@@ -135,7 +135,8 @@ def dashboard_overview():
             membership_ready = len(m) > 0
     except Exception:
         membership_ready = False
-    if bool(NSE_CFG.get('require_effective_dated_membership', True)) and not membership_ready:
+    universe_mode = str(NSE_CFG.get('universe_mode', 'broad_nse')).lower()
+    if universe_mode == 'nifty200' and bool(NSE_CFG.get('require_effective_dated_membership', True)) and not membership_ready:
         issues.append('effective-dated NIFTY 200 membership missing or empty')
     manifest_present = MANIFEST.exists() and _manifest_count() > 0
     if bool(NSE_CFG.get('checksum_manifest_required', True)) and not manifest_present:

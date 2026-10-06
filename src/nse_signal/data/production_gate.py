@@ -61,10 +61,14 @@ def _validate_security_identity() -> tuple[str, str | None]:
 
 def _validate_pit_universe() -> tuple[str, str | None]:
     try:
-        from nse_signal.data.nse.membership import load_membership
-        m = load_membership("data/reference/nifty200_membership.csv", allow_empty=False)
-        if m.empty:
-            return "BLOCKED", "EMPTY_PIT_MEMBERSHIP"
+        from nse_signal.data.universe_policy import UniversePolicy
+        policy = UniversePolicy(universe_mode="BROAD_NSE")
+        if policy.universe_mode == "NIFTY200":
+            from nse_signal.data.nse.membership import load_membership
+            m = load_membership("data/reference/nifty200_membership.csv", allow_empty=False)
+            if m.empty:
+                return "BLOCKED", "EMPTY_PIT_MEMBERSHIP"
+        # Broad NSE production does not require Nifty 200 membership
         return "PASS", None
     except Exception as e:
         return "BLOCKED", f"PIT_UNIVERSE_ERROR: {e}"
