@@ -1,0 +1,170 @@
+[
+  {
+    "detected": true,
+    "expected_check_id": "CHK_07",
+    "mutation_id": "M01",
+    "target_file": "D:\\NSE_Signal_Provider\\data\\processed\\pit\\canonical_price_bars.jsonl"
+  },
+  {
+    "detected": true,
+    "expected_check_id": "CHK_08",
+    "mutation_id": "M02",
+    "target_file": "D:\\NSE_Signal_Provider\\data\\processed\\pit\\canonical_price_bars.jsonl"
+  },
+  {
+    "detected": true,
+    "expected_check_id": "CHK_09",
+    "mutation_id": "M03",
+    "target_file": "D:\\NSE_Signal_Provider\\data\\processed\\pit\\canonical_price_bars.jsonl"
+  },
+  {
+    "detected": true,
+    "expected_check_id": "CHK_09",
+    "mutation_id": "M04",
+    "target_file": "D:\\NSE_Signal_Provider\\data\\processed\\pit\\canonical_instruments.jsonl"
+  },
+  {
+    "detected": true,
+    "expected_check_id": "CHK_13",
+    "mutation_id": "M05",
+    "target_file": "D:\\NSE_Signal_Provider\\data\\processed\\pit\\canonical_price_bars.jsonl"
+  },
+  {
+    "detected": true,
+    "expected_check_id": "CHK_15",
+    "mutation_id": "M06",
+    "target_file": "D:\\NSE_Signal_Provider\\data\\processed\\pit\\canonical_price_bars.jsonl"
+  },
+  {
+    "detected": true,
+    "expected_check_id": "CHK_01",
+    "mutation_id": "M07",
+    "target_file": "D:\\NSE_Signal_Provider\\data\\reference\\raw_manifest.json"
+  },
+  {
+    "detected": true,
+    "expected_check_id": "CHK_03",
+    "mutation_id": "M08",
+    "target_file": "D:\\NSE_Signal_Provider\\data\\processed\\pit\\canonical_price_bars.jsonl"
+  },
+  {
+    "detected": true,
+    "expected_check_id": "CHK_10",
+    "mutation_id": "M09",
+    "target_file": "D:\\NSE_Signal_Provider\\data\\processed\\pit\\canonical_price_bars.jsonl"
+  },
+  {
+    "detected": true,
+    "expected_check_id": "CHK_10",
+    "mutation_id": "M10",
+    "target_file": "D:\\NSE_Signal_Provider\\data\\processed\\pit\\canonical_price_bars.jsonl"
+  },
+  {
+    "detected": true,
+    "expected_check_id": "CHK_07",
+    "mutation_id": "M11",
+    "target_file": "D:\\NSE_Signal_Provider\\data\\processed\\pit\\canonical_price_bars.jsonl"
+  },
+  {
+    "detected": true,
+    "expected_check_id": "CHK_03",
+    "mutation_id": "M12",
+    "target_file": "D:\\NSE_Signal_Provider\\data\\processed\\pit\\canonical_price_bars.jsonl"
+  },
+  {
+    "detected": true,
+    "expected_check_id": "CHK_05",
+    "mutation_id": "M13",
+    "target_file": "D:\\NSE_Signal_Provider\\data\\processed\\pit\\canonical_price_bars.jsonl"
+  },
+  {
+    "detected": true,
+    "expected_check_id": "CHK_07",
+    "mutation_id": "M14",
+    "target_file": "D:\\NSE_Signal_Provider\\data\\processed\\pit\\canonical_price_bars.jsonl"
+  },
+  {
+    "detected": true,
+    "expected_check_id": "CHK_17",
+    "mutation_id": "M15",
+    "target_file": "D:\\NSE_Signal_Provider\\data\\processed\\pit\\row_transformation_ledger.jsonl"
+  },
+  {
+    "detected": true,
+    "expected_check_id": "CHK_17",
+    "mutation_id": "M16",
+    "target_file": "D:\\NSE_Signal_Provider\\data\\processed\\pit\\row_transformation_ledger.jsonl"
+  },
+  {
+    "detected": true,
+    "expected_check_id": "CHK_04",
+    "mutation_id": "M17",
+    "target_file": "D:\\NSE_Signal_Provider\\data\\processed\\pit\\canonical_instruments.jsonl"
+  },
+  {
+    "detected": true,
+    "expected_check_id": "CHK_09",
+    "mutation_id": "M18",
+    "target_file": "D:\\NSE_Signal_Provider\\data\\processed\\pit\\canonical_instruments.jsonl"
+  },
+  {
+    "detected": true,
+    "expected_check_id": "CHK_12",
+    "mutation_id": "M19",
+    "target_file": "D:\\NSE_Signal_Provider\\data\\processed\\pit\\canonical_instruments.jsonl"
+  },
+  {
+    "detected": true,
+    "expected_check_id": "CHK_11",
+    "mutation_id": "M20",
+    "target_file": "D:\\NSE_Signal_Provider\\data\\processed\\pit\\canonical_instruments.jsonl"
+  },
+  {
+    "detected": true,
+    "expected_check_id": "CHK_11",
+    "mutation_id": "M21",
+    "target_file": "D:\\NSE_Signal_Provider\\data\\processed\\pit\\canonical_instruments.jsonl"
+  },
+  {
+    "detected": true,
+    "expected_check_id": "CHK_02",
+    "mutation_id": "M22",
+    "target_file": "D:\\NSE_Signal_Provider\\data\\processed\\pit\\pit_manifest.json"
+  },
+  {
+    "detected": false,
+    "expected_check_id": "CHK_03",
+    "mutation_id": "M23",
+    "target_file": "D:\\NSE_Signal_Provider\\data\\processed\\pit\\row_accounting.json"
+  },
+  {
+    "detected": true,
+    "expected_check_id": "CHK_30",
+    "mutation_id": "M24",
+    "target_file": "D:\\NSE_Signal_Provider\\data\\processed\\pit\\pit_validation_state.json"
+  },
+  {
+    "detected": true,
+    "expected_check_id": "CHK_02",
+    "mutation_id": "M25",
+    "target_file": "D:\\NSE_Signal_Provider\\data\\processed\\pit\\pit_validation_state.json"
+  },
+  {
+    "detected": true,
+    "expected_check_id": "CHK_24",
+    "mutation_id": "M26",
+    "target_file": "D:\\NSE_Signal_Provider\\data\\processed\\pit\\canonical_price_bars.jsonl"
+  },
+  {
+    "detected": false,
+    "expected_check_id": "CHK_28",
+    "mutation_id": "M27",
+    "target_file": "D:\\NSE_Signal_Provider\\data\\processed\\pit\\transformation_errors.json"
+  },
+  {
+    "detected": true,
+    "expected_check_id": "CHK_01",
+    "mutation_id": "M28",
+    "target_file": "D:\\NSE_Signal_Provider\\data\\reference\\raw_manifest.json"
+  }
+]

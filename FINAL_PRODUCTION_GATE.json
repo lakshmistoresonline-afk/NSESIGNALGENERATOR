@@ -1,0 +1,237 @@
+{
+  "blocking_reasons": [
+    "Insufficient multi-year historical coverage for full production window",
+    "Historical index membership incomplete",
+    "Insufficient historical panel time periods for valid walk-forward folds",
+    "Insufficient OOS observations for reliable calibration curve",
+    "Insufficient holdout data for conformal prediction coverage verification"
+  ],
+  "categories": [
+    {
+      "category_id": "historical_data_coverage",
+      "command": "python scripts/build_historical_inventory.py",
+      "coverage": "Partial (~4 years acquired)",
+      "evidence_file": "docs/HISTORICAL_DATA_COVERAGE_REPORT.md",
+      "evidence_hash": "29154f6f1e5347222156225ef215ab0a0c1ae9a41eb143649d2997d12245ee54",
+      "execution_timestamp": "2026-10-06T08:56:45.768760+00:00",
+      "failure_reason": "Insufficient multi-year historical coverage for full production window",
+      "name": "Historical Data Coverage",
+      "status": "BLOCKED"
+    },
+    {
+      "category_id": "raw_file_integrity",
+      "command": "python -m nse_signal.cli --ingest",
+      "coverage": "100% of acquired files",
+      "evidence_file": "data/reference/raw_manifest.json",
+      "evidence_hash": "c5dc31fc9f2d6408cf4e9c4cb75dbc5ac6d4bad55e617cdb6e0acfc5611f6953",
+      "execution_timestamp": "2026-10-06T08:56:45.769317+00:00",
+      "failure_reason": null,
+      "name": "Raw-File Integrity",
+      "status": "PASS"
+    },
+    {
+      "category_id": "historical_security_identity",
+      "command": "python -m pytest tests/test_historical_identity.py",
+      "coverage": "Complete effective intervals [effective_from, effective_to)",
+      "evidence_file": "docs/HISTORICAL_IDENTITY_REPORT.md",
+      "evidence_hash": "1fc210d0334a0915193e4d6fbe7832a6d4dfdafb1ba31a5729a56e9e04f01fa9",
+      "execution_timestamp": "2026-10-06T08:56:45.769707+00:00",
+      "failure_reason": null,
+      "name": "Historical Security Identity",
+      "status": "PASS"
+    },
+    {
+      "category_id": "point_in_time_universe",
+      "command": "python -m pytest tests/test_universe_architecture.py",
+      "coverage": "Fail-closed UNKNOWN fallback",
+      "evidence_file": "data/reference/nifty200_membership.csv",
+      "evidence_hash": "bf92eb7ab85190235d86264090634e249532b3caacfa6c23c2c7c6df67bdc8b6",
+      "execution_timestamp": "2026-10-06T08:56:45.770059+00:00",
+      "failure_reason": "Historical index membership incomplete",
+      "name": "Point-in-Time Universe",
+      "status": "BLOCKED"
+    },
+    {
+      "category_id": "pit_temporal_integrity",
+      "command": "python -m nse_signal.data.nse.temporal_audit",
+      "coverage": "28,464 intervals audited",
+      "evidence_file": "docs/PIT_TEMPORAL_VALIDATION_REPORT.md",
+      "evidence_hash": "MISSING_EVIDENCE_HASH",
+      "execution_timestamp": "2026-10-06T08:56:45.770180+00:00",
+      "failure_reason": null,
+      "name": "PIT Temporal Integrity",
+      "status": "PASS"
+    },
+    {
+      "category_id": "required_pit_layers",
+      "command": "python -m nse_signal.cli --build-pit",
+      "coverage": "Core CM Bhavcopy and Security Master present",
+      "evidence_file": "data/reference/authoritative_pit_data_gap_register.json",
+      "evidence_hash": "f123ae689a35dfdc9d4413397b62b96e6c12d01844fd085366d55b52d3367e68",
+      "execution_timestamp": "2026-10-06T08:56:45.770571+00:00",
+      "failure_reason": null,
+      "name": "Required PIT Layers",
+      "status": "PASS"
+    },
+    {
+      "category_id": "corporate_action_correctness",
+      "command": "python scripts/build_pit_dataset.py",
+      "coverage": "Immutable raw observations preserved",
+      "evidence_file": "data/processed/nse_pit/corporate_adjustments.csv",
+      "evidence_hash": "MISSING_EVIDENCE_HASH",
+      "execution_timestamp": "2026-10-06T08:56:45.770671+00:00",
+      "failure_reason": null,
+      "name": "Corporate-Action Correctness",
+      "status": "PASS"
+    },
+    {
+      "category_id": "model_walk_forward",
+      "command": "python scripts/run_real_walk_forward.py",
+      "coverage": "Blocked due to insufficient panel time periods",
+      "evidence_file": "docs/REAL_WALK_FORWARD_REPORT.md",
+      "evidence_hash": "a50336f07d1ae00b9503a168fbebb58da5b82d5f4422d97123474a5128a431f2",
+      "execution_timestamp": "2026-10-06T08:56:45.771025+00:00",
+      "failure_reason": "Insufficient historical panel time periods for valid walk-forward folds",
+      "name": "Model Walk-Forward Validation",
+      "status": "BLOCKED"
+    },
+    {
+      "category_id": "calibration",
+      "command": "python scripts/run_real_walk_forward.py",
+      "coverage": "Insufficient out-of-sample data",
+      "evidence_file": "data/processed/model_validation/real_walk_forward_results.json",
+      "evidence_hash": "8ff84f2a136e15ad3d54942ba428709a1257f060ff5321aa7c42a6cd0c2f6598",
+      "execution_timestamp": "2026-10-06T08:56:45.771408+00:00",
+      "failure_reason": "Insufficient OOS observations for reliable calibration curve",
+      "name": "Probability Calibration",
+      "status": "BLOCKED"
+    },
+    {
+      "category_id": "conformal_validation",
+      "command": "python scripts/run_real_walk_forward.py",
+      "coverage": "Insufficient prediction intervals",
+      "evidence_file": "data/processed/model_validation/real_walk_forward_results.json",
+      "evidence_hash": "8ff84f2a136e15ad3d54942ba428709a1257f060ff5321aa7c42a6cd0c2f6598",
+      "execution_timestamp": "2026-10-06T08:56:45.771756+00:00",
+      "failure_reason": "Insufficient holdout data for conformal prediction coverage verification",
+      "name": "Conformal Validation",
+      "status": "BLOCKED"
+    },
+    {
+      "category_id": "economic_validation",
+      "command": "python scripts/run_real_walk_forward.py",
+      "coverage": "Not evaluated",
+      "evidence_file": "docs/REAL_WALK_FORWARD_REPORT.md",
+      "evidence_hash": "a50336f07d1ae00b9503a168fbebb58da5b82d5f4422d97123474a5128a431f2",
+      "execution_timestamp": "2026-10-06T08:56:45.772073+00:00",
+      "failure_reason": "Model validation blocked",
+      "name": "Economic Validation",
+      "status": "NOT_APPLICABLE"
+    },
+    {
+      "category_id": "drift",
+      "command": "python scripts/run_real_walk_forward.py",
+      "coverage": "Not evaluated",
+      "evidence_file": "data/processed/model_validation/real_walk_forward_results.json",
+      "evidence_hash": "8ff84f2a136e15ad3d54942ba428709a1257f060ff5321aa7c42a6cd0c2f6598",
+      "execution_timestamp": "2026-10-06T08:56:45.772428+00:00",
+      "failure_reason": "Model not published",
+      "name": "Model Drift",
+      "status": "NOT_APPLICABLE"
+    },
+    {
+      "category_id": "adversarial_validation",
+      "command": "python -m pytest tests/test_accuracy_v2.py",
+      "coverage": "Research suite functional",
+      "evidence_file": "src/nse_signal/research/adversarial.py",
+      "evidence_hash": "97efe84db0d594ac42be7632f47cda35e827e64e3efa0f24599f6babe826d329",
+      "execution_timestamp": "2026-10-06T08:56:45.772814+00:00",
+      "failure_reason": null,
+      "name": "Adversarial Validation",
+      "status": "PASS"
+    },
+    {
+      "category_id": "multiple_testing_controls",
+      "command": "python -m pytest",
+      "coverage": "Fully implemented",
+      "evidence_file": "src/nse_signal/research/falsification.py",
+      "evidence_hash": "b639256cfe2b05d8bba01df8346b76f3cfa9e871e8901e35139d7e86b40a71f9",
+      "execution_timestamp": "2026-10-06T08:56:45.773174+00:00",
+      "failure_reason": null,
+      "name": "Multiple-Testing Controls",
+      "status": "PASS"
+    },
+    {
+      "category_id": "untouched_holdout",
+      "command": "python scripts/build_pit_dataset.py",
+      "coverage": "Reserved",
+      "evidence_file": "data/processed/nse_pit/pit_features.csv",
+      "evidence_hash": "03f26d04d5cc1923df6cd129f48362026b55507f2565c933af3b96a4e84541f3",
+      "execution_timestamp": "2026-10-06T08:56:45.785338+00:00",
+      "failure_reason": null,
+      "name": "Untouched Holdout",
+      "status": "PASS"
+    },
+    {
+      "category_id": "forensic_tests",
+      "command": "python -m nse_signal.data.pit_forensic_suite",
+      "coverage": "M01-M28 executed and verified",
+      "evidence_file": "data/processed/pit/MUTATION_TEST_RESULTS.json",
+      "evidence_hash": "548ec8dba03ea64fc4e8efe9a535f9c2ffed38c5666c1035a7ab7747665ad664",
+      "execution_timestamp": "2026-10-06T08:56:45.786129+00:00",
+      "failure_reason": null,
+      "name": "Forensic Tests",
+      "status": "PASS"
+    },
+    {
+      "category_id": "clean_room_rebuild",
+      "command": "python -m nse_signal.data.forensic.cleanroom",
+      "coverage": "Content-level match PASS",
+      "evidence_file": "data/processed/pit/DETERMINISM_REPORT.md",
+      "evidence_hash": "c18e62c180ca2f7a130e62db9bec9d927809da45fba46ed663f503c600638361",
+      "execution_timestamp": "2026-10-06T08:56:45.786540+00:00",
+      "failure_reason": null,
+      "name": "Clean-Room Rebuild",
+      "status": "PASS"
+    },
+    {
+      "category_id": "android_build",
+      "command": "gradlew.bat assembleDebug assembleRelease",
+      "coverage": "100% compiled successfully",
+      "evidence_file": "android/app/build/outputs/apk/debug/app-debug.apk",
+      "evidence_hash": "18404fb252a7ecaa2d02904e4a7f8812f8169005fab43f9be4f85e8a9508ae00",
+      "execution_timestamp": "2026-10-06T08:56:45.842906+00:00",
+      "failure_reason": null,
+      "name": "Android Build",
+      "status": "PASS"
+    },
+    {
+      "category_id": "android_runtime",
+      "command": "None",
+      "coverage": "0% (No active emulator)",
+      "evidence_file": "ANDROID_EXECUTION_VALIDATION_REPORT.md",
+      "evidence_hash": "77ecb0b06dffc9c3a10415fcc82277b69964e313d5ad24ae23e7bc918df86716",
+      "execution_timestamp": "2026-10-06T08:56:45.843594+00:00",
+      "failure_reason": "Headless agent runtime environment lacks an active AVD or physical device",
+      "name": "Android Runtime E2E",
+      "status": "NOT_EXECUTED"
+    },
+    {
+      "category_id": "signal_only_safety",
+      "command": "python -m pytest tests/test_core.py",
+      "coverage": "100% enforced",
+      "evidence_file": "src/nse_signal/cli.py",
+      "evidence_hash": "003e54ae2e6eab898a3ed2eebef806898ffae80d8fc5407c68976699465f6238",
+      "execution_timestamp": "2026-10-06T08:56:45.843977+00:00",
+      "failure_reason": null,
+      "name": "Signal-Only Safety (REAL_TRADING=FALSE)",
+      "status": "PASS"
+    }
+  ],
+  "eligible": false,
+  "evaluated_at": "2026-10-06T08:56:45.843990+00:00",
+  "project": "NSE Signal Provider V31",
+  "real_trading": false,
+  "signal_publication_allowed": false,
+  "status": "BLOCKED"
+}

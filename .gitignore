@@ -1,0 +1,14 @@
+.venv/
+__pycache__/
+.pytest_cache/
+*.pyc
+.env
+*.parquet
+data/raw/*
+data/processed/*
+models/*.joblib
+reports/generated/*
+.idea/vcs.xml
+.idea/
+.gradle-dist/
+*.zip

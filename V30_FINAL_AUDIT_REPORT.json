@@ -1,0 +1,28 @@
+{
+  "release": "V30_INDIA_WIDE_ACCURACY_HARDENED",
+  "audit_date": "2026-10-03",
+  "tests_collected": 112,
+  "tests_passed_per_module": 112,
+  "validation_mode": "each test module executed independently; all modules passed",
+  "production_status": "BLOCKED_UNTIL_REQUIRED_AUTHORITATIVE_PIT_DATA_IS_PRESENT_AND_LICENSED",
+  "signal_only": true,
+  "real_trading": false,
+  "changes": [
+    "purged production training/calibration boundary by event horizon",
+    "purged probability-calibration/conformal-calibration boundary",
+    "class-conditional finite-sample conformal p-values",
+    "validation-only frozen publication threshold",
+    "model-dispersion publication gate",
+    "causal cross-sectional factor support with single-symbol fallback",
+    "production signal-age and NSE-session validation",
+    "panel calibration leakage correction"
+  ],
+  "research_basis": [
+    "official NSE report catalogue",
+    "official NSE market timings",
+    "official NSE corporate actions",
+    "official NSE India VIX historical data",
+    "SEBI short-selling framework"
+  ],
+  "note": "A single all-tests invocation exceeded the execution harness timeout despite every individual test module passing. This is recorded as an execution-harness limitation, not a test failure."
+}

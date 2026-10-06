@@ -1,0 +1,176 @@
+{
+  "authority_policy": "official_nse_only_for_production",
+  "sources": [
+    {
+      "authority": "NSE India",
+      "availability_rule": "EOD artifact; usable only after its verified availability timestamp",
+      "cadence": "daily",
+      "landing_url": "https://www.nseindia.com/all-reports",
+      "layer": "cash_bhavcopy",
+      "notes": "Official CM-UDiFF final bhavcopy.",
+      "pit_role": "primary",
+      "url_template": "https://archives.nseindia.com/content/cm/BhavCopy_NSE_CM_0_0_0_{YYYYMMDD}_F_0000.csv.zip"
+    },
+    {
+      "authority": "NSE India",
+      "availability_rule": "EOD artifact; usable only after its verified availability timestamp",
+      "cadence": "daily",
+      "landing_url": "https://www.nseindia.com/all-reports-derivatives",
+      "layer": "fo_bhavcopy",
+      "notes": "Official F&O-UDiFF final bhavcopy.",
+      "pit_role": "primary",
+      "url_template": "https://archives.nseindia.com/content/fo/BhavCopy_NSE_FO_0_0_0_{YYYYMMDD}_F_0000.csv.zip"
+    },
+    {
+      "authority": "NSE India",
+      "availability_rule": "Master is effective only from its published/as-of timestamp",
+      "cadence": "daily",
+      "landing_url": "https://www.nseindia.com/all-reports",
+      "layer": "security_master",
+      "notes": "Official NSE listed-security master.",
+      "pit_role": "identity",
+      "url_template": "https://archives.nseindia.com/content/cm/NSE_CM_security_{DDMMYYYY}.csv.gz"
+    },
+    {
+      "authority": "NSE India",
+      "availability_rule": "EOD index report; verified availability required",
+      "cadence": "daily",
+      "landing_url": "https://www.nseindia.com/all-reports",
+      "layer": "index_close",
+      "notes": "Official NSE index close report.",
+      "pit_role": "benchmark",
+      "url_template": "https://archives.nseindia.com/content/indices/ind_close_all_{DDMMYYYY}.csv"
+    },
+    {
+      "authority": "NSE India / NSE Clearing",
+      "availability_rule": "Use true report publication/availability time; do not infer intraday availability",
+      "cadence": "daily",
+      "landing_url": "https://www.nseindia.com/static/products-services/equity-market-data-reports-download",
+      "layer": "delivery",
+      "notes": "Security-wise delivery data.",
+      "pit_role": "secondary",
+      "url_template": null
+    },
+    {
+      "authority": "NSE India",
+      "availability_rule": "Use report's effective date and verified publication time",
+      "cadence": "daily/monthly",
+      "landing_url": "https://www.nseindia.com/all-reports",
+      "layer": "impact_cost",
+      "notes": "Security-category impact-cost report.",
+      "pit_role": "secondary",
+      "url_template": null
+    },
+    {
+      "authority": "NSE India",
+      "availability_rule": "EOD publication",
+      "cadence": "daily",
+      "landing_url": "https://www.nseindia.com/all-reports",
+      "layer": "daily_volatility",
+      "notes": "Official CM daily volatility.",
+      "pit_role": "secondary",
+      "url_template": null
+    },
+    {
+      "authority": "NSE India",
+      "availability_rule": "Report publication time must be respected",
+      "cadence": "daily",
+      "landing_url": "https://www.nseindia.com/all-reports-derivatives",
+      "layer": "participant_oi",
+      "notes": "Participant-wise open interest.",
+      "pit_role": "secondary",
+      "url_template": null
+    },
+    {
+      "authority": "NSE India",
+      "availability_rule": "Report publication time must be respected",
+      "cadence": "daily",
+      "landing_url": "https://www.nseindia.com/all-reports-derivatives",
+      "layer": "fii_derivatives",
+      "notes": "FII derivatives statistics.",
+      "pit_role": "secondary",
+      "url_template": null
+    },
+    {
+      "authority": "NSE India",
+      "availability_rule": "Effective from report date/time",
+      "cadence": "daily",
+      "landing_url": "https://www.nseindia.com/all-reports",
+      "layer": "surveillance",
+      "notes": "Surveillance indicator.",
+      "pit_role": "restriction",
+      "url_template": null
+    },
+    {
+      "authority": "NSE India",
+      "availability_rule": "Use next-trade-date/effective-date semantics",
+      "cadence": "daily",
+      "landing_url": "https://www.nseindia.com/all-reports",
+      "layer": "price_bands",
+      "notes": "Price-band complete list and changes.",
+      "pit_role": "restriction",
+      "url_template": null
+    },
+    {
+      "authority": "NSE India",
+      "availability_rule": "Use actual report date/effective semantics",
+      "cadence": "daily",
+      "landing_url": "https://www.nseindia.com/all-reports",
+      "layer": "short_selling",
+      "notes": "Short-selling report.",
+      "pit_role": "restriction",
+      "url_template": null
+    },
+    {
+      "authority": "NSE India / NSE Indices",
+      "availability_rule": "EOD publication; no same-session use unless timestamped",
+      "cadence": "daily",
+      "landing_url": "https://www.nseindia.com/all-reports",
+      "layer": "india_vix",
+      "notes": "India VIX historical data.",
+      "pit_role": "market_state",
+      "url_template": null
+    },
+    {
+      "authority": "NSE India / NSE Indices",
+      "availability_rule": "Current list is not historical PIT; historical constituent data requires dated official records or licensed historical constituent data",
+      "cadence": "review/event",
+      "landing_url": "https://www.nseindia.com/static/products-services/indices-nifty200-index",
+      "layer": "nifty200_membership",
+      "notes": "Do not use today's constituent list for historical backtests.",
+      "pit_role": "universe",
+      "url_template": "https://nsearchives.nseindia.com/content/indices/ind_nifty200list.csv"
+    },
+    {
+      "authority": "NSE Indices",
+      "availability_rule": "Historical index observations are official when obtained from NSE Indices",
+      "cadence": "daily",
+      "landing_url": "https://www.niftyindices.com/reports",
+      "layer": "nifty_index_history",
+      "notes": "Historical index OHLC/returns/valuation reports.",
+      "pit_role": "benchmark",
+      "url_template": null
+    },
+    {
+      "authority": "NSE India / NSE Clearing",
+      "availability_rule": "Announcement/broadcast timestamp required for PIT; ex/record dates are separate event dates",
+      "cadence": "event",
+      "landing_url": "https://www.nseindia.com/static/products-services/equity-market-data-reports-download",
+      "layer": "corporate_actions",
+      "notes": "Corporate-action report contains record/book closure/ex-date fields.",
+      "pit_role": "adjustment",
+      "url_template": null
+    },
+    {
+      "authority": "NSE India",
+      "availability_rule": "Use the actual NSE broadcast/publication timestamp",
+      "cadence": "event",
+      "landing_url": "https://www.nseindia.com/companies-listing/corporate-filings-actions",
+      "layer": "corporate_filings",
+      "notes": "Event-level corporate filings/actions.",
+      "pit_role": "fundamental_event",
+      "url_template": null
+    }
+  ],
+  "version": "2.0"
+}

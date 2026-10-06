@@ -1,0 +1,21 @@
+{
+  "attempted_trading_dates": [
+    "2025-01-02",
+    "2025-01-03"
+  ],
+  "coverage_percentage": 100.0,
+  "expected_trading_dates": [
+    "2025-01-02",
+    "2025-01-03"
+  ],
+  "failed_trading_dates": [],
+  "missing_trading_dates": [],
+  "requested_calendar_dates": [
+    "2025-01-02",
+    "2025-01-03"
+  ],
+  "successful_trading_dates": [
+    "2025-01-02",
+    "2025-01-03"
+  ]
+}

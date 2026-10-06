@@ -1,0 +1,26 @@
+{
+  "release": "V31",
+  "official_sources_identified": true,
+  "official_historical_market_bytes_bundled": true,
+  "local_bytes_present": true,
+  "license_status": "PUBLIC_AUTHORITATIVE_NSE_ARCHIVES",
+  "pit_ready": true,
+  "production_eligible": false,
+  "reason": "Multi-year historical NSE archives acquired locally; production gate remains BLOCKED pending complete historical universe membership validation.",
+  "secondary_providers": {
+    "free": {
+      "upstox": true,
+      "5paisa": true,
+      "angelone": "free_api_access",
+      "fyers": "free_for_clients"
+    },
+    "paid_or_subscription": {
+      "dhan": true,
+      "groww": true
+    },
+    "restricted_manual": {
+      "yahoo": true
+    }
+  },
+  "production_policy": "fail_closed_until_historical_universe_and_complete_multi_year_coverage_are_fully_verified"
+}

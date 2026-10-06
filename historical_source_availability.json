@@ -1,0 +1,74 @@
+[
+  {
+    "cm_available": true,
+    "cm_bytes": 67113,
+    "cm_url": "https://archives.nseindia.com/content/historical/EQUITIES/2019/JAN/cm02JAN2019bhav.csv.zip",
+    "date": "2019-01-02",
+    "sm_available": true,
+    "sm_bytes": 183561,
+    "sm_url": "https://archives.nseindia.com/content/equities/EQUITY_L.csv"
+  },
+  {
+    "cm_available": true,
+    "cm_bytes": 69955,
+    "cm_url": "https://archives.nseindia.com/content/historical/EQUITIES/2020/JAN/cm02JAN2020bhav.csv.zip",
+    "date": "2020-01-02",
+    "sm_available": true,
+    "sm_bytes": 183561,
+    "sm_url": "https://archives.nseindia.com/content/equities/EQUITY_L.csv"
+  },
+  {
+    "cm_available": true,
+    "cm_bytes": 76203,
+    "cm_url": "https://archives.nseindia.com/content/historical/EQUITIES/2021/JAN/cm04JAN2021bhav.csv.zip",
+    "date": "2021-01-04",
+    "sm_available": true,
+    "sm_bytes": 183561,
+    "sm_url": "https://archives.nseindia.com/content/equities/EQUITY_L.csv"
+  },
+  {
+    "cm_available": true,
+    "cm_bytes": 82765,
+    "cm_url": "https://archives.nseindia.com/content/historical/EQUITIES/2022/MAR/cm02MAR2022bhav.csv.zip",
+    "date": "2022-03-02",
+    "sm_available": true,
+    "sm_bytes": 183561,
+    "sm_url": "https://archives.nseindia.com/content/equities/EQUITY_L.csv"
+  },
+  {
+    "cm_available": true,
+    "cm_bytes": 88952,
+    "cm_url": "https://archives.nseindia.com/content/historical/EQUITIES/2023/JAN/cm03JAN2023bhav.csv.zip",
+    "date": "2023-01-03",
+    "sm_available": true,
+    "sm_bytes": 183561,
+    "sm_url": "https://archives.nseindia.com/content/equities/EQUITY_L.csv"
+  },
+  {
+    "cm_available": true,
+    "cm_bytes": 100665,
+    "cm_url": "https://archives.nseindia.com/content/historical/EQUITIES/2024/JAN/cm02JAN2024bhav.csv.zip",
+    "date": "2024-01-02",
+    "sm_available": true,
+    "sm_bytes": 183561,
+    "sm_url": "https://archives.nseindia.com/content/equities/EQUITY_L.csv"
+  },
+  {
+    "cm_available": true,
+    "cm_bytes": 165750,
+    "cm_url": "https://archives.nseindia.com/content/cm/BhavCopy_NSE_CM_0_0_0_20240801_F_0000.csv.zip",
+    "date": "2024-08-01",
+    "sm_available": true,
+    "sm_bytes": 899434,
+    "sm_url": "https://archives.nseindia.com/content/cm/NSE_CM_security_01082024.csv.gz"
+  },
+  {
+    "cm_available": true,
+    "cm_bytes": 171515,
+    "cm_url": "https://archives.nseindia.com/content/cm/BhavCopy_NSE_CM_0_0_0_20250102_F_0000.csv.zip",
+    "date": "2025-01-02",
+    "sm_available": true,
+    "sm_bytes": 959077,
+    "sm_url": "https://archives.nseindia.com/content/cm/NSE_CM_security_02012025.csv.gz"
+  }
+]

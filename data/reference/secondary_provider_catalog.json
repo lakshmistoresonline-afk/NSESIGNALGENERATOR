@@ -1,0 +1,59 @@
+{
+  "bharatstock": {
+    "access_cost": "free_tier",
+    "automatic_fallback": true,
+    "historical": true,
+    "pit_authoritative": false,
+    "read_only_adapter": true
+  },
+  "policy": "Secondary providers are for research/current-data supplementation only. They do not satisfy authoritative NSE PIT readiness.",
+  "providers": [
+    {
+      "authority": "secondary_unofficial",
+      "cost": "public endpoint / no API key",
+      "credentials": false,
+      "historical": "daily and intraday subject to endpoint availability",
+      "name": "yahoo",
+      "pit_authoritative": false
+    },
+    {
+      "authority": "secondary_broker_api",
+      "cost": "free SmartAPI",
+      "credentials": true,
+      "historical": "NSE/BSE/F&O historical candles",
+      "name": "angelone",
+      "pit_authoritative": false
+    },
+    {
+      "authority": "secondary_broker_api",
+      "cost": "free for FYERS clients",
+      "credentials": true,
+      "historical": "historical, quotes and market data",
+      "name": "fyers",
+      "pit_authoritative": false
+    },
+    {
+      "authority": "secondary_broker_api",
+      "cost": "API access subject to Dhan account/API terms",
+      "credentials": true,
+      "historical": "daily historical data back to instrument inception per API docs",
+      "name": "dhan",
+      "pit_authoritative": false
+    },
+    {
+      "authority": "secondary_broker_api",
+      "cost": "paid API subscription currently advertised at INR 499 + taxes/month",
+      "credentials": true,
+      "historical": "historical candles and F&O backtesting data from 2020 per API docs",
+      "name": "groww",
+      "pit_authoritative": false
+    }
+  ],
+  "tejhq": {
+    "access_cost": "free_keyless_or_free_key",
+    "automatic_fallback": true,
+    "historical": true,
+    "pit_authoritative": false,
+    "read_only_adapter": true
+  }
+}

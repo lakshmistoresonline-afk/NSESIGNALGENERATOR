@@ -1,0 +1,165 @@
+version: '2.0'
+notes: 'Comprehensive indicator registry. Parameters are defaults, not optimized values; all changes require purged walk-forward/OOS validation.'
+trend:
+  sma: [5,10,20,50,100,200]
+  ema: [5,10,20,50,100,200]
+  dema: [20]
+  tema: [20]
+  hma: [20]
+  kama: {period: 10, fast: 2, slow: 30}
+  parabolic_sar: {step: 0.02, max_af: 0.20}
+  donchian: [20,55]
+  keltner: {ema_period: 20, atr_period: 10, multiplier: 2.0}
+  aroon: {period: 25}
+  supertrend: {atr_period: 10, multiplier: 3.0}
+  pivot_points: classic
+momentum:
+  rsi: [7,14,21]
+  roc: [5,10,20]
+  macd: {fast: 12, slow: 26, signal: 9, ma_type: ema}
+  ppo: {fast: 12, slow: 26, signal: 9, ma_type: ema}
+  stochastic: {k_period: 14, slow_k_period: 3, slow_k_ma_type: sma, slow_d_period: 3, slow_d_ma_type: sma}
+  stochastic_rsi: {rsi_period: 14, k_period: 5, d_period: 3, d_ma_type: sma}
+  adx: {period: 14}
+  adxr: {period: 14}
+  cci: {period: 20}
+  williams_r: {period: 14}
+  mfi: {period: 14}
+  tsi: {long: 25, short: 13}
+  awesome_oscillator: {fast: 5, slow: 34}
+  cmo: {period: 14}
+  ultimate_oscillator: {short: 7, medium: 14, long: 28}
+  vortex: {period: 14}
+  rvi: {period: 14, stddev_period: 10}
+  efficiency_ratio: {period: 10}
+  vhf: {period: 28}
+volatility:
+  true_range: true
+  atr: [5,14,20]
+  natr: [5,14,20]
+  realized_vol: [5,10,20,60]
+  bollinger: {period: 20, stddev_up: 2.0, stddev_dn: 2.0, ma_type: sma}
+  keltner: {ema_period: 20, atr_period: 10, multiplier: 2.0}
+  donchian: [20,55]
+  zscore: [20,60]
+volume:
+  volume_ratio: [20,50]
+  volume_zscore: [20]
+  obv: true
+  ad_line: true
+  ad_oscillator: {fast: 3, slow: 10}
+  cmf: {period: 20}
+  mfi: {period: 14}
+  pvt: true
+  force_index: {period: 13}
+  market_facilitation: true
+  pvi: true
+  nvi: true
+price_structure:
+  gap: true
+  intraday_range: true
+  candle_body: true
+  wick_ratios: true
+  vwap: {daily_session_reset: true, fallback: cumulative}
+relative:
+  returns: [1,3,5,20,60,120]
+  beta_window: 60
+  correlation_window: 60
+  sector_relative_strength: optional
+market_context:
+  india_vix: optional
+  nifty_return: optional
+  advance_decline_ratio: optional
+  fii_net: optional
+  dii_net: optional
+derivatives:
+  put_call_ratio: optional
+  open_interest_change: optional
+  futures_basis: optional
+risk:
+  probability_floor: 0.55
+  high_vol_probability_floor: 0.65
+  minimum_rr: 2.0
+  max_atr_pct: 0.08
+  max_signal_age_minutes: 1440
+research:
+  target_horizon_bars: 5
+  annualization_days: 252
+  transaction_cost_bps_round_trip: 30
+  slippage_bps: 10
+  purged_embargo_bars: 5
+  minimum_train_rows: 250
+  probability_calibration: sigmoid
+  benchmark_models: [logistic_regression, random_forest, gradient_boosting]
+  multiple_testing_controls: [permutation_test, deflated_sharpe_ratio, probability_of_backtest_overfitting]
+additional:
+  price_transforms:
+    avg_price: OHLC_mean
+    median_price: HL2
+    typical_price: HLC3
+    weighted_close: HLCC2
+    heikin_ashi: standard_recursive
+  statistics:
+    linear_regression_window: 20
+    percentile_window: 20
+    percent_rank_window: 20
+    stddev_window: 20
+    variance_window: 20
+    kurtosis_window: 20
+    median_window: 20
+  volatility:
+    rvir_period: 14
+    adr_period: 14
+    chaikin_volatility_period: 10
+    mass_index_ema: 9
+    mass_index_sum: 25
+  momentum:
+    chop_period: 14
+    choptr_period: 14
+    center_of_gravity_period: 10
+    connors_rsi: {rsi_period: 3, streak_rsi_period: 2, rank_period: 100}
+    smi: {period: 13, fast: 2, slow: 25, signal_period: 9}
+    kst: {roc_periods: [10,15,20,30], sma_periods: [10,10,10,15], weights: [1,2,3,4], signal_period: 9}
+    kstext: {roc_periods: [10,15,20,30], sma_periods: [10,10,10,15], weights: [1,2,3,4], signal_period: 9, ma_type: sma}
+    cmou: {period: 14}
+    fosc_period: 14
+    macd_extended: {fast: 12, slow: 26, signal: 9, fast_type: ema, slow_type: ema, signal_type: ema}
+    macdfix_signal: 9
+    kdj: {k_period: 9, k_smooth: 3, d_smooth: 3, k_ma_type: rma, d_ma_type: rma}
+    stochastic_fast: {k_period: 14, smooth_k: 3, smooth_d: 3}
+    rocp_period: 20
+    rocr_period: 20
+    apo: {fast: 12, slow: 26, ma_type: ema}
+    dx_period: 14
+    plus_dm_period: 14
+    minus_dm_period: 14
+    momentum_period: 10
+    qstick_period: 14
+    elder_ray_period: 13
+    trix_period: 30
+    dpo_period: 20
+    coppock: {roc1: 14, roc2: 11, wma: 10}
+    imi_period: 14
+  overlap:
+    wma_period: 20
+    ht_trendline_period: 20
+    vwma_period: 20
+    zlema_period: 20
+    trima_period: 20
+    t3: {period: 5, volume_factor: 0.7}
+    midpoint_period: 14
+    midprice_period: 14
+    acceleration_bands: {period: 20, multiplier: 4}
+  volume:
+    emv_period: 14
+    pvo: {fast: 12, slow: 26, signal: 9, ma_type: ema}
+    rvol_period: 20
+accuracy_controls:
+  target_execution: next_open
+  triple_barrier_uses_signal_time_atr: true
+  same_bar_collision: stop_first
+  cpcv: {groups: 6, test_groups: 2, purge: 5, embargo: 5}
+  conformal: {alpha: 0.10, min_calibration_rows: 60}
+  drift: {psi_warning: 0.10, psi_fail: 0.25}
+  feature_stability_min_frequency: 0.60
+  threshold_selection: validation_only

@@ -1,0 +1,48 @@
+{
+  "version": "1.0",
+  "generated_at": "2026-10-05T10:00:00Z",
+  "features": {
+    "price_ohlcv": {
+      "source": "NSE_CM_UDIFF_BHAVCOPY",
+      "required": true,
+      "pit_requirement": "STRICT_ASOF",
+      "availability_requirement": "T_MINUS_1_SESSION",
+      "blocking_behaviour": "BLOCK_PRODUCTION"
+    },
+    "security_master": {
+      "source": "NSE_CM_SECURITY_MASTER",
+      "required": true,
+      "pit_requirement": "TEMPORAL_INTERVAL",
+      "availability_requirement": "AS_OF_DATE",
+      "blocking_behaviour": "BLOCK_PRODUCTION"
+    },
+    "delivery": {
+      "source": "NSE_DELIVERY_DATA",
+      "required": false,
+      "pit_requirement": "STRICT_ASOF",
+      "availability_requirement": "T_MINUS_1_SESSION",
+      "blocking_behaviour": "OPTIONAL_IGNORE"
+    },
+    "impact_cost": {
+      "source": "NSE_IMPACT_COST",
+      "required": false,
+      "pit_requirement": "STRICT_ASOF",
+      "availability_requirement": "T_MINUS_1_SESSION",
+      "blocking_behaviour": "OPTIONAL_IGNORE"
+    },
+    "restrictions": {
+      "source": "NSE_SURVEILLANCE_RESTRICTIONS",
+      "required": false,
+      "pit_requirement": "STRICT_ASOF",
+      "availability_requirement": "T_MINUS_1_SESSION",
+      "blocking_behaviour": "BLOCK_IF_CONFIGURED"
+    },
+    "corporate_events": {
+      "source": "NSE_CORPORATE_ANNOUNCEMENTS",
+      "required": false,
+      "pit_requirement": "ANNOUNCEMENT_TIMESTAMP",
+      "availability_requirement": "BROADCAST_TIME_CAUSAL",
+      "blocking_behaviour": "BLOCK_IF_GATE_TRUE"
+    }
+  }
+}

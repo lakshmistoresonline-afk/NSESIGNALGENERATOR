@@ -1,0 +1,62 @@
+{
+  "all_equations_valid": true,
+  "dataset_stats": {
+    "cash_bhavcopy_2025-01-02": {
+      "canonical_observations": 2928,
+      "conflict_observations": 2,
+      "dataset": "cash_bhavcopy",
+      "equation_valid": true,
+      "error_rows": 0,
+      "event_date": "2025-01-02",
+      "exact_duplicate_observations": 0,
+      "normalized_rows": 2930,
+      "rejected_rows": 0,
+      "source_rows": 2930,
+      "unaccounted_rows": 0
+    },
+    "cash_bhavcopy_2025-01-03": {
+      "canonical_observations": 2919,
+      "conflict_observations": 3,
+      "dataset": "cash_bhavcopy",
+      "equation_valid": true,
+      "error_rows": 0,
+      "event_date": "2025-01-03",
+      "exact_duplicate_observations": 0,
+      "normalized_rows": 2922,
+      "rejected_rows": 0,
+      "source_rows": 2922,
+      "unaccounted_rows": 0
+    },
+    "security_master_2025-01-02": {
+      "canonical_observations": 28458,
+      "conflict_observations": 0,
+      "dataset": "security_master",
+      "equation_valid": true,
+      "error_rows": 0,
+      "event_date": "2025-01-02",
+      "exact_duplicate_observations": 0,
+      "normalized_rows": 28458,
+      "rejected_rows": 0,
+      "source_rows": 28458,
+      "unaccounted_rows": 0
+    },
+    "security_master_2025-01-03": {
+      "canonical_observations": 28464,
+      "conflict_observations": 0,
+      "dataset": "security_master",
+      "equation_valid": true,
+      "error_rows": 0,
+      "event_date": "2025-01-03",
+      "exact_duplicate_observations": 0,
+      "normalized_rows": 28464,
+      "rejected_rows": 0,
+      "source_rows": 28464,
+      "unaccounted_rows": 0
+    }
+  },
+  "generated_at": "2026-10-05T12:56:42.916513+00:00",
+  "total_canonical_observations": 62769,
+  "total_normalized_observations": 62774,
+  "total_physical_intervals": 28464,
+  "total_source_observations": 62774
+}

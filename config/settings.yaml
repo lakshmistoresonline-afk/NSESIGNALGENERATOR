@@ -1,0 +1,304 @@
+app:
+  name: NSE Signal Research Platform
+  timezone: Asia/Kolkata
+  real_trading: false
+  signal_only: true
+data:
+  default_period: 2y
+  interval: 1d
+  cache_dir: data/raw
+model:
+  horizon_bars: 5
+  min_train_rows: 250
+  probability_threshold: 0.55
+  random_state: 42
+backtest:
+  round_trip_cost_bps: 30
+  slippage_bps: 10
+  holding_bars: 5
+  top_k: 10
+  initial_capital: 1000000
+risk:
+  max_signal_count: 10
+  min_confidence: 0.55
+  max_single_name_weight: 0.1
+universe:
+  source: broad_nse_equity
+  broad_nse:
+    allowed_series: [EQ]
+    min_price: 5.0
+    min_median_dollar_volume: 2000000
+    min_history_days: 120
+    max_staleness_days: 5
+    require_unique_trading_dates: true
+    exclude_sme: true
+  source_for_benchmark_research: point_in_time_nifty200
+  membership_role: benchmark_only
+  require_asof_membership: true
+  fallback_for_offline_demo: synthetic_sample
+  symbols: []
+research_controls:
+  label_method: triple_barrier
+  exclude_timeout_events: false
+  timeout_policy: directional
+  require_cpcv_validation: true
+  require_multiple_testing_registry: true
+  pt_atr: 2.0
+  sl_atr: 1.0
+  multi_horizons:
+  - 1
+  - 3
+  - 5
+  - 10
+  max_features_per_fold: 80
+  correlation_pruning: 0.97
+  calibration_bars: 60
+  min_signal_confidence: 0.6
+  target_coverage: 0.2
+  trials_for_dsr: 1
+  require_champion_governance_gate: true
+  pbo_max: 0.5
+  dsr_min_stat: 0.0
+  benchmark_required: true
+  regime_conditioning: true
+  meta_labeling: true
+  event_uniqueness: true
+  data_quality_gate: true
+  corporate_event_gate: true
+  sentiment_input: optional
+  orderbook_input: optional
+  delivery_volume_input: optional
+  no_execution: true
+  require_true_market_context: true
+  require_gap_aware_barrier_labels: true
+  require_two_stage_conformal_calibration: true
+accuracy_enhancements:
+  cpcv:
+    enabled: true
+    n_groups: 6
+    test_groups: 2
+    purge_bars: 10
+    embargo_bars: 10
+    purge_rule: max_configured_event_horizon
+  conformal:
+    enabled: true
+    alpha: 0.1
+    min_calibration_rows: 60
+  threshold_selection:
+    validation_only: true
+    min_threshold: 0.55
+    max_threshold: 0.9
+    min_coverage: 0.05
+  drift:
+    psi_warning: 0.1
+    psi_fail: 0.25
+  stability:
+    min_feature_fold_frequency: 0.6
+  portfolio:
+    max_names: 10
+    max_single_name_weight: 0.1
+    max_sector_weight: 0.3
+  data_provenance:
+    require_asof_timestamps: true
+    backward_asof_join: true
+model_governance:
+  require_oos_baseline_improvement: true
+  min_auc: 0.52
+  max_brier: 0.25
+  min_feature_stability: 0.6
+  max_feature_psi: 0.25
+  min_profit_factor: 1.0
+  max_drawdown: -0.5
+  falsification: true
+  cost_stress_multiple: 3.0
+  reject_if_no_economic_edge: true
+  reject_if_drifted: true
+  reject_if_unstable: true
+  sample_weighting: average_event_uniqueness
+  no_test_set_tuning: true
+  require_adversarial_validation: true
+  require_block_bootstrap_ci: true
+  require_calibration_ece: true
+  max_ece: 0.08
+  max_cost_stress_sharpe_loss: 1.0
+information_layers:
+  fundamentals: optional_point_in_time
+  corporate_actions: optional_point_in_time
+  earnings_calendar: optional_point_in_time
+  options_surface: optional_timestamped
+  order_book: optional_timestamped
+  delivery_data: optional_timestamped
+  news_sentiment: optional_timestamped
+  breadth: optional_timestamped
+accuracy_enhancements_v2:
+  adversarial_drift:
+    enabled: true
+    auc_warning: 0.6
+    auc_fail: 0.65
+  dependence_aware_bootstrap:
+    enabled: true
+    block_length: 10
+    bootstrap_samples: 2000
+    alpha: 0.05
+  regime_controls:
+    enabled: true
+    min_regime_signal_rows: 30
+    min_signal_precision: 0.5
+  signal_stability:
+    enabled: true
+    min_prediction_persistence: 1
+    min_signal_stability: 0.0
+  selective_prediction:
+    conformal_abstention_required: true
+    alpha: 0.1
+    min_eligible_rate: 0.2
+  economic_threshold:
+    enabled: true
+    validation_only: true
+    reward_multiple: 2.0
+    risk_multiple: 1.0
+    minimum_coverage: 0.05
+  dependence_bootstrap:
+    enabled: true
+    block_length: 10
+    samples: 2000
+  multi_horizon_agreement:
+    enabled: true
+    horizons:
+    - 1
+    - 3
+    - 5
+    - 10
+    min_agreeing_horizons: 2
+    probability_agreement_threshold: 0.6
+  incomplete_cross_section_control:
+    enabled: true
+    require_availability_at_timestamp: true
+    minimum_available_constituents: 5
+panel_learning:
+  enabled: true
+  time_column: timestamp
+  symbol_column: symbol
+  pooled_walk_forward: true
+  cross_sectional_features: true
+  cross_sectional_target_auxiliary_only: true
+  require_point_in_time_membership: true
+  no_symbol_concatenation_walk_forward: true
+  purge_full_event_horizon: true
+  max_event_horizon_bars: 10
+nse_data_integration:
+  provider: nse_official_archives
+  secondary_provider_policy: explicit_opt_in
+  automatic_secondary_fallback: false
+  automatic_secondary_exclusions:
+  - yahoo
+  timezone: Asia/Kolkata
+  raw_root: data/raw/nse
+  pit_root: data/processed/nse_pit
+  manifest: data/raw/nse/manifest.jsonl
+  official_archive_layers:
+    cash: cm_bhavcopy
+    derivatives: fo_bhavcopy
+    index: index_close
+    security_master: security_master
+  secondary_layers:
+    delivery: security_wise_delivery
+    impact_cost: security_category_impact_cost
+    breadth: advances_declines
+    india_vix: historical_india_vix
+    corporate_events: corporate_filings_actions
+    fundamentals: external_point_in_time_source
+    surveillance: surveillance_indicator
+    price_bands: price_band_security_list
+    short_selling: short_selling
+    participant_oi: participant_wise_oi
+    fii_derivatives: fii_derivatives_statistics
+    daily_volatility: cm_daily_volatility
+    corporate_adjustments: authoritative_adjustment_factors
+  production_required_layers:
+  - cash
+  - index
+  - derivatives
+  - security_master
+  - delivery
+  - impact_cost
+  - breadth
+  - india_vix
+  - surveillance
+  - price_bands
+  - short_selling
+  - corporate_adjustments
+  - corporate_events
+  production_optional_but_timestamped:
+  - fundamentals
+  - historical_nifty200_membership
+  - options_surface
+  - order_book
+  - news
+  - participant_oi
+  - fii_derivatives
+  fail_closed_if_required_layer_missing: true
+  require_effective_dated_membership: false
+  checksum_manifest_required: true
+  canonical_cash_fields:
+  - symbol
+  - isin
+  - series
+  - date
+  - open
+  - high
+  - low
+  - close
+  - volume
+  - turnover
+  - trades
+  - signal_time
+  - asof_time
+  canonical_fo_fields:
+  - symbol
+  - expiry
+  - option_type
+  - strike
+  - underlying
+  - open
+  - high
+  - low
+  - close
+  - volume
+  - turnover
+  - oi
+  - oi_change
+  - signal_time
+  - asof_time
+  membership_file: data/reference/nifty200_membership.csv
+  require_effective_dated_membership: false
+  never_infer_historical_membership: true
+  require_broad_nse_universe_point_in_time: true
+  max_universe_staleness_trading_days: 5
+  current_snapshot_provider: nse_web
+  live_read_only: true
+  execution: disabled
+  stale_after_trading_days: 1
+  checksum_manifest_required: true
+publication:
+  fail_closed: true
+  reject_restricted_securities: true
+  max_impact_cost_bps: 100.0
+  reject_near_price_band: true
+  reject_stale_market_data: true
+  reject_short_sell_blocked: true
+  max_impact_cost_bps: 100.0
+  signal_ttl_sessions: 1
+  require_model_champion: true
+  require_dataset_snapshot: true
+pit_contract:
+  version: 2.0
+  require_market_time: true
+  require_asof_time: true
+  require_decision_time: true
+  official_source_only: true
+  historical_nifty200_membership_required: false
+  corporate_adjustments_required: true
+  corporate_event_availability_required: true
+  panel_cpcv_timestamp_grouped: true
+  unknown_calendar_year_fail_closed: true

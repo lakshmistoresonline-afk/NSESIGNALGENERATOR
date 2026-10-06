@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#07111f"><meta name="description" content="NSE signal-only PIT dashboard">
+<title>NSE Signal Provider</title><link rel="stylesheet" href="/dashboard/styles.css">
+</head>
+<body>
+<header class="topbar"><div class="brand"><div class="logo">⌁</div><div><h1>NSE Signal Provider</h1><span>Point-in-time research & signal dashboard</span></div></div><div class="top-actions"><span class="badge safe">✓ SIGNAL ONLY</span><button id="refresh" class="icon-btn" title="Refresh">↻</button></div></header>
+<div id="error" class="banner hidden"></div>
+<main>
+<section class="hero"><div><p class="eyebrow">PRODUCTION CONTROL PLANE</p><h2>Research integrity before signal publication.</h2><p class="sub">Only data that passes the configured point-in-time and publication controls can support a published paper signal.</p></div><div id="pitStatus" class="status blocked"><span class="dot"></span><div><b>PIT BLOCKED</b><small>Loading…</small></div></div></section>
+<section class="cards">
+<div class="metric"><div class="metric-icon">▦</div><div><span>PIT readiness</span><strong id="pitValue">—</strong></div></div>
+<div class="metric"><div class="metric-icon">◎</div><div><span>Published signals</span><strong id="signalValue">—</strong></div></div>
+<div class="metric"><div class="metric-icon">◈</div><div><span>Impact-cost cap</span><strong id="impactValue">—</strong></div></div>
+<div class="metric"><div class="metric-icon">◇</div><div><span>PIT universe</span><strong id="universeValue">BLOCKED</strong></div></div>
+<div class="metric"><div class="metric-icon">✓</div><div><span>Provenance</span><strong id="provenanceValue">BLOCKED</strong></div></div>
+<div class="metric"><div class="metric-icon good">✓</div><div><span>Real trading</span><strong id="tradingValue">DISABLED</strong></div></div>
+</section>
+<section class="grid2">
+<div class="panel"><div class="panel-head"><h3>Required PIT layers</h3></div><div id="layers" class="layers"></div><div id="issues" class="issues hidden"></div></div>
+<div class="panel"><div class="panel-head"><h3>Dataset coverage</h3><span id="manifest">Manifest: —</span></div><div id="coverage" class="coverage"></div></div>
+</section>
+<section class="panel"><div class="panel-head"><div><h3>Published paper signals</h3><span>Only signals that passed the publication layer appear here.</span></div></div><div id="signals"></div></section>
+<section class="footer-note">✓ <span><b>Safety boundary:</b> REAL_TRADING = FALSE. This application is signal-only and contains no broker execution path.</span></section>
+</main>
+<script src="/dashboard/app.js"></script>
+</body></html>

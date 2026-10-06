@@ -1,0 +1,19 @@
+{
+  "project": "NSE Signal Provider",
+  "version": "30.0.0",
+  "evaluated_at": "2026-10-04T07:00:00Z",
+  "status": "BLOCKED",
+  "blocking_reasons": [
+    "Authoritative multi-year historical NSE PIT dataset is incomplete (currently 2 trading dates ingested; required >= 30+ days).",
+    "Android runtime and Firebase client E2E unexecuted due to headless container environment lacking AVD/system images."
+  ],
+  "mandatory_requirements": {
+    "backend_tests": "PASSED (131/131)",
+    "gradle_build": "PASSED (Gradle 8.9)",
+    "debug_apk": "VERIFIED (app-debug.apk)",
+    "release_apk": "VERIFIED (app-release-unsigned.apk)",
+    "signal_only": "ENFORCED (REAL_TRADING = FALSE)",
+    "pit_validation": "PARTIAL (CHK_01 through CHK_30 executed independently)"
+  },
+  "final_decision": "B = BUILD READY BUT RUNTIME NOT VERIFIED"
+}

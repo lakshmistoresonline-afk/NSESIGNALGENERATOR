@@ -1,0 +1,33 @@
+{
+  "release": "V30_INDIA_WIDE_ACCURACY_HARDENED",
+  "base": "V29_INDIA_WIDE_ACCURACY_HARDENED",
+  "signal_only": true,
+  "real_trading": false,
+  "test_suite": {
+    "passed": 112,
+    "status": "PASS_PER_MODULE",
+    "warnings": "Pandas fragmentation/numerical warnings remain; they do not affect correctness but are candidates for performance cleanup."
+  },
+  "hardening": [
+    "broad NSE EQ universe is the default PIT universe; NIFTY 200 is benchmark-only",
+    "automatic secondary-provider fallback disabled",
+    "panel walk-forward leakage guard",
+    "symbol-isolated panel economic backtesting",
+    "production signal PIT/provenance/data-governance fail-closed checks",
+    "causal directional factor support replaces hard-coded factor score",
+    "restriction, impact-cost and corporate-event context canonicalization",
+    "corporate-event blackout feature",
+    "unknown NSE calendar years fail closed",
+    "robust missing-column OHLCV validation",
+    "purged production training/calibration boundary by event horizon",
+    "purged probability-calibration/conformal-calibration boundary",
+    "class-conditional finite-sample conformal p-values",
+    "validation-only frozen publication threshold stored in model artifact",
+    "production model-dispersion gate wired into publication",
+    "causal cross-sectional factor support with single-symbol momentum fallback",
+    "production signal-age and NSE-session validation"
+  ],
+  "production_status": "BLOCKED_UNTIL_REQUIRED_AUTHORITATIVE_PIT_DATA_IS_PRESENT_AND_LICENSED",
+  "api_version": "3.8.0",
+  "note": "V30 further hardens temporal leakage prevention, uncertainty calibration, threshold governance and live publication freshness. It does not guarantee future signal accuracy."
+}

@@ -1,0 +1,58 @@
+{
+  "canonical_instruments.jsonl": {
+    "absolute_path": "D:\\NSE_Signal_Provider\\data\\processed\\pit\\canonical_instruments.jsonl",
+    "captured_at": "2026-10-05T12:53:41.946763+00:00",
+    "exists": true,
+    "mtime": 1791204772.490756,
+    "sha256": "9a544210852bea8a942991d700c8b4ab08be9650b1c2efe2369430807b608af0",
+    "size": 24229557
+  },
+  "canonical_price_bars.jsonl": {
+    "absolute_path": "D:\\NSE_Signal_Provider\\data\\processed\\pit\\canonical_price_bars.jsonl",
+    "captured_at": "2026-10-05T12:53:41.840564+00:00",
+    "exists": true,
+    "mtime": 1791204766.3423862,
+    "sha256": "aa515572f520c5acf7db48c2b774d4dffca241246ce5a636d7332dafa87b7c4e",
+    "size": 4923446
+  },
+  "interval_accounting.json": {
+    "absolute_path": "D:\\NSE_Signal_Provider\\data\\processed\\pit\\interval_accounting.json",
+    "captured_at": "2026-10-05T12:53:41.948762+00:00",
+    "exists": true,
+    "mtime": 1791175718.8197489,
+    "sha256": "46a9734547cd6d43247b3bb7970b29264e8276c3b48151c1a00a3bad8801d1bc",
+    "size": 257
+  },
+  "pit_manifest.json": {
+    "absolute_path": "D:\\NSE_Signal_Provider\\data\\processed\\pit\\pit_manifest.json",
+    "captured_at": "2026-10-05T12:53:41.818680+00:00",
+    "exists": true,
+    "mtime": 1791204772.6093006,
+    "sha256": "de0123ba92c556df851bc23aa823c15286b4036780ed4518ad914d4b2a0a58a0",
+    "size": 2068
+  },
+  "pit_validation_state.json": {
+    "absolute_path": "D:\\NSE_Signal_Provider\\data\\processed\\pit\\pit_validation_state.json",
+    "captured_at": "2026-10-05T12:53:41.949649+00:00",
+    "exists": true,
+    "mtime": 1791204763.11089,
+    "sha256": "66a5af53b999cbc8e24bbf94ec0d2b5765a6999ccd6d2a4217e9d067b669ec1d",
+    "size": 12026
+  },
+  "raw_manifest.json": {
+    "absolute_path": "D:\\NSE_Signal_Provider\\data\\reference\\raw_manifest.json",
+    "captured_at": "2026-10-05T12:53:41.950498+00:00",
+    "exists": true,
+    "mtime": 1791204765.5080163,
+    "sha256": "c5dc31fc9f2d6408cf4e9c4cb75dbc5ac6d4bad55e617cdb6e0acfc5611f6953",
+    "size": 8539
+  },
+  "row_accounting.json": {
+    "absolute_path": "D:\\NSE_Signal_Provider\\data\\processed\\pit\\row_accounting.json",
+    "captured_at": "2026-10-05T12:53:41.947924+00:00",
+    "exists": true,
+    "mtime": 1791203493.169152,
+    "sha256": "de0123ba92c556df851bc23aa823c15286b4036780ed4518ad914d4b2a0a58a0",
+    "size": 2068
+  }
+}

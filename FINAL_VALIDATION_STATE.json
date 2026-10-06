@@ -1,0 +1,9 @@
+{
+  "project": "NSE Signal Provider",
+  "version": "31.0.0",
+  "state": "PIT_VALIDATION_PARTIAL",
+  "production_gate": "BLOCKED",
+  "backend_tests": "131 passed",
+  "canonical_records": 24764,
+  "unique_trading_dates": 2
+}

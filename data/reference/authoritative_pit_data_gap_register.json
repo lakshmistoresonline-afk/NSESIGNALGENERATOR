@@ -1,0 +1,81 @@
+{
+  "version": "1.1",
+  "as_of": "2026-10-05",
+  "policy": "Multi-year historical NSE archives (2014-2026) are acquired locally via authoritative public NSE archives. Production blockers are limited to datasets required by the configured broad-NSE signal contract; optional research layers do not block production when their features are disabled.",
+  "authority": [
+    "NSE India",
+    "NSE Data & Analytics Limited",
+    "NSE Clearing Limited",
+    "NSE Indices Limited"
+  ],
+  "gaps": [
+    {
+      "layer": "historical_cm_eod",
+      "status": "ACQUIRED_LOCALLY",
+      "authority": "NSE India",
+      "dataset": "Historical End-of-Day Capital Market data / Bhavcopy and security/trade details (2014-2026)",
+      "pit_need": "Primary daily OHLCV, security/trade details and historical research universe inputs",
+      "official_reference": "https://archives.nseindia.com",
+      "commercial_access": "Public authoritative NSE archives",
+      "package_status": "Multi-year raw archive bytes present locally under data/raw/nse/",
+      "production_required": true
+    },
+    {
+      "layer": "historical_fo_eod",
+      "status": "NOT_BUNDLED",
+      "authority": "NSE Data & Analytics",
+      "dataset": "Historical End-of-Day Futures & Options data / F&O trade details",
+      "pit_need": "Contract prices, OI and derivatives context",
+      "official_reference": "https://www.nseindia.com/static/market-data/eod-historical-data-subscription",
+      "commercial_access": "Paid historical data product; subscription/agreement required for licensed use",
+      "package_status": "No historical derivatives bytes bundled",
+      "production_required": true
+    },
+    {
+      "layer": "historical_security_contract_master",
+      "status": "ACQUIRED_LOCALLY",
+      "authority": "NSE India",
+      "dataset": "Historical securities/contracts master and equity lists (2014-2026)",
+      "pit_need": "Historical symbol, ISIN, series, contract specifications, lot size and tradability identity",
+      "official_reference": "https://archives.nseindia.com",
+      "commercial_access": "Public authoritative NSE archives",
+      "package_status": "Security master archives present locally",
+      "production_required": true
+    },
+    {
+      "layer": "historical_index_constituents_nifty200",
+      "status": "PARTIALLY_ACQUIRED_RECONSTRUCTED",
+      "authority": "NSE Indices",
+      "dataset": "Historical Nifty constituent snapshots/effective intervals",
+      "pit_need": "Survivorship-free historical universe",
+      "official_reference": "https://www.niftyindices.com",
+      "commercial_access": "Subscription required for official raw lists; fail-closed UNKNOWN fallback active",
+      "package_status": "Broad historical universe derived from CM bhavcopy; specific index snapshots fail-closed",
+      "production_required": false
+    },
+    {
+      "layer": "pit_corporate_data",
+      "status": "NOT_SUPPLIED_OR_LICENSED",
+      "authority": "NSE Data & Analytics",
+      "dataset": "Historical corporate data: fundamentals, announcements, shareholding patterns and related disclosures",
+      "pit_need": "Point-in-time fundamentals/revisions and event availability",
+      "official_reference": "https://www.nseindia.com/static/market-data/corporate-data-subscription",
+      "commercial_access": "Paid corporate data product",
+      "package_status": "No licensed PIT corporate dataset bundled",
+      "production_required": false
+    }
+  ],
+  "public_report_layers": [
+    "delivery",
+    "impact_cost",
+    "daily_volatility",
+    "surveillance",
+    "price_bands",
+    "short_selling",
+    "participant_oi",
+    "fii_derivatives",
+    "india_vix",
+    "breadth"
+  ],
+  "public_report_policy": "Historical raw archives (2014-2026) are present locally; production gate remains BLOCKED pending complete historical universe membership validation."
+}

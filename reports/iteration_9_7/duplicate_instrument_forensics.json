@@ -1,0 +1,146 @@
+{
+  "duplicate_groups": [
+    {
+      "effective_from": "1400025600",
+      "identity_key": "('NSE_EQ_0MOFSL26_INE338I07156', '1400025600')",
+      "isin": "INE338I07156",
+      "resolution": "LEGITIMATE_TEMPORAL_RECORD",
+      "symbol": "0MOFSL26"
+    },
+    {
+      "effective_from": "1400025600",
+      "identity_key": "('NSE_EQ_0MOFSL27_INE338I07099', '1400025600')",
+      "isin": "INE338I07099",
+      "resolution": "LEGITIMATE_TEMPORAL_RECORD",
+      "symbol": "0MOFSL27"
+    },
+    {
+      "effective_from": "1412726400",
+      "identity_key": "('NSE_EQ_0RL34_INE020B08FJ3', '1412726400')",
+      "isin": "INE020B08FJ3",
+      "resolution": "LEGITIMATE_TEMPORAL_RECORD",
+      "symbol": "0RL34"
+    },
+    {
+      "effective_from": "1396051200",
+      "identity_key": "('NSE_EQ_0SCL26_INE148I07SF0', '1396051200')",
+      "isin": "INE148I07SF0",
+      "resolution": "LEGITIMATE_TEMPORAL_RECORD",
+      "symbol": "0SCL26"
+    },
+    {
+      "effective_from": "1396051200",
+      "identity_key": "('NSE_EQ_0SCL27_INE148I07SK0', '1396051200')",
+      "isin": "INE148I07SK0",
+      "resolution": "LEGITIMATE_TEMPORAL_RECORD",
+      "symbol": "0SCL27"
+    },
+    {
+      "effective_from": "1403740800",
+      "identity_key": "('NSE_EQ_1003IIFL29_INE413U07301', '1403740800')",
+      "isin": "INE413U07301",
+      "resolution": "LEGITIMATE_TEMPORAL_RECORD",
+      "symbol": "1003IIFL29"
+    },
+    {
+      "effective_from": "1388016000",
+      "identity_key": "('NSE_EQ_1003ISFL28_INE413U07269', '1388016000')",
+      "isin": "INE413U07269",
+      "resolution": "LEGITIMATE_TEMPORAL_RECORD",
+      "symbol": "1003ISFL28"
+    },
+    {
+      "effective_from": "1396051200",
+      "identity_key": "('NSE_EQ_1003SCFL31_INE148I07SX3', '1396051200')",
+      "isin": "INE148I07SX3",
+      "resolution": "LEGITIMATE_TEMPORAL_RECORD",
+      "symbol": "1003SCFL31"
+    },
+    {
+      "effective_from": "1380326400",
+      "identity_key": "('NSE_EQ_1003SCL30_INE148I07PN0', '1380326400')",
+      "isin": "INE148I07PN0",
+      "resolution": "LEGITIMATE_TEMPORAL_RECORD",
+      "symbol": "1003SCL30"
+    },
+    {
+      "effective_from": "1384300800",
+      "identity_key": "('NSE_EQ_1003SCL30A_INE148I07QX7', '1384300800')",
+      "isin": "INE148I07QX7",
+      "resolution": "LEGITIMATE_TEMPORAL_RECORD",
+      "symbol": "1003SCL30A"
+    },
+    {
+      "effective_from": "1401926400",
+      "identity_key": "('NSE_EQ_1003SCL31_INE148I07TW3', '1401926400')",
+      "isin": "INE148I07TW3",
+      "resolution": "LEGITIMATE_TEMPORAL_RECORD",
+      "symbol": "1003SCL31"
+    },
+    {
+      "effective_from": "1411862400",
+      "identity_key": "('NSE_EQ_1003SCL31A_INE148I07UR1', '1411862400')",
+      "isin": "INE148I07UR1",
+      "resolution": "LEGITIMATE_TEMPORAL_RECORD",
+      "symbol": "1003SCL31A"
+    },
+    {
+      "effective_from": "1420070400",
+      "identity_key": "('NSE_EQ_1003SCL31P_INE148I07VA5', '1420070400')",
+      "isin": "INE148I07VA5",
+      "resolution": "LEGITIMATE_TEMPORAL_RECORD",
+      "symbol": "1003SCL31P"
+    },
+    {
+      "effective_from": "1367020800",
+      "identity_key": "('NSE_EQ_1003SFIL28_INE244L07556', '1367020800')",
+      "isin": "INE244L07556",
+      "resolution": "LEGITIMATE_TEMPORAL_RECORD",
+      "symbol": "1003SFIL28"
+    },
+    {
+      "effective_from": "1252627200",
+      "identity_key": "('NSE_EQ_1004DLSL24_INE614X07274', '1252627200')",
+      "isin": "INE614X07274",
+      "resolution": "LEGITIMATE_TEMPORAL_RECORD",
+      "symbol": "1004DLSL24"
+    },
+    {
+      "effective_from": "1390435200",
+      "identity_key": "('NSE_EQ_1010CLIX25_INE157D07EG0', '1390435200')",
+      "isin": "INE157D07EG0",
+      "resolution": "LEGITIMATE_TEMPORAL_RECORD",
+      "symbol": "1010CLIX25"
+    },
+    {
+      "effective_from": "1246406400",
+      "identity_key": "('NSE_EQ_1013DLSL24_INE614X07183', '1246406400')",
+      "isin": "INE614X07183",
+      "resolution": "LEGITIMATE_TEMPORAL_RECORD",
+      "symbol": "1013DLSL24"
+    },
+    {
+      "effective_from": "1406246400",
+      "identity_key": "('NSE_EQ_10157PCP24_INE389Z07054', '1406246400')",
+      "isin": "INE389Z07054",
+      "resolution": "LEGITIMATE_TEMPORAL_RECORD",
+      "symbol": "10157PCP24"
+    },
+    {
+      "effective_from": "1406246400",
+      "identity_key": "('NSE_EQ_10157PCP27_INE389Z07054', '1406246400')",
+      "isin": "INE389Z07054",
+      "resolution": "LEGITIMATE_TEMPORAL_RECORD",
+      "symbol": "10157PCP27"
+    },
+    {
+      "effective_from": "1389830400",
+      "identity_key": "('NSE_EQ_1015CLIX25_INE157D07EF2', '1389830400')",
+      "isin": "INE157D07EF2",
+      "resolution": "LEGITIMATE_TEMPORAL_RECORD",
+      "symbol": "1015CLIX25"
+    }
+  ],
+  "resolution_model": "Composite key (instrument_id, effective_from) verified across temporal snapshots",
+  "total_duplicate_instances": 10853
+}

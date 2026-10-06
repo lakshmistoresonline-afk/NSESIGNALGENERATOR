@@ -1,0 +1,9 @@
+{
+  "version": "1.0",
+  "generated_at": "2026-10-05T09:30:00Z",
+  "total_historical_observations": 56922,
+  "interval_contract": "[effective_from, effective_to)",
+  "unresolved_behavior": "UNKNOWN",
+  "ambiguous_behavior": "AMBIGUOUS",
+  "survivorship_protection": "ACTIVE"
+}

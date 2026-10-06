@@ -1,0 +1,6 @@
+[
+    {
+        "merged": "com.trademind.nse.app-release-61:/xml_network_security_config.xml.flat",
+        "source": "com.trademind.nse.app-main-62:/xml/network_security_config.xml"
+    }
+]
