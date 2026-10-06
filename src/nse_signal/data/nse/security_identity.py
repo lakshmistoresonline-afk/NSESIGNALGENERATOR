@@ -56,27 +56,28 @@ class SecurityIdentityEngine:
             except Exception:
                 pass
 
-        # Group by composite key (symbol, isin, series) and sort by effective_from
-        groups: Dict[Tuple[str, str, str], List[dict]] = {}
+        # Group by composite identity (symbol, isin) and build non-overlapping intervals
+        groups: Dict[Tuple[str, str], List[dict]] = {}
         for obs in raw_intervals:
-            k = (obs["symbol"], obs["isin"], obs["series"])
+            k = (obs["symbol"], obs["isin"])
             groups.setdefault(k, []).append(obs)
 
         final_intervals = []
         for k, obs_list in groups.items():
             sorted_obs = sorted(obs_list, key=lambda x: x["effective_from"])
-            unique_obs = []
-            for o in sorted_obs:
-                if not unique_obs or unique_obs[-1]["effective_from"] != o["effective_from"]:
-                    unique_obs.append(o)
+            unique_dates = sorted(list({o["effective_from"] for o in sorted_obs}))
+            if not unique_dates: continue
 
-            for i, obs in enumerate(unique_obs):
-                eff_from = obs["effective_from"]
+            base_obs = next(o for o in sorted_obs if o["effective_from"] == unique_dates[0])
+            for i, dt in enumerate(unique_dates):
+                eff_from = dt
                 eff_to = "2099-12-31"
-                if i + 1 < len(unique_obs):
-                    eff_to = unique_obs[i + 1]["effective_from"]
-                obs["effective_to"] = eff_to
-                final_intervals.append(obs)
+                if i + 1 < len(unique_dates):
+                    eff_to = unique_dates[i + 1]
+                iv = dict(base_obs)
+                iv["effective_from"] = eff_from
+                iv["effective_to"] = eff_to
+                final_intervals.append(iv)
 
         self.intervals = final_intervals
         self._built = True

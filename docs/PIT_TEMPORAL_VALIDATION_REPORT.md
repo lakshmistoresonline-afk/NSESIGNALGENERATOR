@@ -1,6 +1,6 @@
 # PIT Temporal Validation Report
 
-- **Generated At**: 2026-10-06T11:26:44.585482+00:00
+- **Generated At**: 2026-10-06T12:24:02.893541+00:00
 - **Future Asof Rows**: 0
 - **Same-Session Illegal Rows**: 0
 - **Stale Rows**: 0
