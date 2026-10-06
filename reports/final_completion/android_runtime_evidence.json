@@ -1,0 +1,7 @@
+{
+  "status": "NOT_EXECUTED",
+  "evidence_file": "docs/ANDROID_RUNTIME_VALIDATION.md",
+  "command": "None",
+  "execution_timestamp": "2026-10-06T11:29:47.591096+00:00",
+  "failure_reason": "Headless agent container environment lacks an active AVD or physical device"
+}

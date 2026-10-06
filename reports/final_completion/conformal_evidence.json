@@ -1,0 +1,7 @@
+{
+  "status": "BLOCKED",
+  "evidence_file": "data/processed/model_validation/real_walk_forward_results.json",
+  "command": "python scripts/run_real_walk_forward.py",
+  "execution_timestamp": "2026-10-06T11:27:27.967049+00:00",
+  "failure_reason": "Insufficient holdout data for conformal prediction coverage"
+}

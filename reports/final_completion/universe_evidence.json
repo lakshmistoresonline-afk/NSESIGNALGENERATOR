@@ -1,0 +1,7 @@
+{
+  "status": "PASS",
+  "evidence_file": "src/nse_signal/data/universe_policy.py",
+  "command": "python -m pytest tests/test_universe_architecture.py",
+  "execution_timestamp": "2026-10-06T11:26:44.582560+00:00",
+  "failure_reason": null
+}

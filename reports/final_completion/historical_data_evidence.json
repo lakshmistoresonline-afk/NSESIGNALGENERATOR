@@ -1,0 +1,8 @@
+{
+  "status": "PASS",
+  "evidence_file": "data/reference/historical_data_coverage.json",
+  "command": "python scripts/build_historical_inventory.py",
+  "execution_timestamp": "2026-10-06T11:25:56.740276+00:00",
+  "coverage": "Multi-year raw archives (2014-2025)",
+  "failure_reason": null
+}

@@ -1,0 +1,7 @@
+{
+  "status": "PASS",
+  "evidence_file": "src/nse_signal/signals/engine.py",
+  "command": "python -m pytest tests/test_core.py",
+  "execution_timestamp": "2026-10-06T11:29:47.592638+00:00",
+  "failure_reason": null
+}

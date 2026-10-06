@@ -1,6 +1,6 @@
 # Production Gate Evidence Matrix
 
-- **Evaluated At**: 2026-10-06T08:56:45.843990+00:00
+- **Evaluated At**: 2026-10-06T11:29:47.584776+00:00
 - **Overall Status**: `BLOCKED`
 - **Eligible**: `False`
 
@@ -10,14 +10,14 @@
 | `raw_file_integrity` | Raw-File Integrity | `PASS` | `data/reference/raw_manifest.json` | `c5dc31fc9f2d...` | 100% of acquired files | N/A |
 | `historical_security_identity` | Historical Security Identity | `PASS` | `docs/HISTORICAL_IDENTITY_REPORT.md` | `1fc210d0334a...` | Complete effective intervals [effective_from, effective_to) | N/A |
 | `point_in_time_universe` | Point-in-Time Universe | `BLOCKED` | `data/reference/nifty200_membership.csv` | `bf92eb7ab851...` | Fail-closed UNKNOWN fallback | Historical index membership incomplete |
-| `pit_temporal_integrity` | PIT Temporal Integrity | `PASS` | `docs/PIT_TEMPORAL_VALIDATION_REPORT.md` | `MISSING_EVID...` | 28,464 intervals audited | N/A |
+| `pit_temporal_integrity` | PIT Temporal Integrity | `PASS` | `docs/PIT_TEMPORAL_VALIDATION_REPORT.md` | `bea636b7e8fa...` | 28,464 intervals audited | N/A |
 | `required_pit_layers` | Required PIT Layers | `PASS` | `data/reference/authoritative_pit_data_gap_register.json` | `f123ae689a35...` | Core CM Bhavcopy and Security Master present | N/A |
 | `corporate_action_correctness` | Corporate-Action Correctness | `PASS` | `data/processed/nse_pit/corporate_adjustments.csv` | `MISSING_EVID...` | Immutable raw observations preserved | N/A |
-| `model_walk_forward` | Model Walk-Forward Validation | `BLOCKED` | `docs/REAL_WALK_FORWARD_REPORT.md` | `a50336f07d1a...` | Blocked due to insufficient panel time periods | Insufficient historical panel time periods for valid walk-forward folds |
-| `calibration` | Probability Calibration | `BLOCKED` | `data/processed/model_validation/real_walk_forward_results.json` | `8ff84f2a136e...` | Insufficient out-of-sample data | Insufficient OOS observations for reliable calibration curve |
-| `conformal_validation` | Conformal Validation | `BLOCKED` | `data/processed/model_validation/real_walk_forward_results.json` | `8ff84f2a136e...` | Insufficient prediction intervals | Insufficient holdout data for conformal prediction coverage verification |
-| `economic_validation` | Economic Validation | `NOT_APPLICABLE` | `docs/REAL_WALK_FORWARD_REPORT.md` | `a50336f07d1a...` | Not evaluated | Model validation blocked |
-| `drift` | Model Drift | `NOT_APPLICABLE` | `data/processed/model_validation/real_walk_forward_results.json` | `8ff84f2a136e...` | Not evaluated | Model not published |
+| `model_walk_forward` | Model Walk-Forward Validation | `BLOCKED` | `docs/REAL_WALK_FORWARD_REPORT.md` | `1c968d981b3b...` | Blocked due to insufficient panel time periods | Insufficient historical panel time periods for valid walk-forward folds |
+| `calibration` | Probability Calibration | `BLOCKED` | `data/processed/model_validation/real_walk_forward_results.json` | `a78bb565390f...` | Insufficient out-of-sample data | Insufficient OOS observations for reliable calibration curve |
+| `conformal_validation` | Conformal Validation | `BLOCKED` | `data/processed/model_validation/real_walk_forward_results.json` | `a78bb565390f...` | Insufficient prediction intervals | Insufficient holdout data for conformal prediction coverage verification |
+| `economic_validation` | Economic Validation | `NOT_APPLICABLE` | `docs/REAL_WALK_FORWARD_REPORT.md` | `1c968d981b3b...` | Not evaluated | Model validation blocked |
+| `drift` | Model Drift | `NOT_APPLICABLE` | `data/processed/model_validation/real_walk_forward_results.json` | `a78bb565390f...` | Not evaluated | Model not published |
 | `adversarial_validation` | Adversarial Validation | `PASS` | `src/nse_signal/research/adversarial.py` | `97efe84db0d5...` | Research suite functional | N/A |
 | `multiple_testing_controls` | Multiple-Testing Controls | `PASS` | `src/nse_signal/research/falsification.py` | `b639256cfe2b...` | Fully implemented | N/A |
 | `untouched_holdout` | Untouched Holdout | `PASS` | `data/processed/nse_pit/pit_features.csv` | `03f26d04d5cc...` | Reserved | N/A |
