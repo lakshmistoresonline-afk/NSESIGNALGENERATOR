@@ -1,6 +1,6 @@
 # Production Gate Evidence Matrix (Machine-Verified)
 
-- **Evaluated At**: 2026-10-06T14:21:02.513217+00:00
+- **Evaluated At**: 2026-10-06T14:45:34.891551+00:00
 - **Overall Status**: `BLOCKED`
 - **Eligible**: `False`
 
@@ -10,7 +10,7 @@
 | `raw_integrity` | Raw-File Integrity | `PASS` | `data/reference/raw_manifest.json` | `c5dc31fc9f2d...` | N/A |
 | `security_identity` | Historical Security Identity | `PASS` | `docs/HISTORICAL_IDENTITY_REPORT.md` | `1fc210d0334a...` | N/A |
 | `pit_universe` | Point-in-Time Universe | `PASS` | `data/reference/nifty200_membership.csv` | `f45b9f93c51d...` | N/A |
-| `pit_temporal_integrity` | PIT Temporal Integrity | `PASS` | `data/processed/pit/temporal_validation.json` | `c7c44cab4079...` | N/A |
+| `pit_temporal_integrity` | PIT Temporal Integrity | `PASS` | `data/processed/pit/temporal_validation.json` | `2ec67d29a1de...` | N/A |
 | `required_pit_layers` | Required PIT Layers | `PASS` | `data/processed/nse_pit` | `458fbb01429d...` | N/A |
 | `corporate_action_correctness` | Corporate-Action Correctness | `PASS` | `data/processed/nse_pit/corporate_adjustments.csv` | `MISSING...` | N/A |
 | `model_walk_forward` | Model Walk-Forward Validation | `BLOCKED` | `docs/REAL_WALK_FORWARD_REPORT.md` | `1ecf572ee018...` | WALK_FORWARD_BLOCKED: Insufficient unique trading dates (2) for multi-fold chronological walk-forward evaluation |
