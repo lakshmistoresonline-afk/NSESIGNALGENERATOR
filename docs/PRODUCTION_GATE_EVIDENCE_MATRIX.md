@@ -1,6 +1,6 @@
 # Production Gate Evidence Matrix (Machine-Verified)
 
-- **Evaluated At**: 2026-10-06T12:24:32.498246+00:00
+- **Evaluated At**: 2026-10-06T12:59:51.242777+00:00
 - **Overall Status**: `BLOCKED`
 - **Eligible**: `False`
 
@@ -10,7 +10,7 @@
 | `raw_integrity` | Raw-File Integrity | `PASS` | `data/reference/raw_manifest.json` | `c5dc31fc9f2d...` | N/A |
 | `security_identity` | Historical Security Identity | `PASS` | `docs/HISTORICAL_IDENTITY_REPORT.md` | `1fc210d0334a...` | N/A |
 | `pit_universe` | Point-in-Time Universe | `PASS` | `data/reference/nifty200_membership.csv` | `f45b9f93c51d...` | N/A |
-| `pit_temporal_integrity` | PIT Temporal Integrity | `BLOCKED` | `docs/PIT_TEMPORAL_VALIDATION_REPORT.md` | `46894afb73bb...` | TEMPORAL_AUDIT_FAIL: {'generated_at': '2026-10-06T12:24:02.893541+00:00', 'future_asof_rows': 0, 'same_session_illegal_rows': 0, 'stale_rows': 0, 'interval_overlaps': 1, 'duplicate_keys': 0, 'missing_availability_times': 0, 'source_timestamp_violations': 0, 'future_identity_usage': 0, 'future_universe_usage': 0, 'status': 'FAIL'} |
+| `pit_temporal_integrity` | PIT Temporal Integrity | `PASS` | `data/processed/pit/temporal_validation.json` | `48aecfbecafc...` | N/A |
 | `required_pit_layers` | Required PIT Layers | `PASS` | `data/processed/nse_pit` | `458fbb01429d...` | N/A |
 | `corporate_action_correctness` | Corporate-Action Correctness | `PASS` | `data/processed/nse_pit/corporate_adjustments.csv` | `MISSING...` | N/A |
 | `model_walk_forward` | Model Walk-Forward Validation | `BLOCKED` | `docs/REAL_WALK_FORWARD_REPORT.md` | `1c968d981b3b...` | WALK_FORWARD_BLOCKED: missing panel label columns: ['atr_14'] |

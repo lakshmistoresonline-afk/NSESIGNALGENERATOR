@@ -68,20 +68,19 @@ def _validate_pit_universe() -> tuple[str, str | None]:
             m = load_membership("data/reference/nifty200_membership.csv", allow_empty=False)
             if m.empty:
                 return "BLOCKED", "EMPTY_PIT_MEMBERSHIP"
-        # Broad NSE production does not require Nifty 200 membership
         return "PASS", None
     except Exception as e:
         return "BLOCKED", f"PIT_UNIVERSE_ERROR: {e}"
 
 def _validate_pit_temporal_integrity() -> tuple[str, str | None]:
     try:
-        from nse_signal.data.nse.temporal_audit import run_pit_temporal_audit
-        res = run_pit_temporal_audit()
-        if res.get("status") != "PASS" or res.get("interval_overlaps", 0) > 0:
-            return "BLOCKED", f"TEMPORAL_AUDIT_FAIL: {res}"
+        from nse_signal.data.nse.temporal_validator import execute_pit_temporal_validation
+        res = execute_pit_temporal_validation()
+        if res.get("status") != "PASS" or res.get("invalid_records", 0) > 0:
+            return "BLOCKED", f"TEMPORAL_VALIDATION_FAIL: {res.get('sample_violations', [])}"
         return "PASS", None
     except Exception as e:
-        return "BLOCKED", f"TEMPORAL_AUDIT_EXCEPTION: {e}"
+        return "BLOCKED", f"TEMPORAL_VALIDATION_EXCEPTION: {e}"
 
 def _validate_required_layers() -> tuple[str, str | None]:
     pit_root = Path("data/processed/nse_pit")
@@ -191,7 +190,7 @@ def evaluate_production_gate(root_dir: str = ".") -> dict:
         ("raw_integrity", "Raw-File Integrity", _validate_raw_integrity, "data/reference/raw_manifest.json", "python -m nse_signal.cli --ingest"),
         ("security_identity", "Historical Security Identity", _validate_security_identity, "docs/HISTORICAL_IDENTITY_REPORT.md", "python -m pytest tests/test_historical_identity.py"),
         ("pit_universe", "Point-in-Time Universe", _validate_pit_universe, "data/reference/nifty200_membership.csv", "python -m pytest tests/test_universe_architecture.py"),
-        ("pit_temporal_integrity", "PIT Temporal Integrity", _validate_pit_temporal_integrity, "docs/PIT_TEMPORAL_VALIDATION_REPORT.md", "python -m nse_signal.data.nse.temporal_audit"),
+        ("pit_temporal_integrity", "PIT Temporal Integrity", _validate_pit_temporal_integrity, "data/processed/pit/temporal_validation.json", "python -m nse_signal.data.nse.temporal_validator"),
         ("required_pit_layers", "Required PIT Layers", _validate_required_layers, "data/processed/nse_pit", "python -m nse_signal.cli --build-pit"),
         ("corporate_action_correctness", "Corporate-Action Correctness", _validate_corporate_actions, "data/processed/nse_pit/corporate_adjustments.csv", "python scripts/build_pit_dataset.py"),
         ("model_walk_forward", "Model Walk-Forward Validation", _validate_walk_forward, "docs/REAL_WALK_FORWARD_REPORT.md", "python scripts/run_real_walk_forward.py"),
