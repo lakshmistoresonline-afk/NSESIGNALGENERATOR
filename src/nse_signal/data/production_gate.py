@@ -92,11 +92,14 @@ def _validate_required_layers() -> tuple[str, str | None]:
     return "PASS", None
 
 def _validate_corporate_actions() -> tuple[str, str | None]:
-    adj_path = Path("data/processed/nse_pit/corporate_adjustments.csv")
-    if not adj_path.exists():
-        if not Path("data/reference/raw_manifest.json").exists():
-            return "BLOCKED", "MISSING_CORPORATE_ACTIONS"
-    return "PASS", None
+    try:
+        from nse_signal.data.nse.corporate_action_validator import validate_corporate_actions
+        res = validate_corporate_actions()
+        if res.get("status") != "PASS":
+            return "BLOCKED", f"CORPORATE_ACTION_FAIL: {res.get('failure_reason')}"
+        return "PASS", None
+    except Exception as e:
+        return "BLOCKED", f"CORPORATE_ACTION_EXCEPTION: {e}"
 
 def _validate_walk_forward() -> tuple[str, str | None]:
     res_path = Path("data/processed/model_validation/real_walk_forward_results.json")
@@ -192,7 +195,7 @@ def evaluate_production_gate(root_dir: str = ".") -> dict:
         ("pit_universe", "Point-in-Time Universe", _validate_pit_universe, "data/reference/nifty200_membership.csv", "python -m pytest tests/test_universe_architecture.py"),
         ("pit_temporal_integrity", "PIT Temporal Integrity", _validate_pit_temporal_integrity, "data/processed/pit/temporal_validation.json", "python -m nse_signal.data.nse.temporal_validator"),
         ("required_pit_layers", "Required PIT Layers", _validate_required_layers, "data/processed/nse_pit", "python -m nse_signal.cli --build-pit"),
-        ("corporate_action_correctness", "Corporate-Action Correctness", _validate_corporate_actions, "data/processed/nse_pit/corporate_adjustments.csv", "python scripts/build_pit_dataset.py"),
+        ("corporate_action_correctness", "Corporate-Action Correctness", _validate_corporate_actions, "data/processed/pit/corporate_action_validation.json", "python -m nse_signal.data.nse.corporate_action_validator"),
         ("model_walk_forward", "Model Walk-Forward Validation", _validate_walk_forward, "docs/REAL_WALK_FORWARD_REPORT.md", "python scripts/run_real_walk_forward.py"),
         ("calibration", "Probability Calibration", _validate_calibration, "data/processed/model_validation/real_walk_forward_results.json", "python scripts/run_real_walk_forward.py"),
         ("conformal_validation", "Conformal Validation", _validate_conformal, "data/processed/model_validation/real_walk_forward_results.json", "python scripts/run_real_walk_forward.py"),
