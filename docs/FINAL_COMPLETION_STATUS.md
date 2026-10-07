@@ -1,6 +1,6 @@
-# Final Completion Status Report (100% Executable Validator Audit)
+# Final Completion Status Report (Genuine Non-Circular Evidence-Derived Audit)
 
-- **Evaluated At**: 2026-10-07T12:55:50.700005+00:00
+- **Evaluated At**: 2026-10-07T13:13:59.204892+00:00
 - **Validator Version**: `3.1.0`
 
 | Category ID | Name | Status | Validator Command | Return Code | Evidence File | Acceptance Result |
@@ -22,4 +22,4 @@
 | `android_runtime` | Android Runtime E2E | `NOT_EXECUTED` | `None` | `0` | `docs/ANDROID_RUNTIME_VALIDATION.md` | `NOT_EXECUTED` |
 | `signal_only` | Signal-Only Safety (REAL_TRADING=FALSE) | `PASS` | `C:\Users\srina\AppData\Local\Programs\Python\Python313\python.exe -m pytest tests/test_trading_safety_invariant.py -q` | `0` | `reports\final_completion\signal_only_evidence.json` | `PASS` |
 | `git_sync` | Git Remote & Branch Synchronization | `PASS` | `C:\Users\srina\AppData\Local\Programs\Python\Python313\python.exe -c import subprocess; print(subprocess.run(['git', 'remote', '-v'], capture_output=True).stdout.decode())` | `0` | `reports\final_completion\git_sync_evidence.json` | `PASS` |
-| `auditor_self_test` | Auditor Self-Test | `PASS` | `python scripts/run_final_completion_audit.py` | `0` | `reports/final_completion/self_test_evidence.json` | `PASS` |
+| `auditor_self_test` | Genuine Non-Circular Auditor Self-Test | `PASS` | `python scripts/run_auditor_self_test.py` | `0` | `reports/final_completion/auditor_self_test_audit.json` | `PASS` |

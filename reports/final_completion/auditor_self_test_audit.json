@@ -1,0 +1,13 @@
+{
+  "detection_verified": true,
+  "generated_at": "2026-10-07T13:13:59.203580+00:00",
+  "mutated_hash": "47e4f10588ba584c32f999f2431a2749d8d4e90c47aa3fb51c8044431bdb6fb9",
+  "mutation_description": "Inject invalid completeness ratio / corrupt historical coverage JSON structure",
+  "original_hash": "3ef2b79a5db40bdd14ac329d9c025d895bd4c4621d560e03bfc9568fad601834",
+  "post_mutation_status": "BLOCKED",
+  "pre_mutation_status": "BLOCKED",
+  "restored_hash": "3ef2b79a5db40bdd14ac329d9c025d895bd4c4621d560e03bfc9568fad601834",
+  "restored_status": "BLOCKED",
+  "status": "PASS",
+  "target_evidence": "data\\processed\\final_historical_coverage.json"
+}

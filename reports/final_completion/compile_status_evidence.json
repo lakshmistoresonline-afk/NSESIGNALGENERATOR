@@ -2,7 +2,7 @@
   "acceptance_result": "PASS",
   "category_id": "compile_status",
   "evidence_file": "reports\\final_completion\\compile_status_evidence.json",
-  "execution_timestamp": "2026-10-07T12:50:22.847593+00:00",
+  "execution_timestamp": "2026-10-07T13:09:34.282945+00:00",
   "input_hashes": [
     "e43306c050373d8ce229ab8586d330842c32cba403fc0ac713b40b22a421a2aa"
   ],
@@ -11,7 +11,7 @@
     "stdout_snippet": "Listing 'src'...\nListing 'src\\\\nse_signal'...\nListing 'src\\\\nse_signal\\\\backtest'...\nListing 'src\\\\nse_signal\\\\data'...\nListing 'src\\\\nse_signal\\\\data\\\\forensic'...\nListing 'src\\\\nse_signal\\\\data\\\\nse'...\nListing 'src\\\\nse_signal\\\\data\\\\providers'...\nListing 'src\\\\nse_signal\\\\features'...\nListing 's"
   },
   "name": "Source Compilation",
-  "output_hash": "b4caae376f086d3d78cd55205a20b748b68424aac291fc0292ce7b20035db16d",
+  "output_hash": "38d2bb356c5acb78ba958b16ee18f6b68f65625f1d0cb92668b2de2e31aa35c8",
   "return_code": 0,
   "status": "PASS",
   "validator_command": "C:\\Users\\srina\\AppData\\Local\\Programs\\Python\\Python313\\python.exe -m compileall src server scripts",

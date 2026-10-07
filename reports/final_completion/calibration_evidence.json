@@ -2,7 +2,7 @@
   "acceptance_result": "BLOCKED",
   "category_id": "calibration",
   "evidence_file": "reports\\final_completion\\calibration_evidence.json",
-  "execution_timestamp": "2026-10-07T12:53:20.392562+00:00",
+  "execution_timestamp": "2026-10-07T13:11:48.951578+00:00",
   "input_hashes": [
     "e43306c050373d8ce229ab8586d330842c32cba403fc0ac713b40b22a421a2aa"
   ],
@@ -10,7 +10,7 @@
     "brier_score": null,
     "calibration_error_ece": null,
     "class_balance": null,
-    "generated_at": "2026-10-07T12:53:20.273264+00:00",
+    "generated_at": "2026-10-07T13:11:48.821301+00:00",
     "per_fold_calibration": [],
     "reason": "Insufficient out-of-sample observations from walk-forward folds for probability calibration",
     "reliability": [],
@@ -18,7 +18,7 @@
     "status": "BLOCKED"
   },
   "name": "Probability Calibration",
-  "output_hash": "213ac5c54a3843ebfe8854f2d408cc4d5b73620694cdd8f1e64402e868e9fad3",
+  "output_hash": "f2fb27e4b00f98b13b6ab0ffa69c269ec34778379926f7802fb9df75a75705ac",
   "return_code": 0,
   "status": "BLOCKED",
   "validator_command": "C:\\Users\\srina\\AppData\\Local\\Programs\\Python\\Python313\\python.exe scripts/build_calibration_conformal.py",

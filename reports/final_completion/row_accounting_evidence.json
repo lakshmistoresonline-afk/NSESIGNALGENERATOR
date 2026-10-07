@@ -2,7 +2,7 @@
   "acceptance_result": "BLOCKED",
   "category_id": "row_accounting",
   "evidence_file": "reports\\final_completion\\row_accounting_evidence.json",
-  "execution_timestamp": "2026-10-07T12:53:16.634220+00:00",
+  "execution_timestamp": "2026-10-07T13:11:44.853103+00:00",
   "input_hashes": [
     "e43306c050373d8ce229ab8586d330842c32cba403fc0ac713b40b22a421a2aa"
   ],
@@ -12,7 +12,7 @@
     "stdout_snippet": "Final row accounting generated: data\\processed\\final_row_accounting.json\n"
   },
   "name": "Independent Row Accounting",
-  "output_hash": "487e948e9c34dc7f6a7287f8518ea4b435cd0612c5e7a6963a4c446e69431ae8",
+  "output_hash": "93a87608409698ee57089608f9c4721909fd523ae9fcd924d2a9e2b45546f968",
   "return_code": 0,
   "status": "BLOCKED",
   "validator_command": "C:\\Users\\srina\\AppData\\Local\\Programs\\Python\\Python313\\python.exe scripts/build_final_row_accounting.py",

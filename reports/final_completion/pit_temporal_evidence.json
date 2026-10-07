@@ -2,13 +2,13 @@
   "acceptance_result": "PASS",
   "category_id": "pit_temporal",
   "evidence_file": "reports\\final_completion\\pit_temporal_evidence.json",
-  "execution_timestamp": "2026-10-07T12:52:21.505963+00:00",
+  "execution_timestamp": "2026-10-07T13:11:00.631067+00:00",
   "input_hashes": [
     "e43306c050373d8ce229ab8586d330842c32cba403fc0ac713b40b22a421a2aa"
   ],
   "metrics": {
     "future_leak_count": 0,
-    "generated_at": "2026-10-07T12:53:15.138756+00:00",
+    "generated_at": "2026-10-07T13:11:43.562551+00:00",
     "invalid_records": 0,
     "missing_provenance_count": 0,
     "overlap_count": 0,
@@ -19,7 +19,7 @@
     "valid_records": 5967
   },
   "name": "PIT Temporal Integrity",
-  "output_hash": "a6afc24df064322d66b43e4b4c736b84a35fa9512b280f17501ceae913fce473",
+  "output_hash": "2e58e6cabae05b6b13dae32bae96943ff7a08291bb29a90cfbb8d162906a9fc1",
   "return_code": 0,
   "status": "PASS",
   "validator_command": "C:\\Users\\srina\\AppData\\Local\\Programs\\Python\\Python313\\python.exe scripts/build_final_pit_temporal_validation.py",

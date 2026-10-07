@@ -2,19 +2,19 @@
   "acceptance_result": "BLOCKED",
   "category_id": "walk_forward",
   "evidence_file": "reports\\final_completion\\walk_forward_evidence.json",
-  "execution_timestamp": "2026-10-07T12:53:19.218155+00:00",
+  "execution_timestamp": "2026-10-07T13:11:47.691915+00:00",
   "input_hashes": [
     "e43306c050373d8ce229ab8586d330842c32cba403fc0ac713b40b22a421a2aa"
   ],
   "metrics": {
     "folds": [],
-    "generated_at": "2026-10-07 18:23:19.085975",
+    "generated_at": "2026-10-07 18:41:47.556774",
     "reason": "Insufficient unique trading dates (2) for genuine multi-fold chronological walk-forward evaluation",
     "status": "MODEL_VALIDATION_BLOCKED",
     "synthetic": false
   },
   "name": "Model Walk-Forward Validation",
-  "output_hash": "79a223510db45fb2b6688fcc066581d072da08ae8d0dd66d384ad779da75d3bf",
+  "output_hash": "0e396c231e2f519f37bcce31f7b429160d638ce517172438453ac4dd2cbda891",
   "return_code": 0,
   "status": "BLOCKED",
   "validator_command": "C:\\Users\\srina\\AppData\\Local\\Programs\\Python\\Python313\\python.exe scripts/run_real_walk_forward.py",
