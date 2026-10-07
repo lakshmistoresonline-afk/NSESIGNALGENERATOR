@@ -2,7 +2,7 @@
   "acceptance_result": "PASS",
   "category_id": "corporate_action",
   "evidence_file": "reports\\final_completion\\corporate_action_evidence.json",
-  "execution_timestamp": "2026-10-07T12:30:06.716147+00:00",
+  "execution_timestamp": "2026-10-07T12:53:17.839099+00:00",
   "input_hashes": [
     "e43306c050373d8ce229ab8586d330842c32cba403fc0ac713b40b22a421a2aa"
   ],
@@ -10,7 +10,7 @@
     "adjustments_present": false,
     "events_present": false,
     "failure_reason": null,
-    "generated_at": "2026-10-07T12:30:06.717502+00:00",
+    "generated_at": "2026-10-07T12:53:17.840099+00:00",
     "lifecycle_coverage": {
       "bonus_issues": true,
       "delistings": true,
@@ -26,7 +26,7 @@
     "status": "PASS"
   },
   "name": "Corporate-Action Correctness",
-  "output_hash": "abfdba8734e2dadd77b52d51e905b7ec474fe40e56c4fc6825fafcbb511ef3b6",
+  "output_hash": "3279b40d4bb4f09eebf83938042566c0c8c142176e573e824498d1f975b94983",
   "return_code": 0,
   "status": "PASS",
   "validator_command": "C:\\Users\\srina\\AppData\\Local\\Programs\\Python\\Python313\\python.exe src/nse_signal/data/nse/corporate_action_validator.py",

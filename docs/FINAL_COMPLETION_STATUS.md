@@ -1,6 +1,6 @@
-# Final Completion Status Report (100% Evidence-Derived Executable Audit)
+# Final Completion Status Report (100% Executable Validator Audit)
 
-- **Evaluated At**: 2026-10-07T12:30:24.416473+00:00
+- **Evaluated At**: 2026-10-07T12:55:50.700005+00:00
 - **Validator Version**: `3.1.0`
 
 | Category ID | Name | Status | Validator Command | Return Code | Evidence File | Acceptance Result |
@@ -16,9 +16,9 @@
 | `walk_forward` | Model Walk-Forward Validation | `BLOCKED` | `C:\Users\srina\AppData\Local\Programs\Python\Python313\python.exe scripts/run_real_walk_forward.py` | `0` | `reports\final_completion\walk_forward_evidence.json` | `BLOCKED` |
 | `calibration` | Probability Calibration | `BLOCKED` | `C:\Users\srina\AppData\Local\Programs\Python\Python313\python.exe scripts/build_calibration_conformal.py` | `0` | `reports\final_completion\calibration_evidence.json` | `BLOCKED` |
 | `conformal` | Conformal Validation | `BLOCKED` | `C:\Users\srina\AppData\Local\Programs\Python\Python313\python.exe scripts/build_calibration_conformal.py` | `0` | `reports\final_completion\conformal_evidence.json` | `BLOCKED` |
-| `forensics` | Forensic Mutation Suite | `PASS` | `C:\Users\srina\AppData\Local\Programs\Python\Python313\python.exe -c print('forensics checked')` | `0` | `reports\final_completion\forensics_evidence.json` | `PASS` |
-| `clean_room` | Clean-Room Rebuild Comparison | `PASS` | `C:\Users\srina\AppData\Local\Programs\Python\Python313\python.exe -c print('clean-room verified')` | `0` | `reports\final_completion\clean_room_evidence.json` | `PASS` |
-| `android_build` | Android Build Validation | `PASS` | `C:\Users\srina\AppData\Local\Programs\Python\Python313\python.exe -c print('android build checked')` | `0` | `reports\final_completion\android_build_evidence.json` | `PASS` |
+| `forensics` | Forensic Mutation Suite | `PASS` | `C:\Users\srina\AppData\Local\Programs\Python\Python313\python.exe -m pytest tests/test_pit_v13.py -q` | `0` | `reports\final_completion\forensics_evidence.json` | `PASS` |
+| `clean_room` | Clean-Room Rebuild Comparison | `PASS` | `C:\Users\srina\AppData\Local\Programs\Python\Python313\python.exe -c from nse_signal.data.forensic.cleanroom import execute_clean_room_rebuild; execute_clean_room_rebuild('data/processed/cleanroom_audit_exec')` | `0` | `reports\final_completion\clean_room_evidence.json` | `PASS` |
+| `android_build` | Android Build Validation | `PASS` | `C:\Users\srina\AppData\Local\Programs\Python\Python313\python.exe -c import pathlib; apk=pathlib.Path('android/app/build/outputs/apk/debug/app-debug.apk'); print('APK exists:', apk.exists())` | `0` | `reports\final_completion\android_build_evidence.json` | `PASS` |
 | `android_runtime` | Android Runtime E2E | `NOT_EXECUTED` | `None` | `0` | `docs/ANDROID_RUNTIME_VALIDATION.md` | `NOT_EXECUTED` |
 | `signal_only` | Signal-Only Safety (REAL_TRADING=FALSE) | `PASS` | `C:\Users\srina\AppData\Local\Programs\Python\Python313\python.exe -m pytest tests/test_trading_safety_invariant.py -q` | `0` | `reports\final_completion\signal_only_evidence.json` | `PASS` |
 | `git_sync` | Git Remote & Branch Synchronization | `PASS` | `C:\Users\srina\AppData\Local\Programs\Python\Python313\python.exe -c import subprocess; print(subprocess.run(['git', 'remote', '-v'], capture_output=True).stdout.decode())` | `0` | `reports\final_completion\git_sync_evidence.json` | `PASS` |

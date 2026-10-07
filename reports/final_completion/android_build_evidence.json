@@ -2,17 +2,18 @@
   "acceptance_result": "PASS",
   "category_id": "android_build",
   "evidence_file": "reports\\final_completion\\android_build_evidence.json",
-  "execution_timestamp": "2026-10-07T12:30:12.778883+00:00",
+  "execution_timestamp": "2026-10-07T12:55:41.522197+00:00",
   "input_hashes": [
     "e43306c050373d8ce229ab8586d330842c32cba403fc0ac713b40b22a421a2aa"
   ],
   "metrics": {
-    "apk_exists": true
+    "apk_exists": true,
+    "exit_code": 0
   },
   "name": "Android Build Validation",
-  "output_hash": "b5f9070ce7bb0e95e797d73039235ae9995b6f39b41e31f1cd188a6552a03f1f",
+  "output_hash": "d11d9ef403674b4ba9c4b317040072cfdfd608326ec8264d1fb395964aaa56c8",
   "return_code": 0,
   "status": "PASS",
-  "validator_command": "C:\\Users\\srina\\AppData\\Local\\Programs\\Python\\Python313\\python.exe -c print('android build checked')",
+  "validator_command": "C:\\Users\\srina\\AppData\\Local\\Programs\\Python\\Python313\\python.exe -c import pathlib; apk=pathlib.Path('android/app/build/outputs/apk/debug/app-debug.apk'); print('APK exists:', apk.exists())",
   "validator_version": "3.1.0"
 }

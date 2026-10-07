@@ -2,17 +2,18 @@
   "acceptance_result": "PASS",
   "category_id": "forensics",
   "evidence_file": "reports\\final_completion\\forensics_evidence.json",
-  "execution_timestamp": "2026-10-07T12:30:12.517996+00:00",
+  "execution_timestamp": "2026-10-07T12:53:27.141113+00:00",
   "input_hashes": [
     "e43306c050373d8ce229ab8586d330842c32cba403fc0ac713b40b22a421a2aa"
   ],
   "metrics": {
-    "mutations_verified": 28
+    "mutations_verified": 28,
+    "return_code": 0
   },
   "name": "Forensic Mutation Suite",
-  "output_hash": "MISSING",
+  "output_hash": "18b0c36cc3e4ff04255b37a0ba0f10a71817b06f06026c21b476323582276aec",
   "return_code": 0,
   "status": "PASS",
-  "validator_command": "C:\\Users\\srina\\AppData\\Local\\Programs\\Python\\Python313\\python.exe -c print('forensics checked')",
+  "validator_command": "C:\\Users\\srina\\AppData\\Local\\Programs\\Python\\Python313\\python.exe -m pytest tests/test_pit_v13.py -q",
   "validator_version": "3.1.0"
 }

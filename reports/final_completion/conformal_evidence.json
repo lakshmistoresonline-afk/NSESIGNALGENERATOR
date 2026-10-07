@@ -2,14 +2,14 @@
   "acceptance_result": "BLOCKED",
   "category_id": "conformal",
   "evidence_file": "reports\\final_completion\\conformal_evidence.json",
-  "execution_timestamp": "2026-10-07T12:30:12.382239+00:00",
+  "execution_timestamp": "2026-10-07T12:53:21.764814+00:00",
   "input_hashes": [
     "e43306c050373d8ce229ab8586d330842c32cba403fc0ac713b40b22a421a2aa"
   ],
   "metrics": {
     "abstention_rate": null,
     "actual_coverage": null,
-    "generated_at": "2026-10-07T12:30:12.195778+00:00",
+    "generated_at": "2026-10-07T12:53:21.571941+00:00",
     "interval_set_size": null,
     "nominal_coverage": 0.9,
     "per_fold_results": [],
@@ -18,7 +18,7 @@
     "status": "BLOCKED"
   },
   "name": "Conformal Validation",
-  "output_hash": "f2c8871f967bca99e4b2a4399a9056077e082ef07373f6124d09ea1eab3adce2",
+  "output_hash": "e6d755ce14932deadb090ce503e96f438fb3d7acaf7aaaf5012b5ea10790dfc3",
   "return_code": 0,
   "status": "BLOCKED",
   "validator_command": "C:\\Users\\srina\\AppData\\Local\\Programs\\Python\\Python313\\python.exe scripts/build_calibration_conformal.py",

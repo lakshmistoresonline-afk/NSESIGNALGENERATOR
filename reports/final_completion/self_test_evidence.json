@@ -2,13 +2,13 @@
   "acceptance_result": "PASS",
   "category_id": "auditor_self_test",
   "evidence_file": "reports/final_completion/self_test_evidence.json",
-  "execution_timestamp": "2026-10-07T12:30:24.415165+00:00",
+  "execution_timestamp": "2026-10-07T12:55:50.699044+00:00",
   "input_hashes": [],
   "metrics": {
     "self_test_passed": true
   },
   "name": "Auditor Self-Test",
-  "output_hash": "READ_ERROR",
+  "output_hash": "43969da0faf17cd05ca1b1e668c695e348b033ef55a88ed8c732454ac29f73a6",
   "return_code": 0,
   "status": "PASS",
   "validator_command": "python scripts/run_final_completion_audit.py",

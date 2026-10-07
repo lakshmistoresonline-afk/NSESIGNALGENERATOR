@@ -2,17 +2,67 @@
   "acceptance_result": "PASS",
   "category_id": "clean_room",
   "evidence_file": "reports\\final_completion\\clean_room_evidence.json",
-  "execution_timestamp": "2026-10-07T12:30:12.647717+00:00",
+  "execution_timestamp": "2026-10-07T12:54:32.074004+00:00",
   "input_hashes": [
     "e43306c050373d8ce229ab8586d330842c32cba403fc0ac713b40b22a421a2aa"
   ],
   "metrics": {
-    "report_present": true
+    "dataset_stats": {
+      "cash_bhavcopy_2025-01-02": {
+        "canonical_observations": 2928,
+        "conflict_observations": 0,
+        "dataset": "cash_bhavcopy",
+        "error_rows": 0,
+        "event_date": "2025-01-02",
+        "exact_duplicate_observations": 2,
+        "normalized_rows": 2930,
+        "rejected_rows": 0,
+        "source_rows": 2930
+      },
+      "cash_bhavcopy_2025-01-03": {
+        "canonical_observations": 2919,
+        "conflict_observations": 0,
+        "dataset": "cash_bhavcopy",
+        "error_rows": 0,
+        "event_date": "2025-01-03",
+        "exact_duplicate_observations": 3,
+        "normalized_rows": 2922,
+        "rejected_rows": 0,
+        "source_rows": 2922
+      },
+      "security_master_2025-01-02": {
+        "canonical_observations": 28458,
+        "conflict_observations": 0,
+        "dataset": "security_master",
+        "error_rows": 0,
+        "event_date": "2025-01-02",
+        "exact_duplicate_observations": 0,
+        "normalized_rows": 28458,
+        "rejected_rows": 0,
+        "source_rows": 28458
+      },
+      "security_master_2025-01-03": {
+        "canonical_observations": 28464,
+        "conflict_observations": 0,
+        "dataset": "security_master",
+        "error_rows": 0,
+        "event_date": "2025-01-03",
+        "exact_duplicate_observations": 0,
+        "normalized_rows": 28464,
+        "rejected_rows": 0,
+        "source_rows": 28464
+      }
+    },
+    "generated_at": "2026-10-07T12:55:41.345121+00:00",
+    "total_canonical_observations": 62769,
+    "total_normalized_observations": 62774,
+    "total_physical_intervals": 28464,
+    "total_source_observations": 62774
   },
   "name": "Clean-Room Rebuild Comparison",
-  "output_hash": "ad11c1abef20c0d33056f340c72e36d0d39f352911fe836c595428d9d7142755",
+  "output_hash": "83e92cdf272f6d3497be7e97a55099e3e545547e639f1de20297b40d1264d0cd",
   "return_code": 0,
   "status": "PASS",
-  "validator_command": "C:\\Users\\srina\\AppData\\Local\\Programs\\Python\\Python313\\python.exe -c print('clean-room verified')",
+  "validator_command": "C:\\Users\\srina\\AppData\\Local\\Programs\\Python\\Python313\\python.exe -c from nse_signal.data.forensic.cleanroom import execute_clean_room_rebuild; execute_clean_room_rebuild('data/processed/cleanroom_audit_exec')",
   "validator_version": "3.1.0"
 }
