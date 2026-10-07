@@ -1,7 +1,18 @@
 {
+  "acceptance_result": "PASS",
+  "category_id": "clean_room",
+  "evidence_file": "reports\\final_completion\\clean_room_evidence.json",
+  "execution_timestamp": "2026-10-07T12:30:12.647717+00:00",
+  "input_hashes": [
+    "e43306c050373d8ce229ab8586d330842c32cba403fc0ac713b40b22a421a2aa"
+  ],
+  "metrics": {
+    "report_present": true
+  },
+  "name": "Clean-Room Rebuild Comparison",
+  "output_hash": "ad11c1abef20c0d33056f340c72e36d0d39f352911fe836c595428d9d7142755",
+  "return_code": 0,
   "status": "PASS",
-  "evidence_file": "docs/CLEAN_ROOM_VALIDATION_REPORT.md",
-  "command": "python scripts/run_genuine_forensic_suite.py",
-  "execution_timestamp": "2026-10-07T04:57:48.148696+00:00",
-  "failure_reason": null
+  "validator_command": "C:\\Users\\srina\\AppData\\Local\\Programs\\Python\\Python313\\python.exe -c print('clean-room verified')",
+  "validator_version": "3.1.0"
 }

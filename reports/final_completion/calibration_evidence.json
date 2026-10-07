@@ -1,7 +1,26 @@
 {
+  "acceptance_result": "BLOCKED",
+  "category_id": "calibration",
+  "evidence_file": "reports\\final_completion\\calibration_evidence.json",
+  "execution_timestamp": "2026-10-07T12:30:10.672425+00:00",
+  "input_hashes": [
+    "e43306c050373d8ce229ab8586d330842c32cba403fc0ac713b40b22a421a2aa"
+  ],
+  "metrics": {
+    "brier_score": null,
+    "calibration_error_ece": null,
+    "class_balance": null,
+    "generated_at": "2026-10-07T12:30:10.489357+00:00",
+    "per_fold_calibration": [],
+    "reason": "Insufficient out-of-sample observations from walk-forward folds for probability calibration",
+    "reliability": [],
+    "sample_count": 0,
+    "status": "BLOCKED"
+  },
+  "name": "Probability Calibration",
+  "output_hash": "0e1d292b3f151ed67b991879b0666de382768e66deefddd6c15103214146dfe0",
+  "return_code": 0,
   "status": "BLOCKED",
-  "evidence_file": "data/processed/model_validation/calibration_results.json",
-  "command": "python scripts/validate_calibration_conformal.py",
-  "execution_timestamp": "2026-10-07T04:57:48.145588+00:00",
-  "failure_reason": "Insufficient out-of-sample observations for calibration"
+  "validator_command": "C:\\Users\\srina\\AppData\\Local\\Programs\\Python\\Python313\\python.exe scripts/build_calibration_conformal.py",
+  "validator_version": "3.1.0"
 }

@@ -1,7 +1,20 @@
 {
-  "status": "PASS",
-  "evidence_file": "data/processed/pit/row_accounting.json",
-  "command": "python scripts/build_pit_dataset.py",
-  "execution_timestamp": "2026-10-07T04:57:48.140211+00:00",
-  "failure_reason": null
+  "acceptance_result": "BLOCKED",
+  "category_id": "row_accounting",
+  "evidence_file": "reports\\final_completion\\row_accounting_evidence.json",
+  "execution_timestamp": "2026-10-07T12:30:05.080844+00:00",
+  "input_hashes": [
+    "e43306c050373d8ce229ab8586d330842c32cba403fc0ac713b40b22a421a2aa"
+  ],
+  "metrics": {
+    "error": "No module named 'scripts.build_final_row_accounting'",
+    "return_code": 0,
+    "stdout_snippet": "Final row accounting generated: data\\processed\\final_row_accounting.json\n"
+  },
+  "name": "Independent Row Accounting",
+  "output_hash": "c150cb5b79a52c06eb73da792f48777b6c45125a197992677c29cb36254f90db",
+  "return_code": 0,
+  "status": "BLOCKED",
+  "validator_command": "C:\\Users\\srina\\AppData\\Local\\Programs\\Python\\Python313\\python.exe scripts/build_final_row_accounting.py",
+  "validator_version": "3.1.0"
 }

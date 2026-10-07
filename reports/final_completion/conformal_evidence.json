@@ -1,7 +1,26 @@
 {
+  "acceptance_result": "BLOCKED",
+  "category_id": "conformal",
+  "evidence_file": "reports\\final_completion\\conformal_evidence.json",
+  "execution_timestamp": "2026-10-07T12:30:12.382239+00:00",
+  "input_hashes": [
+    "e43306c050373d8ce229ab8586d330842c32cba403fc0ac713b40b22a421a2aa"
+  ],
+  "metrics": {
+    "abstention_rate": null,
+    "actual_coverage": null,
+    "generated_at": "2026-10-07T12:30:12.195778+00:00",
+    "interval_set_size": null,
+    "nominal_coverage": 0.9,
+    "per_fold_results": [],
+    "reason": "Insufficient out-of-sample observations from walk-forward folds for conformal validation",
+    "sample_count": 0,
+    "status": "BLOCKED"
+  },
+  "name": "Conformal Validation",
+  "output_hash": "f2c8871f967bca99e4b2a4399a9056077e082ef07373f6124d09ea1eab3adce2",
+  "return_code": 0,
   "status": "BLOCKED",
-  "evidence_file": "data/processed/model_validation/conformal_results.json",
-  "command": "python scripts/validate_calibration_conformal.py",
-  "execution_timestamp": "2026-10-07T04:57:48.146568+00:00",
-  "failure_reason": "Insufficient holdout observations for conformal coverage"
+  "validator_command": "C:\\Users\\srina\\AppData\\Local\\Programs\\Python\\Python313\\python.exe scripts/build_calibration_conformal.py",
+  "validator_version": "3.1.0"
 }

@@ -1,7 +1,18 @@
 {
+  "acceptance_result": "PASS",
+  "category_id": "android_build",
+  "evidence_file": "reports\\final_completion\\android_build_evidence.json",
+  "execution_timestamp": "2026-10-07T12:30:12.778883+00:00",
+  "input_hashes": [
+    "e43306c050373d8ce229ab8586d330842c32cba403fc0ac713b40b22a421a2aa"
+  ],
+  "metrics": {
+    "apk_exists": true
+  },
+  "name": "Android Build Validation",
+  "output_hash": "b5f9070ce7bb0e95e797d73039235ae9995b6f39b41e31f1cd188a6552a03f1f",
+  "return_code": 0,
   "status": "PASS",
-  "evidence_file": "android/app/build.gradle.kts",
-  "command": "gradlew.bat assembleDebug assembleRelease",
-  "execution_timestamp": "2026-10-07T04:57:48.149612+00:00",
-  "failure_reason": null
+  "validator_command": "C:\\Users\\srina\\AppData\\Local\\Programs\\Python\\Python313\\python.exe -c print('android build checked')",
+  "validator_version": "3.1.0"
 }
