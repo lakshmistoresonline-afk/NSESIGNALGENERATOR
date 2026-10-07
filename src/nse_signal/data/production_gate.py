@@ -214,7 +214,17 @@ def _validate_economic() -> tuple[str, str | None]:
         return "BLOCKED", f"ECONOMIC_VALIDATION_ERROR: {e}"
 
 def _validate_drift() -> tuple[str, str | None]:
-    return "NOT_APPLICABLE", "Drift monitoring active post-deployment"
+    res_path = Path("data/processed/model_validation/historical_drift.json")
+    valid, err = _validate_evidence_artifact(res_path)
+    if not valid:
+        return "BLOCKED", f"MISSING_OR_EMPTY_EVIDENCE: {err}"
+    try:
+        data = json.loads(res_path.read_text(encoding="utf-8"))
+        if data.get("status") != "PASS":
+            return "BLOCKED", f"HISTORICAL_DRIFT_BLOCKED: {data.get('reason', 'unknown')}"
+        return "PASS", None
+    except Exception as e:
+        return "BLOCKED", f"HISTORICAL_DRIFT_ERROR: {e}"
 
 def _validate_adversarial() -> tuple[str, str | None]:
     adv_path = Path("src/nse_signal/research/adversarial.py")
@@ -287,7 +297,7 @@ def evaluate_production_gate(root_dir: str = ".") -> dict:
         ("calibration", "Probability Calibration", _validate_calibration, "data/processed/model_validation/calibration.json", "python scripts/build_calibration_conformal.py"),
         ("conformal_validation", "Conformal Validation", _validate_conformal, "data/processed/model_validation/conformal.json", "python scripts/build_calibration_conformal.py"),
         ("economic_validation", "Economic Validation", _validate_economic, "data/processed/model_validation/economic_validation.json", "python scripts/build_economic_validation.py"),
-        ("drift", "Model Drift", _validate_drift, "data/processed/model_validation/real_walk_forward_results.json", "python scripts/run_real_walk_forward.py"),
+        ("drift", "Model Drift (Pre-Deployment Historical)", _validate_drift, "data/processed/model_validation/historical_drift.json", "python scripts/build_historical_drift.py"),
         ("adversarial_validation", "Adversarial Validation", _validate_adversarial, "src/nse_signal/research/adversarial.py", "python -m pytest tests/test_accuracy_v2.py"),
         ("multiple_testing_controls", "Multiple-Testing Controls", _validate_multiple_testing, "src/nse_signal/research/falsification.py", "python -m pytest"),
         ("untouched_holdout", "Untouched Holdout", _validate_holdout, "data/processed/nse_pit/pit_features.csv", "python scripts/build_pit_dataset.py"),
@@ -355,7 +365,7 @@ def evaluate_production_gate(root_dir: str = ".") -> dict:
     processed_gate_path.write_text(json.dumps(gate_result, indent=2, sort_keys=True), encoding="utf-8")
     root.joinpath("FINAL_PRODUCTION_GATE.json").write_text(json.dumps(gate_result, indent=2, sort_keys=True), encoding="utf-8")
 
-    md_lines = ["# Production Gate Evidence Matrix (Economic Validation Verified)\n"]
+    md_lines = ["# Production Gate Evidence Matrix (Pre-Deployment Historical Drift Verified)\n"]
     md_lines.append(f"- **Evaluated At**: {gate_result['evaluated_at']}")
     md_lines.append(f"- **Overall Status**: `{gate_result['status']}`")
     md_lines.append(f"- **Eligible**: `{gate_result['eligible']}`\n")
