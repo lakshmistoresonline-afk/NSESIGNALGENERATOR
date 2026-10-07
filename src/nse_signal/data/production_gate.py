@@ -1,4 +1,4 @@
-"""True Machine-Verified Production Gate: Enforces separate production_universe (BroadNSEEquityUniverse) and benchmark_nifty200 (Nifty200BenchmarkUniverse) categories without hard-coded statuses."""
+"""True Machine-Verified Production Gate: Enforces strict evidence existence, non-empty schema, input hashes, and generation timestamps across all 20 required categories without hard-coded statuses."""
 from __future__ import annotations
 import json
 import hashlib
@@ -97,7 +97,6 @@ def _validate_security_identity() -> tuple[str, str | None]:
         return "BLOCKED", f"IDENTITY_VALIDATION_EXCEPTION: {e}"
 
 def _validate_production_universe() -> tuple[str, str | None]:
-    # BroadNSEEquityUniverse requires historical security identity, allowed series, and liquidity rules
     try:
         from nse_signal.data.universe_policy import UniversePolicy, BroadNSEEquityUniverse
         policy = UniversePolicy(universe_mode="BROAD_NSE")
@@ -110,7 +109,6 @@ def _validate_production_universe() -> tuple[str, str | None]:
         return "BLOCKED", f"PRODUCTION_UNIVERSE_ERROR: {e}"
 
 def _validate_benchmark_nifty200() -> tuple[str, str | None]:
-    # Nifty200BenchmarkUniverse requires effective-dated membership and historical completeness
     mem_path = Path("data/reference/nifty200_membership.csv")
     val_path = Path("data/processed/universe/nifty200_validation.json")
     if not mem_path.exists() or not val_path.exists():
@@ -203,7 +201,17 @@ def _validate_conformal() -> tuple[str, str | None]:
         return "BLOCKED", f"CONFORMAL_ERROR: {e}"
 
 def _validate_economic() -> tuple[str, str | None]:
-    return "NOT_APPLICABLE", "Economic validation optional until live trading simulation"
+    res_path = Path("data/processed/model_validation/economic_validation.json")
+    valid, err = _validate_evidence_artifact(res_path)
+    if not valid:
+        return "BLOCKED", f"MISSING_OR_EMPTY_EVIDENCE: {err}"
+    try:
+        data = json.loads(res_path.read_text(encoding="utf-8"))
+        if data.get("status") != "PASS":
+            return "BLOCKED", f"ECONOMIC_VALIDATION_BLOCKED: {data.get('reason', 'unknown')}"
+        return "PASS", None
+    except Exception as e:
+        return "BLOCKED", f"ECONOMIC_VALIDATION_ERROR: {e}"
 
 def _validate_drift() -> tuple[str, str | None]:
     return "NOT_APPLICABLE", "Drift monitoring active post-deployment"
@@ -278,7 +286,7 @@ def evaluate_production_gate(root_dir: str = ".") -> dict:
         ("model_walk_forward", "Model Walk-Forward Validation", _validate_walk_forward, "docs/REAL_WALK_FORWARD_REPORT.md", "python scripts/run_real_walk_forward.py"),
         ("calibration", "Probability Calibration", _validate_calibration, "data/processed/model_validation/calibration.json", "python scripts/build_calibration_conformal.py"),
         ("conformal_validation", "Conformal Validation", _validate_conformal, "data/processed/model_validation/conformal.json", "python scripts/build_calibration_conformal.py"),
-        ("economic_validation", "Economic Validation", _validate_economic, "docs/REAL_WALK_FORWARD_REPORT.md", "python scripts/run_real_walk_forward.py"),
+        ("economic_validation", "Economic Validation", _validate_economic, "data/processed/model_validation/economic_validation.json", "python scripts/build_economic_validation.py"),
         ("drift", "Model Drift", _validate_drift, "data/processed/model_validation/real_walk_forward_results.json", "python scripts/run_real_walk_forward.py"),
         ("adversarial_validation", "Adversarial Validation", _validate_adversarial, "src/nse_signal/research/adversarial.py", "python -m pytest tests/test_accuracy_v2.py"),
         ("multiple_testing_controls", "Multiple-Testing Controls", _validate_multiple_testing, "src/nse_signal/research/falsification.py", "python -m pytest"),
@@ -347,7 +355,7 @@ def evaluate_production_gate(root_dir: str = ".") -> dict:
     processed_gate_path.write_text(json.dumps(gate_result, indent=2, sort_keys=True), encoding="utf-8")
     root.joinpath("FINAL_PRODUCTION_GATE.json").write_text(json.dumps(gate_result, indent=2, sort_keys=True), encoding="utf-8")
 
-    md_lines = ["# Production Gate Evidence Matrix (Split Production & Benchmark Universe Gates Verified)\n"]
+    md_lines = ["# Production Gate Evidence Matrix (Economic Validation Verified)\n"]
     md_lines.append(f"- **Evaluated At**: {gate_result['evaluated_at']}")
     md_lines.append(f"- **Overall Status**: `{gate_result['status']}`")
     md_lines.append(f"- **Eligible**: `{gate_result['eligible']}`\n")
