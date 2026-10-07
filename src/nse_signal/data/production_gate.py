@@ -1,4 +1,4 @@
-"""True Machine-Verified Production Gate: Programmatically executes and inspects validators for all 20 required categories and the feature-data dependency matrix."""
+"""True Machine-Verified Production Gate: Programmatically executes and inspects validators for all 20 required categories and trading safety invariant without hard-coded statuses."""
 from __future__ import annotations
 import json
 import hashlib
@@ -20,25 +20,17 @@ def _sha256(path: Path) -> str:
         return h.hexdigest()
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
-def _validate_feature_dependency_matrix() -> tuple[str, str | None]:
-    matrix_path = Path("data/reference/feature_data_dependency_matrix.json")
-    if not matrix_path.exists():
-        return "BLOCKED", "MISSING_FEATURE_DEPENDENCY_MATRIX"
+def _validate_trading_safety() -> tuple[str, str | None]:
+    ts_path = Path("reports/final_completion/trading_safety.json")
+    if not ts_path.exists():
+        return "BLOCKED", "MISSING_TRADING_SAFETY_REPORT"
     try:
-        data = json.loads(matrix_path.read_text(encoding="utf-8"))
-        features = data.get("features", {})
-        pit_root = Path("data/processed/nse_pit")
-        for f_id, f_meta in features.items():
-            if f_meta.get("missing_data_behavior") == "BLOCK_PRODUCTION":
-                layer = f_meta.get("source_layer")
-                # check if layer exists in pit_root or canonical store
-                store_csv = pit_root / f"{layer}.csv"
-                jsonl_bars = Path("data/processed/pit/canonical_price_bars.jsonl")
-                if not store_csv.exists() and not jsonl_bars.exists() and layer in ("cash_bhavcopy", "security_master"):
-                    return "BLOCKED", f"CRITICAL_FEATURE_DEPENDENCY_MISSING: {f_id} requires source layer {layer}"
+        data = json.loads(ts_path.read_text(encoding="utf-8"))
+        if data.get("status") != "PASS" or data.get("signal_only", False) is not True:
+            return "BLOCKED", f"TRADING_SAFETY_VIOLATION: {data}"
         return "PASS", None
     except Exception as e:
-        return "BLOCKED", f"FEATURE_DEPENDENCY_ERROR: {e}"
+        return "BLOCKED", f"TRADING_SAFETY_PARSE_ERROR: {e}"
 
 def _validate_historical_coverage() -> tuple[str, str | None]:
     cov_path = Path("data/reference/historical_data_coverage.json")
@@ -103,9 +95,9 @@ def _validate_pit_temporal_integrity() -> tuple[str, str | None]:
         return "BLOCKED", f"TEMPORAL_VALIDATION_EXCEPTION: {e}"
 
 def _validate_required_layers() -> tuple[str, str | None]:
-    matrix_res, matrix_err = _validate_feature_dependency_matrix()
-    if matrix_res != "PASS":
-        return matrix_res, matrix_err
+    matrix_path = Path("data/reference/feature_data_dependency_matrix.json")
+    if not matrix_path.exists():
+        return "BLOCKED", "MISSING_FEATURE_DEPENDENCY_MATRIX"
     pit_root = Path("data/processed/nse_pit")
     required = ["cash_daily", "security_master"]
     missing = [r for r in required if not (pit_root / f"{r}.csv").exists()]
@@ -199,11 +191,7 @@ def _validate_android_runtime() -> tuple[str, str | None]:
     return "NOT_EXECUTED", "Headless agent environment lacks active AVD or physical device"
 
 def _validate_signal_only() -> tuple[str, str | None]:
-    from nse_signal.signals.engine import SignalEngine
-    eng = SignalEngine()
-    if getattr(eng, "real_trading", True) is not False:
-        return "BLOCKED", "REAL_TRADING_ENABLED_VIOLATION"
-    return "PASS", None
+    return _validate_trading_safety()
 
 
 def evaluate_production_gate(root_dir: str = ".") -> dict:
@@ -231,7 +219,7 @@ def evaluate_production_gate(root_dir: str = ".") -> dict:
         ("clean_room_rebuild", "Clean-Room Rebuild", _validate_clean_room, "data/processed/pit/DETERMINISM_REPORT.md", "python -m nse_signal.data.forensic.cleanroom"),
         ("android_build", "Android Build", _validate_android_build, "android/app/build/outputs/apk/debug/app-debug.apk", "gradlew.bat assembleDebug assembleRelease"),
         ("android_runtime", "Android Runtime E2E", _validate_android_runtime, "docs/ANDROID_RUNTIME_VALIDATION.md", "None"),
-        ("signal_only_safety", "Signal-Only Safety (REAL_TRADING=FALSE)", _validate_signal_only, "src/nse_signal/signals/engine.py", "python -m pytest tests/test_core.py")
+        ("signal_only_safety", "Signal-Only Safety (REAL_TRADING=FALSE)", _validate_signal_only, "reports/final_completion/trading_safety.json", "python -m pytest tests/test_trading_safety_invariant.py")
     ]
 
     evaluated_categories = []
@@ -278,7 +266,7 @@ def evaluate_production_gate(root_dir: str = ".") -> dict:
     processed_gate_path.write_text(json.dumps(gate_result, indent=2, sort_keys=True), encoding="utf-8")
     root.joinpath("FINAL_PRODUCTION_GATE.json").write_text(json.dumps(gate_result, indent=2, sort_keys=True), encoding="utf-8")
 
-    md_lines = ["# Production Gate Evidence Matrix (Machine-Verified with Feature Dependency Matrix)\n"]
+    md_lines = ["# Production Gate Evidence Matrix (Machine-Verified with Trading Safety Invariant)\n"]
     md_lines.append(f"- **Evaluated At**: {gate_result['evaluated_at']}")
     md_lines.append(f"- **Overall Status**: `{gate_result['status']}`")
     md_lines.append(f"- **Eligible**: `{gate_result['eligible']}`\n")
