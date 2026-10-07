@@ -1,0 +1,311 @@
+{
+  "findings": [
+    {
+      "file": "src\\nse_signal\\data\\ingest_pipeline.py",
+      "line": 82,
+      "pattern": "PASS",
+      "severity": "WARNING"
+    },
+    {
+      "file": "src\\nse_signal\\data\\ingest_pipeline.py",
+      "line": 135,
+      "pattern": "PASS",
+      "severity": "WARNING"
+    },
+    {
+      "file": "src\\nse_signal\\data\\iteration_9_7_runner.py",
+      "line": 247,
+      "pattern": "PASS",
+      "severity": "WARNING"
+    },
+    {
+      "file": "src\\nse_signal\\data\\iteration_9_7_runner.py",
+      "line": 313,
+      "pattern": "PASS",
+      "severity": "WARNING"
+    },
+    {
+      "file": "src\\nse_signal\\data\\iteration_9_7_runner.py",
+      "line": 349,
+      "pattern": "BLOCKED",
+      "severity": "WARNING"
+    },
+    {
+      "file": "src\\nse_signal\\data\\iteration_9_7_runner.py",
+      "line": 74,
+      "pattern": "PASS",
+      "severity": "WARNING"
+    },
+    {
+      "file": "src\\nse_signal\\data\\iteration_9_7_runner.py",
+      "line": 276,
+      "pattern": "PASS",
+      "severity": "WARNING"
+    },
+    {
+      "file": "src\\nse_signal\\data\\iteration_9_7_runner.py",
+      "line": 226,
+      "pattern": "PASS",
+      "severity": "WARNING"
+    },
+    {
+      "file": "src\\nse_signal\\data\\iteration_9_7_runner.py",
+      "line": 307,
+      "pattern": "PASS",
+      "severity": "WARNING"
+    },
+    {
+      "file": "src\\nse_signal\\data\\iteration_9_7_runner.py",
+      "line": 307,
+      "pattern": "READY",
+      "severity": "WARNING"
+    },
+    {
+      "file": "src\\nse_signal\\data\\iteration_9_7_runner.py",
+      "line": 307,
+      "pattern": "BLOCKED",
+      "severity": "WARNING"
+    },
+    {
+      "file": "src\\nse_signal\\data\\pit_builder.py",
+      "line": 424,
+      "pattern": "BLOCKED",
+      "severity": "WARNING"
+    },
+    {
+      "file": "src\\nse_signal\\data\\pit_builder.py",
+      "line": 317,
+      "pattern": "PASS",
+      "severity": "WARNING"
+    },
+    {
+      "file": "src\\nse_signal\\data\\pit_builder.py",
+      "line": 409,
+      "pattern": "PASS",
+      "severity": "WARNING"
+    },
+    {
+      "file": "src\\nse_signal\\data\\pit_builder.py",
+      "line": 61,
+      "pattern": "PASS",
+      "severity": "WARNING"
+    },
+    {
+      "file": "src\\nse_signal\\data\\pit_forensic_suite.py",
+      "line": 148,
+      "pattern": "PASS",
+      "severity": "WARNING"
+    },
+    {
+      "file": "src\\nse_signal\\data\\pit_forensic_suite.py",
+      "line": 209,
+      "pattern": "PASS",
+      "severity": "WARNING"
+    },
+    {
+      "file": "src\\nse_signal\\data\\pit_forensic_suite.py",
+      "line": 176,
+      "pattern": "PASS",
+      "severity": "WARNING"
+    },
+    {
+      "file": "src\\nse_signal\\data\\pit_forensic_suite.py",
+      "line": 127,
+      "pattern": "PASS",
+      "severity": "WARNING"
+    },
+    {
+      "file": "src\\nse_signal\\data\\pit_forensic_suite.py",
+      "line": 203,
+      "pattern": "PASS",
+      "severity": "WARNING"
+    },
+    {
+      "file": "src\\nse_signal\\data\\pit_forensic_suite.py",
+      "line": 203,
+      "pattern": "READY",
+      "severity": "WARNING"
+    },
+    {
+      "file": "src\\nse_signal\\data\\pit_forensic_suite.py",
+      "line": 203,
+      "pattern": "BLOCKED",
+      "severity": "WARNING"
+    },
+    {
+      "file": "src\\nse_signal\\data\\pit_forensic_validator.py",
+      "line": 58,
+      "pattern": "PASS",
+      "severity": "WARNING"
+    },
+    {
+      "file": "src\\nse_signal\\data\\pit_forensic_validator.py",
+      "line": 246,
+      "pattern": "PASS",
+      "severity": "WARNING"
+    },
+    {
+      "file": "src\\nse_signal\\data\\pit_validator.py",
+      "line": 178,
+      "pattern": "PASS",
+      "severity": "WARNING"
+    },
+    {
+      "file": "src\\nse_signal\\data\\pit_validator.py",
+      "line": 188,
+      "pattern": "PASS",
+      "severity": "WARNING"
+    },
+    {
+      "file": "src\\nse_signal\\data\\pit_validator.py",
+      "line": 197,
+      "pattern": "PASS",
+      "severity": "WARNING"
+    },
+    {
+      "file": "src\\nse_signal\\data\\pit_validator.py",
+      "line": 198,
+      "pattern": "PASS",
+      "severity": "WARNING"
+    },
+    {
+      "file": "src\\nse_signal\\data\\pit_validator.py",
+      "line": 199,
+      "pattern": "PASS",
+      "severity": "WARNING"
+    },
+    {
+      "file": "src\\nse_signal\\data\\pit_validator.py",
+      "line": 200,
+      "pattern": "PASS",
+      "severity": "WARNING"
+    },
+    {
+      "file": "src\\nse_signal\\data\\pit_validator.py",
+      "line": 201,
+      "pattern": "PASS",
+      "severity": "WARNING"
+    },
+    {
+      "file": "src\\nse_signal\\data\\pit_validator.py",
+      "line": 203,
+      "pattern": "PASS",
+      "severity": "WARNING"
+    },
+    {
+      "file": "src\\nse_signal\\data\\pit_validator.py",
+      "line": 205,
+      "pattern": "PASS",
+      "severity": "WARNING"
+    },
+    {
+      "file": "src\\nse_signal\\data\\pit_validator.py",
+      "line": 207,
+      "pattern": "BLOCKED",
+      "severity": "WARNING"
+    },
+    {
+      "file": "src\\nse_signal\\data\\pit_validator.py",
+      "line": 207,
+      "pattern": "READY",
+      "severity": "WARNING"
+    },
+    {
+      "file": "src\\nse_signal\\data\\pit_validator.py",
+      "line": 209,
+      "pattern": "PASS",
+      "severity": "WARNING"
+    },
+    {
+      "file": "src\\nse_signal\\data\\pit_validator.py",
+      "line": 217,
+      "pattern": "BLOCKED",
+      "severity": "WARNING"
+    },
+    {
+      "file": "src\\nse_signal\\data\\pit_validator.py",
+      "line": 59,
+      "pattern": "PASS",
+      "severity": "WARNING"
+    },
+    {
+      "file": "src\\nse_signal\\data\\pit_validator.py",
+      "line": 69,
+      "pattern": "PASS",
+      "severity": "WARNING"
+    },
+    {
+      "file": "src\\nse_signal\\data\\pit_validator.py",
+      "line": 87,
+      "pattern": "PASS",
+      "severity": "WARNING"
+    },
+    {
+      "file": "src\\nse_signal\\data\\pit_validator.py",
+      "line": 92,
+      "pattern": "PASS",
+      "severity": "WARNING"
+    },
+    {
+      "file": "src\\nse_signal\\data\\pit_validator.py",
+      "line": 96,
+      "pattern": "PASS",
+      "severity": "WARNING"
+    },
+    {
+      "file": "src\\nse_signal\\data\\pit_validator.py",
+      "line": 100,
+      "pattern": "PASS",
+      "severity": "WARNING"
+    },
+    {
+      "file": "src\\nse_signal\\data\\pit_validator.py",
+      "line": 104,
+      "pattern": "PASS",
+      "severity": "WARNING"
+    },
+    {
+      "file": "src\\nse_signal\\data\\pit_validator.py",
+      "line": 108,
+      "pattern": "PASS",
+      "severity": "WARNING"
+    },
+    {
+      "file": "src\\nse_signal\\data\\pit_validator.py",
+      "line": 118,
+      "pattern": "PASS",
+      "severity": "WARNING"
+    },
+    {
+      "file": "src\\nse_signal\\data\\pit_validator.py",
+      "line": 130,
+      "pattern": "PASS",
+      "severity": "WARNING"
+    },
+    {
+      "file": "src\\nse_signal\\data\\pit_validator.py",
+      "line": 138,
+      "pattern": "PASS",
+      "severity": "WARNING"
+    },
+    {
+      "file": "src\\nse_signal\\data\\pit_validator.py",
+      "line": 148,
+      "pattern": "PASS",
+      "severity": "WARNING"
+    },
+    {
+      "file": "src\\nse_signal\\data\\pit_validator.py",
+      "line": 159,
+      "pattern": "PASS",
+      "severity": "WARNING"
+    }
+  ],
+  "findings_count": 73,
+  "scanned_directories": [
+    "src/nse_signal",
+    "tests",
+    "scripts"
+  ],
+  "status": "PASS"
+}

@@ -1,0 +1,6 @@
+{
+  "command": "python -m nse_signal.data.iteration_9_7_runner",
+  "duration_seconds": 15.0,
+  "exit_code": 0,
+  "status": "SUCCESS"
+}
