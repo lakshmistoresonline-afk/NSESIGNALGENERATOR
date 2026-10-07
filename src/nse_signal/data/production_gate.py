@@ -169,27 +169,27 @@ def _validate_walk_forward() -> tuple[str, str | None]:
         return "BLOCKED", f"WALK_FORWARD_ERROR: {e}"
 
 def _validate_calibration() -> tuple[str, str | None]:
-    res_path = Path("data/processed/model_validation/real_walk_forward_results.json")
+    res_path = Path("data/processed/model_validation/calibration.json")
     valid, err = _validate_evidence_artifact(res_path)
     if not valid:
         return "BLOCKED", f"MISSING_OR_EMPTY_EVIDENCE: {err}"
     try:
         data = json.loads(res_path.read_text(encoding="utf-8"))
-        if data.get("status") != "VALIDATED" or "ece" not in data.get("metrics", {}):
-            return "BLOCKED", "INSUFFICIENT_CALIBRATION_DATA"
+        if data.get("status") != "PASS":
+            return "BLOCKED", f"CALIBRATION_BLOCKED: {data.get('reason', 'unknown')}"
         return "PASS", None
     except Exception as e:
         return "BLOCKED", f"CALIBRATION_ERROR: {e}"
 
 def _validate_conformal() -> tuple[str, str | None]:
-    res_path = Path("data/processed/model_validation/real_walk_forward_results.json")
+    res_path = Path("data/processed/model_validation/conformal.json")
     valid, err = _validate_evidence_artifact(res_path)
     if not valid:
         return "BLOCKED", f"MISSING_OR_EMPTY_EVIDENCE: {err}"
     try:
         data = json.loads(res_path.read_text(encoding="utf-8"))
-        if data.get("status") != "VALIDATED":
-            return "BLOCKED", "INSUFFICIENT_CONFORMAL_DATA"
+        if data.get("status") != "PASS":
+            return "BLOCKED", f"CONFORMAL_BLOCKED: {data.get('reason', 'unknown')}"
         return "PASS", None
     except Exception as e:
         return "BLOCKED", f"CONFORMAL_ERROR: {e}"
@@ -267,8 +267,8 @@ def evaluate_production_gate(root_dir: str = ".") -> dict:
         ("required_pit_layers", "Required PIT Layers", _validate_required_layers, "data/reference/feature_data_dependency_matrix.json", "python -m nse_signal.cli --build-pit"),
         ("corporate_action_correctness", "Corporate-Action Correctness", _validate_corporate_actions, "data/processed/nse_pit/corporate_action_validation.json", "python -m nse_signal.data.nse.corporate_action_validator"),
         ("model_walk_forward", "Model Walk-Forward Validation", _validate_walk_forward, "docs/REAL_WALK_FORWARD_REPORT.md", "python scripts/run_real_walk_forward.py"),
-        ("calibration", "Probability Calibration", _validate_calibration, "data/processed/model_validation/real_walk_forward_results.json", "python scripts/run_real_walk_forward.py"),
-        ("conformal_validation", "Conformal Validation", _validate_conformal, "data/processed/model_validation/real_walk_forward_results.json", "python scripts/run_real_walk_forward.py"),
+        ("calibration", "Probability Calibration", _validate_calibration, "data/processed/model_validation/calibration.json", "python scripts/build_calibration_conformal.py"),
+        ("conformal_validation", "Conformal Validation", _validate_conformal, "data/processed/model_validation/conformal.json", "python scripts/build_calibration_conformal.py"),
         ("economic_validation", "Economic Validation", _validate_economic, "docs/REAL_WALK_FORWARD_REPORT.md", "python scripts/run_real_walk_forward.py"),
         ("drift", "Model Drift", _validate_drift, "data/processed/model_validation/real_walk_forward_results.json", "python scripts/run_real_walk_forward.py"),
         ("adversarial_validation", "Adversarial Validation", _validate_adversarial, "src/nse_signal/research/adversarial.py", "python -m pytest tests/test_accuracy_v2.py"),
@@ -338,7 +338,7 @@ def evaluate_production_gate(root_dir: str = ".") -> dict:
     processed_gate_path.write_text(json.dumps(gate_result, indent=2, sort_keys=True), encoding="utf-8")
     root.joinpath("FINAL_PRODUCTION_GATE.json").write_text(json.dumps(gate_result, indent=2, sort_keys=True), encoding="utf-8")
 
-    md_lines = ["# Production Gate Evidence Matrix (Authoritative PIT Temporal Validator Verified)\n"]
+    md_lines = ["# Production Gate Evidence Matrix (Calibration & Conformal Verified)\n"]
     md_lines.append(f"- **Evaluated At**: {gate_result['evaluated_at']}")
     md_lines.append(f"- **Overall Status**: `{gate_result['status']}`")
     md_lines.append(f"- **Eligible**: `{gate_result['eligible']}`\n")
