@@ -1,0 +1,116 @@
+{
+  "version": "1.0",
+  "generated_at": "2026-10-06T16:30:00Z",
+  "features": {
+    "ohlcv": {
+      "feature_id": "ohlcv",
+      "source_layer": "cash_bhavcopy",
+      "required_fields": ["open", "high", "low", "close", "volume"],
+      "point_in_time_required": true,
+      "source_available_at_required": true,
+      "historical_coverage_required": true,
+      "fallback_allowed": false,
+      "missing_data_behavior": "BLOCK_PRODUCTION"
+    },
+    "liquidity": {
+      "feature_id": "liquidity",
+      "source_layer": "cash_bhavcopy",
+      "required_fields": ["close", "volume"],
+      "point_in_time_required": true,
+      "source_available_at_required": true,
+      "historical_coverage_required": true,
+      "fallback_allowed": false,
+      "missing_data_behavior": "BLOCK_PRODUCTION"
+    },
+    "delivery": {
+      "feature_id": "delivery",
+      "source_layer": "delivery",
+      "required_fields": ["quantity_traded", "delivery_qty"],
+      "point_in_time_required": true,
+      "source_available_at_required": true,
+      "historical_coverage_required": false,
+      "fallback_allowed": true,
+      "missing_data_behavior": "ALLOW_OPTIONAL"
+    },
+    "india_vix": {
+      "feature_id": "india_vix",
+      "source_layer": "india_vix",
+      "required_fields": ["close"],
+      "point_in_time_required": true,
+      "source_available_at_required": true,
+      "historical_coverage_required": false,
+      "fallback_allowed": true,
+      "missing_data_behavior": "ALLOW_OPTIONAL"
+    },
+    "nifty_context": {
+      "feature_id": "nifty_context",
+      "source_layer": "index_close",
+      "required_fields": ["close"],
+      "point_in_time_required": true,
+      "source_available_at_required": true,
+      "historical_coverage_required": false,
+      "fallback_allowed": true,
+      "missing_data_behavior": "ALLOW_OPTIONAL"
+    },
+    "sector_context": {
+      "feature_id": "sector_context",
+      "source_layer": "breadth",
+      "required_fields": ["advance", "decline"],
+      "point_in_time_required": true,
+      "source_available_at_required": true,
+      "historical_coverage_required": false,
+      "fallback_allowed": true,
+      "missing_data_behavior": "ALLOW_OPTIONAL"
+    },
+    "derivatives_context": {
+      "feature_id": "derivatives_context",
+      "source_layer": "fo_bhavcopy",
+      "required_fields": ["open_interest", "close"],
+      "point_in_time_required": true,
+      "source_available_at_required": true,
+      "historical_coverage_required": false,
+      "fallback_allowed": true,
+      "missing_data_behavior": "ALLOW_OPTIONAL"
+    },
+    "corporate_events": {
+      "feature_id": "corporate_events",
+      "source_layer": "corporate_events",
+      "required_fields": ["announcement_time", "symbol"],
+      "point_in_time_required": true,
+      "source_available_at_required": true,
+      "historical_coverage_required": false,
+      "fallback_allowed": false,
+      "missing_data_behavior": "BLOCK_IF_ENABLED"
+    },
+    "surveillance": {
+      "feature_id": "surveillance",
+      "source_layer": "restrictions",
+      "required_fields": ["surveillance"],
+      "point_in_time_required": true,
+      "source_available_at_required": true,
+      "historical_coverage_required": false,
+      "fallback_allowed": false,
+      "missing_data_behavior": "BLOCK_IF_ENABLED"
+    },
+    "price_bands": {
+      "feature_id": "price_bands",
+      "source_layer": "restrictions",
+      "required_fields": ["upper_band", "lower_band"],
+      "point_in_time_required": true,
+      "source_available_at_required": true,
+      "historical_coverage_required": false,
+      "fallback_allowed": false,
+      "missing_data_behavior": "BLOCK_IF_ENABLED"
+    },
+    "short_sale_restrictions": {
+      "feature_id": "short_sale_restrictions",
+      "source_layer": "restrictions",
+      "required_fields": ["short_selling_allowed"],
+      "point_in_time_required": true,
+      "source_available_at_required": true,
+      "historical_coverage_required": false,
+      "fallback_allowed": false,
+      "missing_data_behavior": "BLOCK_IF_ENABLED"
+    }
+  }
+}

@@ -1,4 +1,4 @@
-"""True Machine-Verified Production Gate: Programmatically executes and inspects validators for all 20 required categories without hard-coded statuses."""
+"""True Machine-Verified Production Gate: Programmatically executes and inspects validators for all 20 required categories and the feature-data dependency matrix."""
 from __future__ import annotations
 import json
 import hashlib
@@ -19,6 +19,26 @@ def _sha256(path: Path) -> str:
                     pass
         return h.hexdigest()
     return hashlib.sha256(path.read_bytes()).hexdigest()
+
+def _validate_feature_dependency_matrix() -> tuple[str, str | None]:
+    matrix_path = Path("data/reference/feature_data_dependency_matrix.json")
+    if not matrix_path.exists():
+        return "BLOCKED", "MISSING_FEATURE_DEPENDENCY_MATRIX"
+    try:
+        data = json.loads(matrix_path.read_text(encoding="utf-8"))
+        features = data.get("features", {})
+        pit_root = Path("data/processed/nse_pit")
+        for f_id, f_meta in features.items():
+            if f_meta.get("missing_data_behavior") == "BLOCK_PRODUCTION":
+                layer = f_meta.get("source_layer")
+                # check if layer exists in pit_root or canonical store
+                store_csv = pit_root / f"{layer}.csv"
+                jsonl_bars = Path("data/processed/pit/canonical_price_bars.jsonl")
+                if not store_csv.exists() and not jsonl_bars.exists() and layer in ("cash_bhavcopy", "security_master"):
+                    return "BLOCKED", f"CRITICAL_FEATURE_DEPENDENCY_MISSING: {f_id} requires source layer {layer}"
+        return "PASS", None
+    except Exception as e:
+        return "BLOCKED", f"FEATURE_DEPENDENCY_ERROR: {e}"
 
 def _validate_historical_coverage() -> tuple[str, str | None]:
     cov_path = Path("data/reference/historical_data_coverage.json")
@@ -83,6 +103,9 @@ def _validate_pit_temporal_integrity() -> tuple[str, str | None]:
         return "BLOCKED", f"TEMPORAL_VALIDATION_EXCEPTION: {e}"
 
 def _validate_required_layers() -> tuple[str, str | None]:
+    matrix_res, matrix_err = _validate_feature_dependency_matrix()
+    if matrix_res != "PASS":
+        return matrix_res, matrix_err
     pit_root = Path("data/processed/nse_pit")
     required = ["cash_daily", "security_master"]
     missing = [r for r in required if not (pit_root / f"{r}.csv").exists()]
@@ -194,8 +217,8 @@ def evaluate_production_gate(root_dir: str = ".") -> dict:
         ("security_identity", "Historical Security Identity", _validate_security_identity, "docs/HISTORICAL_IDENTITY_REPORT.md", "python -m pytest tests/test_historical_identity.py"),
         ("pit_universe", "Point-in-Time Universe", _validate_pit_universe, "data/reference/nifty200_membership.csv", "python -m pytest tests/test_universe_architecture.py"),
         ("pit_temporal_integrity", "PIT Temporal Integrity", _validate_pit_temporal_integrity, "data/processed/pit/temporal_validation.json", "python -m nse_signal.data.nse.temporal_validator"),
-        ("required_pit_layers", "Required PIT Layers", _validate_required_layers, "data/processed/nse_pit", "python -m nse_signal.cli --build-pit"),
-        ("corporate_action_correctness", "Corporate-Action Correctness", _validate_corporate_actions, "data/processed/pit/corporate_action_validation.json", "python -m nse_signal.data.nse.corporate_action_validator"),
+        ("required_pit_layers", "Required PIT Layers", _validate_required_layers, "data/reference/feature_data_dependency_matrix.json", "python -m nse_signal.cli --build-pit"),
+        ("corporate_action_correctness", "Corporate-Action Correctness", _validate_corporate_actions, "data/processed/nse_pit/corporate_action_validation.json", "python -m nse_signal.data.nse.corporate_action_validator"),
         ("model_walk_forward", "Model Walk-Forward Validation", _validate_walk_forward, "docs/REAL_WALK_FORWARD_REPORT.md", "python scripts/run_real_walk_forward.py"),
         ("calibration", "Probability Calibration", _validate_calibration, "data/processed/model_validation/real_walk_forward_results.json", "python scripts/run_real_walk_forward.py"),
         ("conformal_validation", "Conformal Validation", _validate_conformal, "data/processed/model_validation/real_walk_forward_results.json", "python scripts/run_real_walk_forward.py"),
@@ -255,7 +278,7 @@ def evaluate_production_gate(root_dir: str = ".") -> dict:
     processed_gate_path.write_text(json.dumps(gate_result, indent=2, sort_keys=True), encoding="utf-8")
     root.joinpath("FINAL_PRODUCTION_GATE.json").write_text(json.dumps(gate_result, indent=2, sort_keys=True), encoding="utf-8")
 
-    md_lines = ["# Production Gate Evidence Matrix (Machine-Verified)\n"]
+    md_lines = ["# Production Gate Evidence Matrix (Machine-Verified with Feature Dependency Matrix)\n"]
     md_lines.append(f"- **Evaluated At**: {gate_result['evaluated_at']}")
     md_lines.append(f"- **Overall Status**: `{gate_result['status']}`")
     md_lines.append(f"- **Eligible**: `{gate_result['eligible']}`\n")
