@@ -1,5 +1,6 @@
 {
   "blocking_reasons": [
+    "Required PIT Layers: MISSING_REQUIRED_PIT_LAYERS: ['cash_daily', 'security_master']",
     "Model Walk-Forward Validation: WALK_FORWARD_BLOCKED: Insufficient unique trading dates (2) for multi-fold chronological walk-forward evaluation",
     "Probability Calibration: INSUFFICIENT_CALIBRATION_DATA",
     "Conformal Validation: INSUFFICIENT_CONFORMAL_DATA"
@@ -10,7 +11,7 @@
       "command": "python scripts/build_historical_inventory.py",
       "evidence_file": "data/reference/historical_data_coverage.json",
       "evidence_hash": "28f2fdc6f9837041492395e03eae43b2fab6b766f192cf1ea8eee704c55ef817",
-      "execution_timestamp": "2026-10-06T16:00:13.272944+00:00",
+      "execution_timestamp": "2026-10-07T02:50:07.323366+00:00",
       "failure_reason": null,
       "name": "Historical Data Coverage",
       "status": "PASS"
@@ -20,7 +21,7 @@
       "command": "python -m nse_signal.cli --ingest",
       "evidence_file": "data/reference/raw_manifest.json",
       "evidence_hash": "c5dc31fc9f2d6408cf4e9c4cb75dbc5ac6d4bad55e617cdb6e0acfc5611f6953",
-      "execution_timestamp": "2026-10-06T16:00:13.274101+00:00",
+      "execution_timestamp": "2026-10-07T02:50:07.324678+00:00",
       "failure_reason": null,
       "name": "Raw-File Integrity",
       "status": "PASS"
@@ -30,7 +31,7 @@
       "command": "python -m pytest tests/test_historical_identity.py",
       "evidence_file": "docs/HISTORICAL_IDENTITY_REPORT.md",
       "evidence_hash": "1fc210d0334a0915193e4d6fbe7832a6d4dfdafb1ba31a5729a56e9e04f01fa9",
-      "execution_timestamp": "2026-10-06T16:00:48.487982+00:00",
+      "execution_timestamp": "2026-10-07T02:50:07.455558+00:00",
       "failure_reason": null,
       "name": "Historical Security Identity",
       "status": "PASS"
@@ -40,7 +41,7 @@
       "command": "python -m pytest tests/test_universe_architecture.py",
       "evidence_file": "data/reference/nifty200_membership.csv",
       "evidence_hash": "f45b9f93c51d5036a1225f7ff8df5b330a8d06ae7522ff4d104be1c9c9a03328",
-      "execution_timestamp": "2026-10-06T16:00:48.491765+00:00",
+      "execution_timestamp": "2026-10-07T02:50:07.456315+00:00",
       "failure_reason": null,
       "name": "Point-in-Time Universe",
       "status": "PASS"
@@ -49,8 +50,8 @@
       "category_id": "pit_temporal_integrity",
       "command": "python -m nse_signal.data.nse.temporal_validator",
       "evidence_file": "data/processed/pit/temporal_validation.json",
-      "evidence_hash": "ef65ecd6f6b3db8049a6adde47276b84de2802f97026f991dfb9d210ee27a173",
-      "execution_timestamp": "2026-10-06T16:01:27.428990+00:00",
+      "evidence_hash": "4530ccd395774e499692eb6e9aadaba5debbf24dfd3bf0b3575d5feef7958547",
+      "execution_timestamp": "2026-10-07T02:51:04.340261+00:00",
       "failure_reason": null,
       "name": "PIT Temporal Integrity",
       "status": "PASS"
@@ -58,19 +59,19 @@
     {
       "category_id": "required_pit_layers",
       "command": "python -m nse_signal.cli --build-pit",
-      "evidence_file": "data/processed/nse_pit",
-      "evidence_hash": "6d234df95903f8b269261dca9f66b62b48de8e4feb180239af005f7841c981a6",
-      "execution_timestamp": "2026-10-06T16:01:27.443384+00:00",
-      "failure_reason": null,
+      "evidence_file": "data/reference/feature_data_dependency_matrix.json",
+      "evidence_hash": "93064e79edb91571779583c1e181af939abbfa4ec6d9ecc54faa18a62ec438ee",
+      "execution_timestamp": "2026-10-07T02:51:04.341044+00:00",
+      "failure_reason": "MISSING_REQUIRED_PIT_LAYERS: ['cash_daily', 'security_master']",
       "name": "Required PIT Layers",
-      "status": "PASS"
+      "status": "BLOCKED"
     },
     {
       "category_id": "corporate_action_correctness",
       "command": "python -m nse_signal.data.nse.corporate_action_validator",
-      "evidence_file": "data/processed/pit/corporate_action_validation.json",
-      "evidence_hash": "MISSING",
-      "execution_timestamp": "2026-10-06T16:01:27.447652+00:00",
+      "evidence_file": "data/processed/nse_pit/corporate_action_validation.json",
+      "evidence_hash": "f766dc3cd2b855ef20b971cce16b2d5756c50c2c029d62233db8096d33a36c2b",
+      "execution_timestamp": "2026-10-07T02:51:04.343019+00:00",
       "failure_reason": null,
       "name": "Corporate-Action Correctness",
       "status": "PASS"
@@ -80,7 +81,7 @@
       "command": "python scripts/run_real_walk_forward.py",
       "evidence_file": "docs/REAL_WALK_FORWARD_REPORT.md",
       "evidence_hash": "1ecf572ee0180a22fe8a3e6d7e94736a15c19b77fbfb9f665be5347805d9da62",
-      "execution_timestamp": "2026-10-06T16:01:27.448569+00:00",
+      "execution_timestamp": "2026-10-07T02:51:04.343789+00:00",
       "failure_reason": "WALK_FORWARD_BLOCKED: Insufficient unique trading dates (2) for multi-fold chronological walk-forward evaluation",
       "name": "Model Walk-Forward Validation",
       "status": "BLOCKED"
@@ -90,7 +91,7 @@
       "command": "python scripts/run_real_walk_forward.py",
       "evidence_file": "data/processed/model_validation/real_walk_forward_results.json",
       "evidence_hash": "5ba08b952ad442a52971c90ea36b8d22423fc3bc59bfb85bab35c3b0e7da4fa3",
-      "execution_timestamp": "2026-10-06T16:01:27.449423+00:00",
+      "execution_timestamp": "2026-10-07T02:51:04.344518+00:00",
       "failure_reason": "INSUFFICIENT_CALIBRATION_DATA",
       "name": "Probability Calibration",
       "status": "BLOCKED"
@@ -100,7 +101,7 @@
       "command": "python scripts/run_real_walk_forward.py",
       "evidence_file": "data/processed/model_validation/real_walk_forward_results.json",
       "evidence_hash": "5ba08b952ad442a52971c90ea36b8d22423fc3bc59bfb85bab35c3b0e7da4fa3",
-      "execution_timestamp": "2026-10-06T16:01:27.450221+00:00",
+      "execution_timestamp": "2026-10-07T02:51:04.345240+00:00",
       "failure_reason": "INSUFFICIENT_CONFORMAL_DATA",
       "name": "Conformal Validation",
       "status": "BLOCKED"
@@ -110,7 +111,7 @@
       "command": "python scripts/run_real_walk_forward.py",
       "evidence_file": "docs/REAL_WALK_FORWARD_REPORT.md",
       "evidence_hash": "1ecf572ee0180a22fe8a3e6d7e94736a15c19b77fbfb9f665be5347805d9da62",
-      "execution_timestamp": "2026-10-06T16:01:27.450669+00:00",
+      "execution_timestamp": "2026-10-07T02:51:04.345604+00:00",
       "failure_reason": "Economic validation optional until live trading simulation",
       "name": "Economic Validation",
       "status": "NOT_APPLICABLE"
@@ -120,7 +121,7 @@
       "command": "python scripts/run_real_walk_forward.py",
       "evidence_file": "data/processed/model_validation/real_walk_forward_results.json",
       "evidence_hash": "5ba08b952ad442a52971c90ea36b8d22423fc3bc59bfb85bab35c3b0e7da4fa3",
-      "execution_timestamp": "2026-10-06T16:01:27.451066+00:00",
+      "execution_timestamp": "2026-10-07T02:51:04.345986+00:00",
       "failure_reason": "Drift monitoring active post-deployment",
       "name": "Model Drift",
       "status": "NOT_APPLICABLE"
@@ -130,7 +131,7 @@
       "command": "python -m pytest tests/test_accuracy_v2.py",
       "evidence_file": "src/nse_signal/research/adversarial.py",
       "evidence_hash": "97efe84db0d594ac42be7632f47cda35e827e64e3efa0f24599f6babe826d329",
-      "execution_timestamp": "2026-10-06T16:01:27.454859+00:00",
+      "execution_timestamp": "2026-10-07T02:51:04.346358+00:00",
       "failure_reason": null,
       "name": "Adversarial Validation",
       "status": "PASS"
@@ -140,7 +141,7 @@
       "command": "python -m pytest",
       "evidence_file": "src/nse_signal/research/falsification.py",
       "evidence_hash": "b639256cfe2b05d8bba01df8346b76f3cfa9e871e8901e35139d7e86b40a71f9",
-      "execution_timestamp": "2026-10-06T16:01:27.458132+00:00",
+      "execution_timestamp": "2026-10-07T02:51:04.346724+00:00",
       "failure_reason": null,
       "name": "Multiple-Testing Controls",
       "status": "PASS"
@@ -150,7 +151,7 @@
       "command": "python scripts/build_pit_dataset.py",
       "evidence_file": "data/processed/nse_pit/pit_features.csv",
       "evidence_hash": "03f26d04d5cc1923df6cd129f48362026b55507f2565c933af3b96a4e84541f3",
-      "execution_timestamp": "2026-10-06T16:01:27.470256+00:00",
+      "execution_timestamp": "2026-10-07T02:51:04.358820+00:00",
       "failure_reason": null,
       "name": "Untouched Holdout",
       "status": "PASS"
@@ -160,7 +161,7 @@
       "command": "python -m nse_signal.data.pit_forensic_suite",
       "evidence_file": "reports/iteration_9_7/MUTATION_TEST_RESULTS.json",
       "evidence_hash": "MISSING",
-      "execution_timestamp": "2026-10-06T16:01:27.470668+00:00",
+      "execution_timestamp": "2026-10-07T02:51:04.359161+00:00",
       "failure_reason": null,
       "name": "Forensic Tests",
       "status": "PASS"
@@ -170,7 +171,7 @@
       "command": "python -m nse_signal.data.forensic.cleanroom",
       "evidence_file": "data/processed/pit/DETERMINISM_REPORT.md",
       "evidence_hash": "c18e62c180ca2f7a130e62db9bec9d927809da45fba46ed663f503c600638361",
-      "execution_timestamp": "2026-10-06T16:01:27.471311+00:00",
+      "execution_timestamp": "2026-10-07T02:51:04.359686+00:00",
       "failure_reason": null,
       "name": "Clean-Room Rebuild",
       "status": "PASS"
@@ -180,7 +181,7 @@
       "command": "gradlew.bat assembleDebug assembleRelease",
       "evidence_file": "android/app/build/outputs/apk/debug/app-debug.apk",
       "evidence_hash": "18404fb252a7ecaa2d02904e4a7f8812f8169005fab43f9be4f85e8a9508ae00",
-      "execution_timestamp": "2026-10-06T16:01:27.527089+00:00",
+      "execution_timestamp": "2026-10-07T02:51:04.415976+00:00",
       "failure_reason": null,
       "name": "Android Build",
       "status": "PASS"
@@ -189,25 +190,25 @@
       "category_id": "android_runtime",
       "command": "None",
       "evidence_file": "docs/ANDROID_RUNTIME_VALIDATION.md",
-      "evidence_hash": "45df589ca5bf5b12e151dcf8e6e1da1487721ffd08bbbd72841cc78f56040537",
-      "execution_timestamp": "2026-10-06T16:01:27.527748+00:00",
+      "evidence_hash": "02f21c5daf0aafa0968b92dc96ec06ad543e14082795f3f30bf0a24e70a778e3",
+      "execution_timestamp": "2026-10-07T02:51:04.416677+00:00",
       "failure_reason": "Headless agent environment lacks active AVD or physical device",
       "name": "Android Runtime E2E",
       "status": "NOT_EXECUTED"
     },
     {
       "category_id": "signal_only_safety",
-      "command": "python -m pytest tests/test_core.py",
-      "evidence_file": "src/nse_signal/signals/engine.py",
-      "evidence_hash": "a5d268575c789d16bfa4278cc5ebe01364d9223ba82b9283ddd7fb7a7c198ce1",
-      "execution_timestamp": "2026-10-06T16:01:27.538769+00:00",
+      "command": "python -m pytest tests/test_trading_safety_invariant.py",
+      "evidence_file": "reports/final_completion/trading_safety.json",
+      "evidence_hash": "7ddbd8b4477be81728e0bcff170f6210d182da7c3ec26cf509dfcc9f82d70efc",
+      "execution_timestamp": "2026-10-07T02:51:04.417554+00:00",
       "failure_reason": null,
       "name": "Signal-Only Safety (REAL_TRADING=FALSE)",
       "status": "PASS"
     }
   ],
   "eligible": false,
-  "evaluated_at": "2026-10-06T16:01:27.538785+00:00",
+  "evaluated_at": "2026-10-07T02:51:04.417568+00:00",
   "project": "NSE Signal Provider V31",
   "real_trading": false,
   "signal_publication_allowed": false,

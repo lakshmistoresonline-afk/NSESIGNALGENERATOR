@@ -1,6 +1,6 @@
-# Production Gate Evidence Matrix (Machine-Verified)
+# Production Gate Evidence Matrix (Machine-Verified with Trading Safety Invariant)
 
-- **Evaluated At**: 2026-10-06T16:01:27.538785+00:00
+- **Evaluated At**: 2026-10-07T02:51:04.417568+00:00
 - **Overall Status**: `BLOCKED`
 - **Eligible**: `False`
 
@@ -10,9 +10,9 @@
 | `raw_integrity` | Raw-File Integrity | `PASS` | `data/reference/raw_manifest.json` | `c5dc31fc9f2d...` | N/A |
 | `security_identity` | Historical Security Identity | `PASS` | `docs/HISTORICAL_IDENTITY_REPORT.md` | `1fc210d0334a...` | N/A |
 | `pit_universe` | Point-in-Time Universe | `PASS` | `data/reference/nifty200_membership.csv` | `f45b9f93c51d...` | N/A |
-| `pit_temporal_integrity` | PIT Temporal Integrity | `PASS` | `data/processed/pit/temporal_validation.json` | `ef65ecd6f6b3...` | N/A |
-| `required_pit_layers` | Required PIT Layers | `PASS` | `data/processed/nse_pit` | `6d234df95903...` | N/A |
-| `corporate_action_correctness` | Corporate-Action Correctness | `PASS` | `data/processed/pit/corporate_action_validation.json` | `MISSING...` | N/A |
+| `pit_temporal_integrity` | PIT Temporal Integrity | `PASS` | `data/processed/pit/temporal_validation.json` | `4530ccd39577...` | N/A |
+| `required_pit_layers` | Required PIT Layers | `BLOCKED` | `data/reference/feature_data_dependency_matrix.json` | `93064e79edb9...` | MISSING_REQUIRED_PIT_LAYERS: ['cash_daily', 'security_master'] |
+| `corporate_action_correctness` | Corporate-Action Correctness | `PASS` | `data/processed/nse_pit/corporate_action_validation.json` | `f766dc3cd2b8...` | N/A |
 | `model_walk_forward` | Model Walk-Forward Validation | `BLOCKED` | `docs/REAL_WALK_FORWARD_REPORT.md` | `1ecf572ee018...` | WALK_FORWARD_BLOCKED: Insufficient unique trading dates (2) for multi-fold chronological walk-forward evaluation |
 | `calibration` | Probability Calibration | `BLOCKED` | `data/processed/model_validation/real_walk_forward_results.json` | `5ba08b952ad4...` | INSUFFICIENT_CALIBRATION_DATA |
 | `conformal_validation` | Conformal Validation | `BLOCKED` | `data/processed/model_validation/real_walk_forward_results.json` | `5ba08b952ad4...` | INSUFFICIENT_CONFORMAL_DATA |
@@ -24,5 +24,5 @@
 | `forensic_tests` | Forensic Tests | `PASS` | `reports/iteration_9_7/MUTATION_TEST_RESULTS.json` | `MISSING...` | N/A |
 | `clean_room_rebuild` | Clean-Room Rebuild | `PASS` | `data/processed/pit/DETERMINISM_REPORT.md` | `c18e62c180ca...` | N/A |
 | `android_build` | Android Build | `PASS` | `android/app/build/outputs/apk/debug/app-debug.apk` | `18404fb252a7...` | N/A |
-| `android_runtime` | Android Runtime E2E | `NOT_EXECUTED` | `docs/ANDROID_RUNTIME_VALIDATION.md` | `45df589ca5bf...` | Headless agent environment lacks active AVD or physical device |
-| `signal_only_safety` | Signal-Only Safety (REAL_TRADING=FALSE) | `PASS` | `src/nse_signal/signals/engine.py` | `a5d268575c78...` | N/A |
+| `android_runtime` | Android Runtime E2E | `NOT_EXECUTED` | `docs/ANDROID_RUNTIME_VALIDATION.md` | `02f21c5daf0a...` | Headless agent environment lacks active AVD or physical device |
+| `signal_only_safety` | Signal-Only Safety (REAL_TRADING=FALSE) | `PASS` | `reports/final_completion/trading_safety.json` | `7ddbd8b4477b...` | N/A |
