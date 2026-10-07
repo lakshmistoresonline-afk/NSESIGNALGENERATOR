@@ -2,13 +2,13 @@
   "acceptance_result": "BLOCKED",
   "category_id": "historical_data",
   "evidence_file": "reports\\final_completion\\historical_data_evidence.json",
-  "execution_timestamp": "2026-10-07T13:09:39.044577+00:00",
+  "execution_timestamp": "2026-10-07T14:21:56.634351+00:00",
   "input_hashes": [
     "e43306c050373d8ce229ab8586d330842c32cba403fc0ac713b40b22a421a2aa"
   ],
   "metrics": {
     "failure_reason": "Multi-year historical data layer coverage is incomplete (pre-2024 layers missing)",
-    "generated_at": "2026-10-07T13:09:38.883240+00:00",
+    "generated_at": "2026-10-07T14:21:56.353169+00:00",
     "layers": {
       "cm_bhavcopy": {
         "acceptable_gap_rules": "Zero gap for production; mandatory for multi-year walk-forward",
@@ -819,7 +819,7 @@
     "status": "BLOCKED"
   },
   "name": "Historical Data Coverage",
-  "output_hash": "db8931bfc4f01489151fe4ab2f661233cbfbba84dc6ccf47646c46a2d560b10f",
+  "output_hash": "e5ca93ec84982fcc100176e53297a9daaeb604406e8f95de18da07fc0a209bf7",
   "return_code": 0,
   "status": "BLOCKED",
   "validator_command": "C:\\Users\\srina\\AppData\\Local\\Programs\\Python\\Python313\\python.exe scripts/build_final_historical_coverage.py",

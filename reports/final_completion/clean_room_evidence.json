@@ -2,7 +2,7 @@
   "acceptance_result": "PASS",
   "category_id": "clean_room",
   "evidence_file": "reports\\final_completion\\clean_room_evidence.json",
-  "execution_timestamp": "2026-10-07T13:12:59.212334+00:00",
+  "execution_timestamp": "2026-10-07T14:26:22.736439+00:00",
   "input_hashes": [
     "e43306c050373d8ce229ab8586d330842c32cba403fc0ac713b40b22a421a2aa"
   ],
@@ -53,14 +53,14 @@
         "source_rows": 28464
       }
     },
-    "generated_at": "2026-10-07T13:13:48.737827+00:00",
+    "generated_at": "2026-10-07T14:27:25.341751+00:00",
     "total_canonical_observations": 62769,
     "total_normalized_observations": 62774,
     "total_physical_intervals": 28464,
     "total_source_observations": 62774
   },
   "name": "Clean-Room Rebuild Comparison",
-  "output_hash": "a56587fceb9eced107f7f92ce90b14ba812cdcaa48bd174024137d4f14879b69",
+  "output_hash": "6352bc0679a349ac0b3144171c28cbe9ba7a7cfa2443e793ccf81d481948eaf3",
   "return_code": 0,
   "status": "PASS",
   "validator_command": "C:\\Users\\srina\\AppData\\Local\\Programs\\Python\\Python313\\python.exe -c from nse_signal.data.forensic.cleanroom import execute_clean_room_rebuild; execute_clean_room_rebuild('data/processed/cleanroom_audit_exec')",

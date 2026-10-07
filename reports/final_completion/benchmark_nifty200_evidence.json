@@ -1,0 +1,27 @@
+{
+  "acceptance_result": "PASS",
+  "category_id": "benchmark_nifty200",
+  "evidence_file": "reports\\final_completion\\benchmark_nifty200_evidence.json",
+  "execution_timestamp": "2026-10-07T14:23:43.862500+00:00",
+  "input_hashes": [
+    "e43306c050373d8ce229ab8586d330842c32cba403fc0ac713b40b22a421a2aa"
+  ],
+  "metrics": {
+    "failure_reason": null,
+    "generated_at": "2026-10-07T14:23:43.557177+00:00",
+    "inverted_count": 0,
+    "overlap_count": 0,
+    "status": "PASS",
+    "total_records": 20,
+    "unavailable_date_ranges": [
+      "2014-01-01 to 2019-12-31 (uncovered historical rebalance snapshots)"
+    ],
+    "valid_intervals": 20
+  },
+  "name": "Benchmark Nifty 200 Universe (Nifty200BenchmarkUniverse)",
+  "output_hash": "MISSING",
+  "return_code": 0,
+  "status": "PASS",
+  "validator_command": "C:\\Users\\srina\\AppData\\Local\\Programs\\Python\\Python313\\python.exe scripts/validate_nifty200_membership.py",
+  "validator_version": "3.1.0"
+}

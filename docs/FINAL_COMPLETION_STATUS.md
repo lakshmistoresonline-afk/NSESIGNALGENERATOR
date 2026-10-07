@@ -1,6 +1,6 @@
-# Final Completion Status Report (Genuine Non-Circular Evidence-Derived Audit)
+# Final Completion Status Report (Split Universe Gates Verified)
 
-- **Evaluated At**: 2026-10-07T13:13:59.204892+00:00
+- **Evaluated At**: 2026-10-07T14:27:36.833470+00:00
 - **Validator Version**: `3.1.0`
 
 | Category ID | Name | Status | Validator Command | Return Code | Evidence File | Acceptance Result |
@@ -9,7 +9,8 @@
 | `compile_status` | Source Compilation | `PASS` | `C:\Users\srina\AppData\Local\Programs\Python\Python313\python.exe -m compileall src server scripts` | `0` | `reports\final_completion\compile_status_evidence.json` | `PASS` |
 | `historical_data` | Historical Data Coverage | `BLOCKED` | `C:\Users\srina\AppData\Local\Programs\Python\Python313\python.exe scripts/build_final_historical_coverage.py` | `0` | `reports\final_completion\historical_data_evidence.json` | `BLOCKED` |
 | `security_identity` | Historical Security Identity | `PASS` | `C:\Users\srina\AppData\Local\Programs\Python\Python313\python.exe -c import sys; from nse_signal.data.nse.security_identity import build_identity_intervals; build_identity_intervals()` | `0` | `reports\final_completion\security_identity_evidence.json` | `PASS` |
-| `pit_universe` | Point-in-Time Universe | `PASS` | `C:\Users\srina\AppData\Local\Programs\Python\Python313\python.exe -c import sys; from nse_signal.data.nse.membership import load_membership; load_membership()` | `0` | `reports\final_completion\pit_universe_evidence.json` | `PASS` |
+| `production_universe` | Production Universe (BroadNSEEquityUniverse) | `PASS` | `C:\Users\srina\AppData\Local\Programs\Python\Python313\python.exe -c import sys; from nse_signal.data.universe_policy import UniversePolicy; UniversePolicy(universe_mode='BROAD_NSE')` | `0` | `reports\final_completion\production_universe_evidence.json` | `PASS` |
+| `benchmark_nifty200` | Benchmark Nifty 200 Universe (Nifty200BenchmarkUniverse) | `PASS` | `C:\Users\srina\AppData\Local\Programs\Python\Python313\python.exe scripts/validate_nifty200_membership.py` | `0` | `reports\final_completion\benchmark_nifty200_evidence.json` | `PASS` |
 | `pit_temporal` | PIT Temporal Integrity | `PASS` | `C:\Users\srina\AppData\Local\Programs\Python\Python313\python.exe scripts/build_final_pit_temporal_validation.py` | `0` | `reports\final_completion\pit_temporal_evidence.json` | `PASS` |
 | `row_accounting` | Independent Row Accounting | `BLOCKED` | `C:\Users\srina\AppData\Local\Programs\Python\Python313\python.exe scripts/build_final_row_accounting.py` | `0` | `reports\final_completion\row_accounting_evidence.json` | `BLOCKED` |
 | `corporate_action` | Corporate-Action Correctness | `PASS` | `C:\Users\srina\AppData\Local\Programs\Python\Python313\python.exe src/nse_signal/data/nse/corporate_action_validator.py` | `0` | `reports\final_completion\corporate_action_evidence.json` | `PASS` |

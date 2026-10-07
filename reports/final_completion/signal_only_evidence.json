@@ -2,7 +2,7 @@
   "acceptance_result": "PASS",
   "category_id": "signal_only",
   "evidence_file": "reports\\final_completion\\signal_only_evidence.json",
-  "execution_timestamp": "2026-10-07T13:13:55.132793+00:00",
+  "execution_timestamp": "2026-10-07T14:27:33.158928+00:00",
   "input_hashes": [
     "e43306c050373d8ce229ab8586d330842c32cba403fc0ac713b40b22a421a2aa"
   ],
@@ -10,7 +10,7 @@
     "real_trading": false
   },
   "name": "Signal-Only Safety (REAL_TRADING=FALSE)",
-  "output_hash": "0b180f1f2f6b48fdf726aeebe68b405da12367a402eb1f090d4cfe6deff6c981",
+  "output_hash": "bdfed12b5d059957bec0c8a86c9081696727f66e3e550e7ca69b72eaa4e32fd7",
   "return_code": 0,
   "status": "PASS",
   "validator_command": "C:\\Users\\srina\\AppData\\Local\\Programs\\Python\\Python313\\python.exe -m pytest tests/test_trading_safety_invariant.py -q",
