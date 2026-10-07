@@ -55,19 +55,19 @@ def _validate_trading_safety() -> tuple[str, str | None]:
         return "BLOCKED", f"TRADING_SAFETY_PARSE_ERROR: {e}"
 
 def _validate_historical_coverage() -> tuple[str, str | None]:
-    cov_path = Path("data/processed/final_historical_coverage.json")
-    valid, err = _validate_evidence_artifact(cov_path)
+    inv_path = Path("data/processed/final_historical_coverage.json")
+    valid, err = _validate_evidence_artifact(inv_path)
     if not valid:
         return "BLOCKED", f"MISSING_OR_EMPTY_EVIDENCE: {err}"
     try:
-        data = json.loads(cov_path.read_text(encoding="utf-8"))
+        data = json.loads(inv_path.read_text(encoding="utf-8"))
         layers = data.get("layers", {})
         for l_id, l_meta in layers.items():
             if l_meta.get("completeness_ratio", 0.0) < 0.50:
                 return "BLOCKED", f"LAYER_COVERAGE_INSUFFICIENT ({l_id}): completeness ratio {l_meta.get('completeness_ratio')} < 0.50"
         return "PASS", None
     except Exception as e:
-        return "BLOCKED", f"HISTORICAL_COVERAGE_PARSE_ERROR: {e}"
+        return "BLOCKED", f"HISTORICAL_INVENTORY_PARSE_ERROR: {e}"
 
 def _validate_raw_integrity() -> tuple[str, str | None]:
     man_path = Path("data/reference/raw_manifest.json")
@@ -130,17 +130,14 @@ def _validate_pit_temporal_integrity() -> tuple[str, str | None]:
         return "BLOCKED", f"FINAL_TEMPORAL_VALIDATION_EXCEPTION: {e}"
 
 def _validate_required_layers() -> tuple[str, str | None]:
-    mat_path = Path("data/reference/feature_data_dependency_matrix.json")
-    valid, err = _validate_evidence_artifact(mat_path)
-    if not valid:
-        return "BLOCKED", f"MISSING_OR_EMPTY_EVIDENCE: {err}"
-    pit_root = Path("data/processed/nse_pit")
-    required = ["cash_daily", "security_master"]
-    missing = [r for r in required if not (pit_root / f"{r}.csv").exists()]
-    if missing:
-        if not (Path("data/processed/pit/canonical_price_bars.jsonl").exists()):
-            return "BLOCKED", f"MISSING_REQUIRED_PIT_LAYERS: {missing}"
-    return "PASS", None
+    try:
+        from nse_signal.data.nse.pit_layer_validator import validate_all_required_pit_layers
+        valid, blocking = validate_all_required_pit_layers()
+        if not valid:
+            return "BLOCKED", f"SEMANTIC_PIT_LAYER_VALIDATION_FAIL: {blocking}"
+        return "PASS", None
+    except Exception as e:
+        return "BLOCKED", f"SEMANTIC_PIT_LAYER_EXCEPTION: {e}"
 
 def _validate_corporate_actions() -> tuple[str, str | None]:
     corp_path = Path("data/processed/nse_pit/corporate_action_validation.json")
@@ -265,7 +262,7 @@ def evaluate_production_gate(root_dir: str = ".") -> dict:
         ("security_identity", "Historical Security Identity", _validate_security_identity, "data/processed/final_identity_validation.json", "python -m pytest tests/test_historical_identity.py"),
         ("pit_universe", "Point-in-Time Universe", _validate_pit_universe, "data/reference/nifty200_membership.csv", "python -m pytest tests/test_universe_architecture.py"),
         ("pit_temporal_integrity", "PIT Temporal Integrity", _validate_pit_temporal_integrity, "data/processed/final_pit_temporal_validation.json", "python scripts/build_final_pit_temporal_validation.py"),
-        ("required_pit_layers", "Required PIT Layers", _validate_required_layers, "data/reference/feature_data_dependency_matrix.json", "python -m nse_signal.cli --build-pit"),
+        ("required_pit_layers", "Required PIT Layers", _validate_required_layers, "data/processed/pit/canonical_price_bars.jsonl", "python -m nse_signal.data.nse.pit_layer_validator"),
         ("corporate_action_correctness", "Corporate-Action Correctness", _validate_corporate_actions, "data/processed/nse_pit/corporate_action_validation.json", "python -m nse_signal.data.nse.corporate_action_validator"),
         ("model_walk_forward", "Model Walk-Forward Validation", _validate_walk_forward, "docs/REAL_WALK_FORWARD_REPORT.md", "python scripts/run_real_walk_forward.py"),
         ("calibration", "Probability Calibration", _validate_calibration, "data/processed/model_validation/calibration.json", "python scripts/build_calibration_conformal.py"),
@@ -339,7 +336,7 @@ def evaluate_production_gate(root_dir: str = ".") -> dict:
     processed_gate_path.write_text(json.dumps(gate_result, indent=2, sort_keys=True), encoding="utf-8")
     root.joinpath("FINAL_PRODUCTION_GATE.json").write_text(json.dumps(gate_result, indent=2, sort_keys=True), encoding="utf-8")
 
-    md_lines = ["# Production Gate Evidence Matrix (Layer-Specific Historical Coverage Contract Verified)\n"]
+    md_lines = ["# Production Gate Evidence Matrix (Semantic PIT Layer Validator Verified)\n"]
     md_lines.append(f"- **Evaluated At**: {gate_result['evaluated_at']}")
     md_lines.append(f"- **Overall Status**: `{gate_result['status']}`")
     md_lines.append(f"- **Eligible**: `{gate_result['eligible']}`\n")
