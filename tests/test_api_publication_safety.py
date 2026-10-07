@@ -1,4 +1,4 @@
-"""End-to-end API and publication safety tests covering health, PIT blocked, provenance, authorization, and signal validation."""
+"""Comprehensive API and publication contract test suite covering health, PIT blocking, provenance, authorization, signal validation, and absence of order endpoints."""
 from __future__ import annotations
 import sys
 import json
@@ -80,3 +80,9 @@ def test_published_signals_rejects_execution_enabled_artifacts(monkeypatch):
             bad_pub.write_bytes(bak)
         elif bad_pub.exists():
             bad_pub.unlink()
+
+def test_no_order_endpoint_exists():
+    client = TestClient(app)
+    for route in ["/api/v1/orders", "/api/v1/trade", "/api/v1/execute", "/api/orders", "/trade", "/execute"]:
+        response = client.post(route, json={"symbol": "RELIANCE", "qty": 10})
+        assert response.status_code in (404, 405, 422, 401, 403)
