@@ -12,8 +12,8 @@ android {
         applicationId = "com.trademind.nse"
         minSdk = 26
         targetSdk = 35
-        versionCode = 3000000
-        versionName = "30.0.0"
+        versionCode = 3100000
+        versionName = "31.0.0"
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_21
@@ -24,6 +24,32 @@ android {
     }
     buildFeatures {
         buildConfig = true
+    }
+
+    signingConfigs {
+        create("release") {
+            val storeFilePath = System.getenv("KEYSTORE_FILE")
+            if (storeFilePath != null && File(storeFilePath).exists()) {
+                storeFile = File(storeFilePath)
+                storePassword = System.getenv("KEYSTORE_PASSWORD")
+                keyAlias = System.getenv("KEY_ALIAS")
+                keyPassword = System.getenv("KEY_PASSWORD")
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            isMinifyEnabled = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+            val storeFilePath = System.getenv("KEYSTORE_FILE")
+            if (storeFilePath != null && File(storeFilePath).exists()) {
+                signingConfig = signingConfigs.getByName("release")
+            }
+        }
     }
 }
 
