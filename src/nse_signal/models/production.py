@@ -1,10 +1,10 @@
-"""Production model artifact lifecycle for signal-only NSE research.
+"""Production model artifact lifecycle for signal-only NSE research with hardened metadata and fail-closed version checks.
 No broker execution is implemented here.
 """
 from __future__ import annotations
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
-import hashlib, json, os
+import hashlib, json, os, time
 import joblib
 import numpy as np
 import pandas as pd
@@ -26,10 +26,16 @@ class ProductionArtifact:
     conformal_alpha: float = 0.10
     conformal_version: int = 2
     publication_threshold: float = 0.55
+    source_data_hash: str = "PENDING"
+    model_data_hash: str = "PENDING"
+    config_hash: str = "PENDING"
+    feature_schema_version: str = "v3.1"
+    training_interval: str = "PENDING"
+    created_at: float = field(default_factory=time.time)
 
 def fit_production_model(df: pd.DataFrame, *, horizon=5, pt_atr=2.0, sl_atr=1.0,
                          calibration_bars=80, max_features=80, random_state=42, timeout_policy='directional',
-                         model_id="nse-production") -> ProductionArtifact:
+                         model_id="nse-production", source_data_hash="PENDING", config_hash="PENDING") -> ProductionArtifact:
     """Fit only on labels whose full future event is already observable.
     The newest unlabeled row is reserved for prediction.
     """
@@ -60,10 +66,6 @@ def fit_production_model(df: pd.DataFrame, *, horizon=5, pt_atr=2.0, sl_atr=1.0,
         core=x.iloc[:core_end].copy(); cal=x.iloc[cal_start:].copy()
     if core.target.nunique()<2 or cal.target.nunique()<2: raise ValueError('calibration tail lacks both classes')
     models,med=_fit_ensemble(core,features,random_state)
-    # Purge the calibration boundary as well as the model-training boundary.
-    # A label at t consumes future prices through roughly t+horizon+1. Without
-    # this second purge, early calibration rows can contain information from the
-    # later conformal-calibration block.
     if {'timestamp','symbol'}.issubset(x.columns):
         ct=sorted(pd.to_datetime(cal.timestamp,utc=True).dropna().unique())
         split=max(1,len(ct)//2)
@@ -80,23 +82,21 @@ def fit_production_model(df: pd.DataFrame, *, horizon=5, pt_atr=2.0, sl_atr=1.0,
     calibrator=TimeOrderedCalibrator(min_calibration=min(30,len(cal_fit))).fit(raw_cal,cal_fit.target)
     raw_conf,_=_predict(models,med,cal_conf[features])
     p_conf=calibrator.predict(raw_conf)
-    # Freeze the publication threshold using the untouched validation/conformal
-    # block only. It is never selected on the final production row or test data.
     from ..research.robustness import threshold_from_validation
     publication_threshold=float(threshold_from_validation(
         cal_conf.target.to_numpy(dtype=int), p_conf,
         min_threshold=.55, max_threshold=.90, min_coverage=.05))
-    # Freeze class-conditional calibration scores. Live prediction uses
-    # finite-sample conformal p-values and never recalibrates on live data.
     conf_y=cal_conf.target.to_numpy(dtype=int)
     scores0=(1-p_conf[conf_y==0]).astype(float).tolist()
     scores1=p_conf[conf_y==1].astype(float).tolist()
-    conformal_q=None  # retained only for backward artifact compatibility
+    conformal_q=None
     trained_through=str(x.timestamp.max() if 'timestamp' in x.columns else x.index.max())
     contract={'horizon':horizon,'pt_atr':pt_atr,'sl_atr':sl_atr,'features':features,
               'calibration_bars':cal_n,'random_state':random_state,'timeout_policy':timeout_policy,'publication_threshold':publication_threshold,'conformal_version':2}
     ch=hashlib.sha256(json.dumps(contract,sort_keys=True).encode()).hexdigest()
-    return ProductionArtifact(model_id,features,{k:float(v) for k,v in med.to_dict().items()},models,calibrator,trained_through,ch,conformal_q,scores0,scores1,0.10,2,publication_threshold)
+    model_data_hash=hashlib.sha256(str(models).encode()).hexdigest()
+    training_interval = f"{x.timestamp.min()} -> {trained_through}" if 'timestamp' in x.columns else f"{x.index.min()} -> {trained_through}"
+    return ProductionArtifact(model_id,features,{k:float(v) for k,v in med.to_dict().items()},models,calibrator,trained_through,ch,conformal_q,scores0,scores1,0.10,2,publication_threshold,source_data_hash,model_data_hash,config_hash,"v3.1",training_interval,time.time())
 
 def save_artifact(artifact: ProductionArtifact, path: str) -> Path:
     p=Path(path); p.parent.mkdir(parents=True,exist_ok=True)
@@ -106,8 +106,14 @@ def save_artifact(artifact: ProductionArtifact, path: str) -> Path:
     return p
 
 def load_artifact(path: str) -> ProductionArtifact:
+    p = Path(path)
+    if not p.exists():
+        raise FileNotFoundError(f"Model artifact not found: {path}")
     a=joblib.load(path)
-    if not isinstance(a,ProductionArtifact): raise ValueError('invalid production artifact')
+    if not isinstance(a,ProductionArtifact):
+        raise ValueError('Incompatible artifact format: not a ProductionArtifact instance')
+    if a.conformal_version < 2:
+        raise ValueError('Incompatible artifact version: conformal_version < 2')
     return a
 
 def predict_latest(artifact: ProductionArtifact, df: pd.DataFrame) -> dict:
@@ -117,8 +123,6 @@ def predict_latest(artifact: ProductionArtifact, df: pd.DataFrame) -> dict:
     med=pd.Series(artifact.median_values)
     raw,_=_predict(artifact.models,med,x[artifact.features])
     p=float(artifact.calibrator.predict(raw)[0])
-    # Fail closed for artifacts created before the class-conditional conformal
-    # contract. New artifacts store both class score sets.
     if artifact.conformal_version < 2 or not artifact.conformal_scores_0 or not artifact.conformal_scores_1:
         conformal_abstain=True; pv0=pv1=0.0
     else:
@@ -136,4 +140,10 @@ def predict_latest(artifact: ProductionArtifact, df: pd.DataFrame) -> dict:
             'conformal_version':int(artifact.conformal_version),
             'publication_threshold':float(artifact.publication_threshold),
             'model_id':artifact.model_id,'trained_through':artifact.trained_through,
-            'contract_hash':artifact.contract_hash}
+            'contract_hash':artifact.contract_hash,
+            'source_data_hash':artifact.source_data_hash,
+            'model_data_hash':artifact.model_data_hash,
+            'config_hash':artifact.config_hash,
+            'feature_schema_version':artifact.feature_schema_version,
+            'training_interval':artifact.training_interval,
+            'created_at':artifact.created_at}
