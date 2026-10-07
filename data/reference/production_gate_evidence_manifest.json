@@ -1,10 +1,4 @@
 {
-  "blocking_reasons": [
-    "Required PIT Layers: MISSING_REQUIRED_PIT_LAYERS: ['cash_daily', 'security_master']",
-    "Model Walk-Forward Validation: WALK_FORWARD_BLOCKED: Insufficient unique trading dates (2) for multi-fold chronological walk-forward evaluation",
-    "Probability Calibration: INSUFFICIENT_CALIBRATION_DATA",
-    "Conformal Validation: INSUFFICIENT_CONFORMAL_DATA"
-  ],
   "categories": [
     {
       "category_id": "historical_coverage",
@@ -287,10 +281,7 @@
       "validator_version": "3.1.0"
     }
   ],
-  "eligible": false,
-  "evaluated_at": "2026-10-07T03:21:56.318338+00:00",
-  "project": "NSE Signal Provider V31",
-  "real_trading": false,
-  "signal_publication_allowed": false,
-  "status": "BLOCKED"
+  "gate_status": "BLOCKED",
+  "generated_at": "2026-10-07T03:21:56.318338+00:00",
+  "validator_version": "3.1.0"
 }
