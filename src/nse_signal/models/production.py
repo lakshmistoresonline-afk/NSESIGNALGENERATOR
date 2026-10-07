@@ -1,4 +1,4 @@
-"""Production model artifact lifecycle for signal-only NSE research with hardened metadata and fail-closed version checks.
+"""Production model artifact lifecycle for signal-only NSE research with hardened metadata, feature schema hash, dataset manifest hash, and fail-closed version checks.
 No broker execution is implemented here.
 """
 from __future__ import annotations
@@ -30,12 +30,16 @@ class ProductionArtifact:
     model_data_hash: str = "PENDING"
     config_hash: str = "PENDING"
     feature_schema_version: str = "v3.1"
+    feature_schema_hash: str = "PENDING"
+    dataset_manifest_hash: str = "PENDING"
+    validator_version: str = "3.1.0"
+    model_version: str = "3.1.0"
     training_interval: str = "PENDING"
     created_at: float = field(default_factory=time.time)
 
 def fit_production_model(df: pd.DataFrame, *, horizon=5, pt_atr=2.0, sl_atr=1.0,
                          calibration_bars=80, max_features=80, random_state=42, timeout_policy='directional',
-                         model_id="nse-production", source_data_hash="PENDING", config_hash="PENDING") -> ProductionArtifact:
+                         model_id="nse-production", source_data_hash="PENDING", config_hash="PENDING", dataset_manifest_hash="PENDING") -> ProductionArtifact:
     """Fit only on labels whose full future event is already observable.
     The newest unlabeled row is reserved for prediction.
     """
@@ -95,8 +99,9 @@ def fit_production_model(df: pd.DataFrame, *, horizon=5, pt_atr=2.0, sl_atr=1.0,
               'calibration_bars':cal_n,'random_state':random_state,'timeout_policy':timeout_policy,'publication_threshold':publication_threshold,'conformal_version':2}
     ch=hashlib.sha256(json.dumps(contract,sort_keys=True).encode()).hexdigest()
     model_data_hash=hashlib.sha256(str(models).encode()).hexdigest()
+    feature_schema_hash=hashlib.sha256(json.dumps(sorted(features)).encode()).hexdigest()
     training_interval = f"{x.timestamp.min()} -> {trained_through}" if 'timestamp' in x.columns else f"{x.index.min()} -> {trained_through}"
-    return ProductionArtifact(model_id,features,{k:float(v) for k,v in med.to_dict().items()},models,calibrator,trained_through,ch,conformal_q,scores0,scores1,0.10,2,publication_threshold,source_data_hash,model_data_hash,config_hash,"v3.1",training_interval,time.time())
+    return ProductionArtifact(model_id,features,{k:float(v) for k,v in med.to_dict().items()},models,calibrator,trained_through,ch,conformal_q,scores0,scores1,0.10,2,publication_threshold,source_data_hash,model_data_hash,config_hash,"v3.1",feature_schema_hash,dataset_manifest_hash,"3.1.0","3.1.0",training_interval,time.time())
 
 def save_artifact(artifact: ProductionArtifact, path: str) -> Path:
     p=Path(path); p.parent.mkdir(parents=True,exist_ok=True)
@@ -145,5 +150,9 @@ def predict_latest(artifact: ProductionArtifact, df: pd.DataFrame) -> dict:
             'model_data_hash':artifact.model_data_hash,
             'config_hash':artifact.config_hash,
             'feature_schema_version':artifact.feature_schema_version,
+            'feature_schema_hash':artifact.feature_schema_hash,
+            'dataset_manifest_hash':artifact.dataset_manifest_hash,
+            'validator_version':artifact.validator_version,
+            'model_version':artifact.model_version,
             'training_interval':artifact.training_interval,
             'created_at':artifact.created_at}
