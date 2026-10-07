@@ -11,7 +11,7 @@
       "category_id": "historical_coverage",
       "evidence_hash": "c5730036f07f627dcd1d9ae2020a5e9b628b2fc3608a8006ec271c1baf05c9a0",
       "evidence_path": "data/processed/final_historical_inventory.json",
-      "execution_timestamp": "2026-10-07T05:36:34.127163+00:00",
+      "execution_timestamp": "2026-10-07T05:43:51.566102+00:00",
       "input_hashes": [
         "93064e79edb91571779583c1e181af939abbfa4ec6d9ecc54faa18a62ec438ee"
       ],
@@ -30,7 +30,7 @@
       "category_id": "raw_integrity",
       "evidence_hash": "c5dc31fc9f2d6408cf4e9c4cb75dbc5ac6d4bad55e617cdb6e0acfc5611f6953",
       "evidence_path": "data/reference/raw_manifest.json",
-      "execution_timestamp": "2026-10-07T05:36:34.129042+00:00",
+      "execution_timestamp": "2026-10-07T05:43:51.567774+00:00",
       "input_hashes": [
         "93064e79edb91571779583c1e181af939abbfa4ec6d9ecc54faa18a62ec438ee"
       ],
@@ -47,7 +47,7 @@
       "category_id": "security_identity",
       "evidence_hash": "1fc210d0334a0915193e4d6fbe7832a6d4dfdafb1ba31a5729a56e9e04f01fa9",
       "evidence_path": "docs/HISTORICAL_IDENTITY_REPORT.md",
-      "execution_timestamp": "2026-10-07T05:36:34.167517+00:00",
+      "execution_timestamp": "2026-10-07T05:43:51.606060+00:00",
       "input_hashes": [
         "93064e79edb91571779583c1e181af939abbfa4ec6d9ecc54faa18a62ec438ee"
       ],
@@ -64,7 +64,7 @@
       "category_id": "pit_universe",
       "evidence_hash": "f45b9f93c51d5036a1225f7ff8df5b330a8d06ae7522ff4d104be1c9c9a03328",
       "evidence_path": "data/reference/nifty200_membership.csv",
-      "execution_timestamp": "2026-10-07T05:36:34.198540+00:00",
+      "execution_timestamp": "2026-10-07T05:43:51.638866+00:00",
       "input_hashes": [
         "93064e79edb91571779583c1e181af939abbfa4ec6d9ecc54faa18a62ec438ee"
       ],
@@ -80,7 +80,7 @@
       "category_id": "pit_temporal_integrity",
       "evidence_hash": "a55731838b4b489acc40467c5a9771cb8aa2ef0fb513dbf0021ecf67ab1e8ab5",
       "evidence_path": "data/processed/pit/temporal_validation.json",
-      "execution_timestamp": "2026-10-07T05:36:34.199868+00:00",
+      "execution_timestamp": "2026-10-07T05:43:51.640058+00:00",
       "input_hashes": [
         "93064e79edb91571779583c1e181af939abbfa4ec6d9ecc54faa18a62ec438ee"
       ],
@@ -97,7 +97,7 @@
       "category_id": "required_pit_layers",
       "evidence_hash": "93064e79edb91571779583c1e181af939abbfa4ec6d9ecc54faa18a62ec438ee",
       "evidence_path": "data/reference/feature_data_dependency_matrix.json",
-      "execution_timestamp": "2026-10-07T05:36:34.201006+00:00",
+      "execution_timestamp": "2026-10-07T05:43:51.641115+00:00",
       "input_hashes": [
         "93064e79edb91571779583c1e181af939abbfa4ec6d9ecc54faa18a62ec438ee"
       ],
@@ -118,7 +118,7 @@
       "category_id": "corporate_action_correctness",
       "evidence_hash": "f26f46923e87c422ce89bf48cb278d3bfd5a3866ee101ae8b091c1ed12939624",
       "evidence_path": "data/processed/nse_pit/corporate_action_validation.json",
-      "execution_timestamp": "2026-10-07T05:36:34.202289+00:00",
+      "execution_timestamp": "2026-10-07T05:43:51.642264+00:00",
       "input_hashes": [
         "93064e79edb91571779583c1e181af939abbfa4ec6d9ecc54faa18a62ec438ee"
       ],
@@ -134,7 +134,7 @@
       "category_id": "model_walk_forward",
       "evidence_hash": "1ecf572ee0180a22fe8a3e6d7e94736a15c19b77fbfb9f665be5347805d9da62",
       "evidence_path": "docs/REAL_WALK_FORWARD_REPORT.md",
-      "execution_timestamp": "2026-10-07T05:36:34.203518+00:00",
+      "execution_timestamp": "2026-10-07T05:43:51.643387+00:00",
       "input_hashes": [
         "93064e79edb91571779583c1e181af939abbfa4ec6d9ecc54faa18a62ec438ee"
       ],
@@ -152,7 +152,7 @@
       "category_id": "calibration",
       "evidence_hash": "5ba08b952ad442a52971c90ea36b8d22423fc3bc59bfb85bab35c3b0e7da4fa3",
       "evidence_path": "data/processed/model_validation/real_walk_forward_results.json",
-      "execution_timestamp": "2026-10-07T05:36:34.204782+00:00",
+      "execution_timestamp": "2026-10-07T05:43:51.644477+00:00",
       "input_hashes": [
         "93064e79edb91571779583c1e181af939abbfa4ec6d9ecc54faa18a62ec438ee"
       ],
@@ -170,7 +170,7 @@
       "category_id": "conformal_validation",
       "evidence_hash": "5ba08b952ad442a52971c90ea36b8d22423fc3bc59bfb85bab35c3b0e7da4fa3",
       "evidence_path": "data/processed/model_validation/real_walk_forward_results.json",
-      "execution_timestamp": "2026-10-07T05:36:34.206008+00:00",
+      "execution_timestamp": "2026-10-07T05:43:51.645569+00:00",
       "input_hashes": [
         "93064e79edb91571779583c1e181af939abbfa4ec6d9ecc54faa18a62ec438ee"
       ],
@@ -188,7 +188,7 @@
       "category_id": "economic_validation",
       "evidence_hash": "1ecf572ee0180a22fe8a3e6d7e94736a15c19b77fbfb9f665be5347805d9da62",
       "evidence_path": "docs/REAL_WALK_FORWARD_REPORT.md",
-      "execution_timestamp": "2026-10-07T05:36:34.206839+00:00",
+      "execution_timestamp": "2026-10-07T05:43:51.646300+00:00",
       "input_hashes": [
         "93064e79edb91571779583c1e181af939abbfa4ec6d9ecc54faa18a62ec438ee"
       ],
@@ -204,7 +204,7 @@
       "category_id": "drift",
       "evidence_hash": "5ba08b952ad442a52971c90ea36b8d22423fc3bc59bfb85bab35c3b0e7da4fa3",
       "evidence_path": "data/processed/model_validation/real_walk_forward_results.json",
-      "execution_timestamp": "2026-10-07T05:36:34.207691+00:00",
+      "execution_timestamp": "2026-10-07T05:43:51.647055+00:00",
       "input_hashes": [
         "93064e79edb91571779583c1e181af939abbfa4ec6d9ecc54faa18a62ec438ee"
       ],
@@ -220,7 +220,7 @@
       "category_id": "adversarial_validation",
       "evidence_hash": "97efe84db0d594ac42be7632f47cda35e827e64e3efa0f24599f6babe826d329",
       "evidence_path": "src/nse_signal/research/adversarial.py",
-      "execution_timestamp": "2026-10-07T05:36:34.208595+00:00",
+      "execution_timestamp": "2026-10-07T05:43:51.647849+00:00",
       "input_hashes": [
         "93064e79edb91571779583c1e181af939abbfa4ec6d9ecc54faa18a62ec438ee"
       ],
@@ -236,7 +236,7 @@
       "category_id": "multiple_testing_controls",
       "evidence_hash": "b639256cfe2b05d8bba01df8346b76f3cfa9e871e8901e35139d7e86b40a71f9",
       "evidence_path": "src/nse_signal/research/falsification.py",
-      "execution_timestamp": "2026-10-07T05:36:34.209465+00:00",
+      "execution_timestamp": "2026-10-07T05:43:51.648625+00:00",
       "input_hashes": [
         "93064e79edb91571779583c1e181af939abbfa4ec6d9ecc54faa18a62ec438ee"
       ],
@@ -252,7 +252,7 @@
       "category_id": "untouched_holdout",
       "evidence_hash": "03f26d04d5cc1923df6cd129f48362026b55507f2565c933af3b96a4e84541f3",
       "evidence_path": "data/processed/nse_pit/pit_features.csv",
-      "execution_timestamp": "2026-10-07T05:36:34.222574+00:00",
+      "execution_timestamp": "2026-10-07T05:43:51.661294+00:00",
       "input_hashes": [
         "93064e79edb91571779583c1e181af939abbfa4ec6d9ecc54faa18a62ec438ee"
       ],
@@ -268,7 +268,7 @@
       "category_id": "forensic_tests",
       "evidence_hash": "6929733dff3a5e344a130424f07b78c8a463a04a33be2e9c2ec85f8acbe42bb7",
       "evidence_path": "data/processed/forensics/MUTATION_TEST_RESULTS.json",
-      "execution_timestamp": "2026-10-07T05:36:34.223644+00:00",
+      "execution_timestamp": "2026-10-07T05:43:51.662277+00:00",
       "input_hashes": [
         "93064e79edb91571779583c1e181af939abbfa4ec6d9ecc54faa18a62ec438ee"
       ],
@@ -284,7 +284,7 @@
       "category_id": "clean_room_rebuild",
       "evidence_hash": "50d1be3d489cf0fba85a10517647ed8daa3b801add31229043077a15523299bf",
       "evidence_path": "docs/CLEAN_ROOM_VALIDATION_REPORT.md",
-      "execution_timestamp": "2026-10-07T05:36:34.224539+00:00",
+      "execution_timestamp": "2026-10-07T05:43:51.663210+00:00",
       "input_hashes": [
         "93064e79edb91571779583c1e181af939abbfa4ec6d9ecc54faa18a62ec438ee"
       ],
@@ -300,7 +300,7 @@
       "category_id": "android_build",
       "evidence_hash": "18404fb252a7ecaa2d02904e4a7f8812f8169005fab43f9be4f85e8a9508ae00",
       "evidence_path": "android/app/build/outputs/apk/debug/app-debug.apk",
-      "execution_timestamp": "2026-10-07T05:36:34.280340+00:00",
+      "execution_timestamp": "2026-10-07T05:43:51.718219+00:00",
       "input_hashes": [
         "93064e79edb91571779583c1e181af939abbfa4ec6d9ecc54faa18a62ec438ee"
       ],
@@ -316,7 +316,7 @@
       "category_id": "android_runtime",
       "evidence_hash": "02f21c5daf0aafa0968b92dc96ec06ad543e14082795f3f30bf0a24e70a778e3",
       "evidence_path": "docs/ANDROID_RUNTIME_VALIDATION.md",
-      "execution_timestamp": "2026-10-07T05:36:34.281196+00:00",
+      "execution_timestamp": "2026-10-07T05:43:51.718984+00:00",
       "input_hashes": [
         "93064e79edb91571779583c1e181af939abbfa4ec6d9ecc54faa18a62ec438ee"
       ],
@@ -332,7 +332,7 @@
       "category_id": "signal_only_safety",
       "evidence_hash": "7ddbd8b4477be81728e0bcff170f6210d182da7c3ec26cf509dfcc9f82d70efc",
       "evidence_path": "reports/final_completion/trading_safety.json",
-      "execution_timestamp": "2026-10-07T05:36:34.282467+00:00",
+      "execution_timestamp": "2026-10-07T05:43:51.720125+00:00",
       "input_hashes": [
         "93064e79edb91571779583c1e181af939abbfa4ec6d9ecc54faa18a62ec438ee"
       ],
@@ -347,7 +347,7 @@
     }
   ],
   "eligible": false,
-  "execution_timestamp": "2026-10-07T05:36:34.282481+00:00",
+  "execution_timestamp": "2026-10-07T05:43:51.720138+00:00",
   "project": "NSE Signal Provider V31",
   "real_trading": false,
   "signal_publication_allowed": false,

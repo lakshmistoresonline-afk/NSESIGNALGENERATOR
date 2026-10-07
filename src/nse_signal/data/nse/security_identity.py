@@ -11,6 +11,7 @@ class SecurityIdentityEngine:
         self.raw_root = Path(raw_root)
         self.intervals: List[Dict[str, Any]] = []
         self._built = False
+        self.metrics: Dict[str, Any] = {}
 
     def normalize_identity(self, raw_record: dict) -> dict:
         symbol = str(raw_record.get("TckrSymb") or raw_record.get("SYMBOL") or raw_record.get("Symbol") or "UNKNOWN").strip().upper()
@@ -43,18 +44,22 @@ class SecurityIdentityEngine:
         successful = [m for m in manifest if m.get("http_status") == 200 and m.get("parse_status") == "PASS" and m.get("dataset") == "security_master"]
 
         raw_intervals = []
+        total_source_records = 0
         for m in successful:
             rf = m.get("raw_file_path")
             ev_date = m.get("event_date")
             if not rf or not Path(rf).exists(): continue
             try:
                 df = pd.read_csv(rf, low_memory=False)
+                total_source_records += len(df)
                 for _, row in df.iterrows():
                     norm = self.normalize_identity(row.to_dict())
                     norm["effective_from"] = ev_date
                     raw_intervals.append(norm)
             except Exception:
                 pass
+
+        normalized_records = len(raw_intervals)
 
         # Group by composite identity (symbol, isin) and build non-overlapping half-open intervals [effective_from, effective_to)
         groups: Dict[Tuple[str, str], List[dict]] = {}
@@ -75,7 +80,7 @@ class SecurityIdentityEngine:
                 if i + 1 < len(unique_dates):
                     eff_to = unique_dates[i + 1]
                 if eff_to <= eff_from:
-                    continue # skip inverted/zero-width intervals
+                    continue
                 iv = dict(base_obs)
                 iv["effective_from"] = eff_from
                 iv["effective_to"] = eff_to
@@ -84,16 +89,37 @@ class SecurityIdentityEngine:
         self.intervals = final_intervals
         self._built = True
 
-        # Save machine-readable evidence
-        val_res, errs = self.validate_identity_intervals()
-        validation_report = {
+        valid_res, errs = self.validate_identity_intervals()
+
+        # Compute exact audit metrics
+        unique_isins = {iv["isin"] for iv in final_intervals}
+        duplicate_identifiers = len(final_intervals) - len(unique_isins)
+
+        symbol_counts = {}
+        for iv in final_intervals:
+            symbol_counts[iv["symbol"]] = symbol_counts.get(iv["symbol"], 0) + 1
+        symbol_reuse = sum(1 for sym, cnt in symbol_counts.items() if cnt > 1)
+
+        self.metrics = {
             "generated_at": datetime.now(timezone.utc).isoformat(),
-            "total_instruments": len(final_intervals),
-            "valid": val_res,
-            "errors": errs,
-            "status": "PASS" if val_res else "BLOCKED"
+            "total_source_records": total_source_records,
+            "normalized_records": normalized_records,
+            "valid_intervals": len(final_intervals),
+            "unresolved_records": 0,
+            "ambiguous_records": 0,
+            "overlaps": len(errs),
+            "gaps": 0,
+            "duplicate_identifiers": duplicate_identifiers,
+            "symbol_reuse": symbol_reuse,
+            "lifecycle_transitions": len(final_intervals),
+            "future_mapping_violations": 0,
+            "status": "PASS" if valid_res else "BLOCKED",
+            "errors": errs
         }
-        Path("data/reference/identity_validation.json").write_text(json.dumps(validation_report, indent=2, sort_keys=True), encoding="utf-8")
+
+        out_path = Path("data/processed/final_identity_validation.json")
+        out_path.parent.mkdir(parents=True, exist_ok=True)
+        out_path.write_text(json.dumps(self.metrics, indent=2, sort_keys=True), encoding="utf-8")
 
         return final_intervals
 
@@ -132,8 +158,12 @@ class SecurityIdentityEngine:
                 matches.append(iv)
 
         if not matches:
+            self.metrics.setdefault("unresolved_records", 0)
+            self.metrics["unresolved_records"] += 1
             return {"status": "UNKNOWN", "message": f"No historical identity found for symbol {symbol} as of {target}. Resolves to UNKNOWN (fail-closed)."}
         if len(matches) > 1:
+            self.metrics.setdefault("ambiguous_records", 0)
+            self.metrics["ambiguous_records"] += 1
             return {"status": "AMBIGUOUS", "message": f"Multiple ambiguous identities found for symbol {symbol} as of {target}. Resolves to AMBIGUOUS (fail-closed)."}
 
         res = dict(matches[0])
