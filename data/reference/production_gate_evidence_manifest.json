@@ -4,7 +4,7 @@
       "category_id": "historical_coverage",
       "evidence_hash": "c5730036f07f627dcd1d9ae2020a5e9b628b2fc3608a8006ec271c1baf05c9a0",
       "evidence_path": "data/processed/final_historical_inventory.json",
-      "execution_timestamp": "2026-10-07T06:55:50.167610+00:00",
+      "execution_timestamp": "2026-10-07T07:58:14.211783+00:00",
       "failure_reason": "INSUFFICIENT_VALIDATED_HISTORICAL_DAYS: validated 219 days (< 500)",
       "input_hashes": [
         "93064e79edb91571779583c1e181af939abbfa4ec6d9ecc54faa18a62ec438ee"
@@ -17,7 +17,7 @@
       "category_id": "raw_integrity",
       "evidence_hash": "c5dc31fc9f2d6408cf4e9c4cb75dbc5ac6d4bad55e617cdb6e0acfc5611f6953",
       "evidence_path": "data/reference/raw_manifest.json",
-      "execution_timestamp": "2026-10-07T06:55:50.169441+00:00",
+      "execution_timestamp": "2026-10-07T07:58:14.213750+00:00",
       "failure_reason": null,
       "input_hashes": [
         "93064e79edb91571779583c1e181af939abbfa4ec6d9ecc54faa18a62ec438ee"
@@ -28,9 +28,9 @@
     },
     {
       "category_id": "security_identity",
-      "evidence_hash": "3c33c063e4d7747cd0aa3b2bb40cf12bd406edb9e4f00e87a0d7dea21c61518e",
+      "evidence_hash": "8486bf18e7cff4885dd3ad148636c058b1ed2cb0cf65a18c6f51eedaa6c9b625",
       "evidence_path": "data/processed/final_identity_validation.json",
-      "execution_timestamp": "2026-10-07T06:55:50.170851+00:00",
+      "execution_timestamp": "2026-10-07T07:58:14.215559+00:00",
       "failure_reason": null,
       "input_hashes": [
         "93064e79edb91571779583c1e181af939abbfa4ec6d9ecc54faa18a62ec438ee"
@@ -43,7 +43,7 @@
       "category_id": "pit_universe",
       "evidence_hash": "f45b9f93c51d5036a1225f7ff8df5b330a8d06ae7522ff4d104be1c9c9a03328",
       "evidence_path": "data/reference/nifty200_membership.csv",
-      "execution_timestamp": "2026-10-07T06:55:50.172012+00:00",
+      "execution_timestamp": "2026-10-07T07:58:14.216993+00:00",
       "failure_reason": null,
       "input_hashes": [
         "93064e79edb91571779583c1e181af939abbfa4ec6d9ecc54faa18a62ec438ee"
@@ -56,7 +56,7 @@
       "category_id": "pit_temporal_integrity",
       "evidence_hash": "f248e935c74c2af8a81bc36a6c9642d82842af56b57bc1921a9ebaafcc50a13c",
       "evidence_path": "data/processed/final_pit_temporal_validation.json",
-      "execution_timestamp": "2026-10-07T06:55:50.173492+00:00",
+      "execution_timestamp": "2026-10-07T07:58:14.218534+00:00",
       "failure_reason": null,
       "input_hashes": [
         "93064e79edb91571779583c1e181af939abbfa4ec6d9ecc54faa18a62ec438ee"
@@ -69,7 +69,7 @@
       "category_id": "required_pit_layers",
       "evidence_hash": "93064e79edb91571779583c1e181af939abbfa4ec6d9ecc54faa18a62ec438ee",
       "evidence_path": "data/reference/feature_data_dependency_matrix.json",
-      "execution_timestamp": "2026-10-07T06:55:50.174871+00:00",
+      "execution_timestamp": "2026-10-07T07:58:14.219954+00:00",
       "failure_reason": "MISSING_REQUIRED_PIT_LAYERS: ['cash_daily', 'security_master']",
       "input_hashes": [
         "93064e79edb91571779583c1e181af939abbfa4ec6d9ecc54faa18a62ec438ee"
@@ -80,9 +80,9 @@
     },
     {
       "category_id": "corporate_action_correctness",
-      "evidence_hash": "b939fdb753f6387727b409840d5b8b688323d97ef85ed1a030ed3ba02945bbcb",
+      "evidence_hash": "c629dd038c8eee14f80c5a4cc23ac786154944e9f800a0123cc8d45ffb15cf06",
       "evidence_path": "data/processed/nse_pit/corporate_action_validation.json",
-      "execution_timestamp": "2026-10-07T06:55:50.177649+00:00",
+      "execution_timestamp": "2026-10-07T07:58:14.226350+00:00",
       "failure_reason": null,
       "input_hashes": [
         "93064e79edb91571779583c1e181af939abbfa4ec6d9ecc54faa18a62ec438ee"
@@ -95,7 +95,7 @@
       "category_id": "model_walk_forward",
       "evidence_hash": "6f630363b8bacc5f99366f5c8d6777d64b1496dcacbc9e9800478767d58577fc",
       "evidence_path": "docs/REAL_WALK_FORWARD_REPORT.md",
-      "execution_timestamp": "2026-10-07T06:55:50.179055+00:00",
+      "execution_timestamp": "2026-10-07T07:58:14.227972+00:00",
       "failure_reason": "WALK_FORWARD_BLOCKED: Insufficient unique trading dates (2) for genuine multi-fold chronological walk-forward evaluation",
       "input_hashes": [
         "93064e79edb91571779583c1e181af939abbfa4ec6d9ecc54faa18a62ec438ee"
@@ -108,7 +108,7 @@
       "category_id": "calibration",
       "evidence_hash": "a01a4d35caa527fea89101c5ee5f4ff9504490165e0a271bf337a142193065b3",
       "evidence_path": "data/processed/model_validation/calibration.json",
-      "execution_timestamp": "2026-10-07T06:55:50.180443+00:00",
+      "execution_timestamp": "2026-10-07T07:58:14.229721+00:00",
       "failure_reason": "CALIBRATION_BLOCKED: Insufficient out-of-sample observations from walk-forward folds for probability calibration",
       "input_hashes": [
         "93064e79edb91571779583c1e181af939abbfa4ec6d9ecc54faa18a62ec438ee"
@@ -121,7 +121,7 @@
       "category_id": "conformal_validation",
       "evidence_hash": "fdca45374822b99ece78314a42794458ae223db000a46963bc7d3ae186f3ca47",
       "evidence_path": "data/processed/model_validation/conformal.json",
-      "execution_timestamp": "2026-10-07T06:55:50.181815+00:00",
+      "execution_timestamp": "2026-10-07T07:58:14.231322+00:00",
       "failure_reason": "CONFORMAL_BLOCKED: Insufficient out-of-sample observations from walk-forward folds for conformal validation",
       "input_hashes": [
         "93064e79edb91571779583c1e181af939abbfa4ec6d9ecc54faa18a62ec438ee"
@@ -134,7 +134,7 @@
       "category_id": "economic_validation",
       "evidence_hash": "6f630363b8bacc5f99366f5c8d6777d64b1496dcacbc9e9800478767d58577fc",
       "evidence_path": "docs/REAL_WALK_FORWARD_REPORT.md",
-      "execution_timestamp": "2026-10-07T06:55:50.182540+00:00",
+      "execution_timestamp": "2026-10-07T07:58:14.232255+00:00",
       "failure_reason": "Economic validation optional until live trading simulation",
       "input_hashes": [
         "93064e79edb91571779583c1e181af939abbfa4ec6d9ecc54faa18a62ec438ee"
@@ -147,7 +147,7 @@
       "category_id": "drift",
       "evidence_hash": "e7de07ea83d0aac1ab5f0f8c8e574a534f5d2bfe17e52f2cfe51837d68e3fe51",
       "evidence_path": "data/processed/model_validation/real_walk_forward_results.json",
-      "execution_timestamp": "2026-10-07T06:55:50.183273+00:00",
+      "execution_timestamp": "2026-10-07T07:58:14.233065+00:00",
       "failure_reason": "Drift monitoring active post-deployment",
       "input_hashes": [
         "93064e79edb91571779583c1e181af939abbfa4ec6d9ecc54faa18a62ec438ee"
@@ -160,7 +160,7 @@
       "category_id": "adversarial_validation",
       "evidence_hash": "97efe84db0d594ac42be7632f47cda35e827e64e3efa0f24599f6babe826d329",
       "evidence_path": "src/nse_signal/research/adversarial.py",
-      "execution_timestamp": "2026-10-07T06:55:50.184365+00:00",
+      "execution_timestamp": "2026-10-07T07:58:14.238259+00:00",
       "failure_reason": null,
       "input_hashes": [
         "93064e79edb91571779583c1e181af939abbfa4ec6d9ecc54faa18a62ec438ee"
@@ -173,7 +173,7 @@
       "category_id": "multiple_testing_controls",
       "evidence_hash": "b639256cfe2b05d8bba01df8346b76f3cfa9e871e8901e35139d7e86b40a71f9",
       "evidence_path": "src/nse_signal/research/falsification.py",
-      "execution_timestamp": "2026-10-07T06:55:50.185455+00:00",
+      "execution_timestamp": "2026-10-07T07:58:14.242991+00:00",
       "failure_reason": null,
       "input_hashes": [
         "93064e79edb91571779583c1e181af939abbfa4ec6d9ecc54faa18a62ec438ee"
@@ -186,7 +186,7 @@
       "category_id": "untouched_holdout",
       "evidence_hash": "03f26d04d5cc1923df6cd129f48362026b55507f2565c933af3b96a4e84541f3",
       "evidence_path": "data/processed/nse_pit/pit_features.csv",
-      "execution_timestamp": "2026-10-07T06:55:50.200694+00:00",
+      "execution_timestamp": "2026-10-07T07:58:14.258654+00:00",
       "failure_reason": null,
       "input_hashes": [
         "93064e79edb91571779583c1e181af939abbfa4ec6d9ecc54faa18a62ec438ee"
@@ -199,7 +199,7 @@
       "category_id": "forensic_tests",
       "evidence_hash": "6929733dff3a5e344a130424f07b78c8a463a04a33be2e9c2ec85f8acbe42bb7",
       "evidence_path": "data/processed/forensics/MUTATION_TEST_RESULTS.json",
-      "execution_timestamp": "2026-10-07T06:55:50.201850+00:00",
+      "execution_timestamp": "2026-10-07T07:58:14.259889+00:00",
       "failure_reason": null,
       "input_hashes": [
         "93064e79edb91571779583c1e181af939abbfa4ec6d9ecc54faa18a62ec438ee"
@@ -212,7 +212,7 @@
       "category_id": "clean_room_rebuild",
       "evidence_hash": "de95976822798fac024d889ab485932f91ea1709240c975b08d58de8a68d5ae9",
       "evidence_path": "docs/CLEAN_ROOM_VALIDATION_REPORT.md",
-      "execution_timestamp": "2026-10-07T06:55:50.202973+00:00",
+      "execution_timestamp": "2026-10-07T07:58:14.261063+00:00",
       "failure_reason": null,
       "input_hashes": [
         "93064e79edb91571779583c1e181af939abbfa4ec6d9ecc54faa18a62ec438ee"
@@ -225,7 +225,7 @@
       "category_id": "android_build",
       "evidence_hash": "18404fb252a7ecaa2d02904e4a7f8812f8169005fab43f9be4f85e8a9508ae00",
       "evidence_path": "android/app/build/outputs/apk/debug/app-debug.apk",
-      "execution_timestamp": "2026-10-07T06:55:50.269726+00:00",
+      "execution_timestamp": "2026-10-07T07:58:14.329043+00:00",
       "failure_reason": null,
       "input_hashes": [
         "93064e79edb91571779583c1e181af939abbfa4ec6d9ecc54faa18a62ec438ee"
@@ -238,7 +238,7 @@
       "category_id": "android_runtime",
       "evidence_hash": "02f21c5daf0aafa0968b92dc96ec06ad543e14082795f3f30bf0a24e70a778e3",
       "evidence_path": "docs/ANDROID_RUNTIME_VALIDATION.md",
-      "execution_timestamp": "2026-10-07T06:55:50.270545+00:00",
+      "execution_timestamp": "2026-10-07T07:58:14.329990+00:00",
       "failure_reason": "Headless agent environment lacks active AVD or physical device",
       "input_hashes": [
         "93064e79edb91571779583c1e181af939abbfa4ec6d9ecc54faa18a62ec438ee"
@@ -251,7 +251,7 @@
       "category_id": "signal_only_safety",
       "evidence_hash": "7ddbd8b4477be81728e0bcff170f6210d182da7c3ec26cf509dfcc9f82d70efc",
       "evidence_path": "reports/final_completion/trading_safety.json",
-      "execution_timestamp": "2026-10-07T06:55:50.272032+00:00",
+      "execution_timestamp": "2026-10-07T07:58:14.331479+00:00",
       "failure_reason": null,
       "input_hashes": [
         "93064e79edb91571779583c1e181af939abbfa4ec6d9ecc54faa18a62ec438ee"
@@ -262,6 +262,6 @@
     }
   ],
   "gate_status": "BLOCKED",
-  "generated_at": "2026-10-07T06:55:50.272044+00:00",
+  "generated_at": "2026-10-07T07:58:14.331492+00:00",
   "validator_version": "3.1.0"
 }
