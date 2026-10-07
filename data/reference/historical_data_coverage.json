@@ -2,7 +2,7 @@
   "2014": {
     "acquired_cash_days": 241,
     "acquired_fo_days": 0,
-    "acquired_index_days": 0,
+    "acquired_index_days": 138,
     "acquired_security_master_days": 245,
     "duplicate_files": 0,
     "expected_trading_days": 245,
@@ -10,8 +10,8 @@
     "invalid_files": 0,
     "missing_days": [],
     "sha256_verified": true,
-    "total_bytes": 58517394,
-    "total_rows": 48600
+    "total_bytes": 59025147,
+    "total_rows": 53944
   },
   "2015": {
     "acquired_cash_days": 245,
@@ -140,31 +140,31 @@
     "total_rows": 48900
   },
   "2024": {
-    "acquired_cash_days": 21,
+    "acquired_cash_days": 245,
     "acquired_fo_days": 0,
-    "acquired_index_days": 0,
-    "acquired_security_master_days": 22,
+    "acquired_index_days": 245,
+    "acquired_security_master_days": 247,
     "duplicate_files": 0,
     "expected_trading_days": 248,
     "failed_days": 0,
     "invalid_files": 0,
     "missing_days": [],
     "sha256_verified": true,
-    "total_bytes": 6202438,
-    "total_rows": 4300
+    "total_bytes": 170528924,
+    "total_rows": 73700
   },
   "2025": {
-    "acquired_cash_days": 0,
+    "acquired_cash_days": 100,
     "acquired_fo_days": 0,
-    "acquired_index_days": 0,
-    "acquired_security_master_days": 0,
+    "acquired_index_days": 99,
+    "acquired_security_master_days": 99,
     "duplicate_files": 0,
     "expected_trading_days": 248,
     "failed_days": 0,
-    "invalid_files": 0,
+    "invalid_files": 1,
     "missing_days": [],
     "sha256_verified": true,
-    "total_bytes": 0,
-    "total_rows": 0
+    "total_bytes": 116264602,
+    "total_rows": 29800
   }
 }

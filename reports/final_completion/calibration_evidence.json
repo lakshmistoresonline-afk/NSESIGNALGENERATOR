@@ -1,7 +1,7 @@
 {
   "status": "BLOCKED",
-  "evidence_file": "data/processed/model_validation/real_walk_forward_results.json",
-  "command": "python scripts/run_real_walk_forward.py",
-  "execution_timestamp": "2026-10-06T11:27:27.966932+00:00",
-  "failure_reason": "Insufficient OOS observations for reliable calibration"
+  "evidence_file": "data/processed/model_validation/calibration_results.json",
+  "command": "python scripts/validate_calibration_conformal.py",
+  "execution_timestamp": "2026-10-07T04:57:48.145588+00:00",
+  "failure_reason": "Insufficient out-of-sample observations for calibration"
 }

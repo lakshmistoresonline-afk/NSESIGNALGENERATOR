@@ -1,0 +1,7 @@
+{
+  "status": "PASS",
+  "evidence_file": "data/processed/pit/row_accounting.json",
+  "command": "python scripts/build_pit_dataset.py",
+  "execution_timestamp": "2026-10-07T04:57:48.140211+00:00",
+  "failure_reason": null
+}
