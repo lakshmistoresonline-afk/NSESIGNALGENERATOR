@@ -1,0 +1,159 @@
+name: NSE Signal Provider CI Quality Gate
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  software_tests:
+    name: Software Tests & Compilation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install -r server/requirements.txt
+          pip install pytest pytest-asyncio anyio httpx
+
+      - name: Run Source Compilation Check
+        run: python -m compileall src server scripts
+
+      - name: Run Pytest Test Suite
+        run: python -m pytest -q
+
+      - name: Upload Test Results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: software-test-results
+          path: |
+            reports/
+            data/processed/model_validation/
+
+  security_invariants:
+    name: Security & Signal-Only Invariant
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install -r server/requirements.txt
+          pip install pytest pytest-asyncio httpx
+
+      - name: Verify Signal-Only Invariant (REAL_TRADING=FALSE)
+        run: python -m pytest tests/test_core.py tests/test_trading_safety_invariant.py tests/test_api_publication_safety.py
+
+      - name: Upload Security Evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: security-invariant-evidence
+          path: reports/final_completion/trading_safety.json
+
+  pit_contracts:
+    name: PIT Contracts & Temporal Validation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytest
+
+      - name: Run PIT Temporal Audit & Security Identity Validation
+        run: |
+          python -m nse_signal.data.nse.temporal_validator
+          python -m pytest tests/test_historical_identity.py tests/test_historical_universe.py tests/test_pit_v13.py
+
+      - name: Upload PIT Evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: pit-contract-evidence
+          path: |
+            data/processed/pit/temporal_validation.json
+            data/reference/identity_validation.json
+
+  android_build:
+    name: Android Unit & Build Validation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'microsoft'
+          java-version: '21'
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Build Android App (Debug)
+        working-directory: ./android
+        run: ./gradlew assembleDebug
+
+      - name: Upload Android APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-debug-apk
+          path: android/app/build/outputs/apk/debug/app-debug.apk
+
+  production_readiness:
+    name: Production Gate Evaluation
+    needs: [software_tests, security_invariants, pit_contracts]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install -r server/requirements.txt
+
+      - name: Evaluate Production Gate
+        run: python scripts/run_production_gate.py
+
+      - name: Upload Production Gate Evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: production-gate-evidence
+          path: |
+            FINAL_PRODUCTION_GATE.json
+            data/reference/production_gate_evidence_manifest.json
+            docs/PRODUCTION_GATE_EVIDENCE_MATRIX.md
