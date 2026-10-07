@@ -1,18 +1,18 @@
-# Production Gate Evidence Matrix (Calibration & Conformal Verified)
+# Production Gate Evidence Matrix (Layer-Specific Historical Coverage Contract Verified)
 
-- **Evaluated At**: 2026-10-07T11:40:52.426918+00:00
+- **Evaluated At**: 2026-10-07T12:03:34.549862+00:00
 - **Overall Status**: `BLOCKED`
 - **Eligible**: `False`
 
 | Category ID | Name | Status | Evidence Path | Evidence Hash (SHA256) | Failure Reason |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| `historical_coverage` | Historical Data Coverage | `BLOCKED` | `data/processed/final_historical_inventory.json` | `c5730036f07f...` | INSUFFICIENT_VALIDATED_HISTORICAL_DAYS: validated 219 days (< 500) |
+| `historical_coverage` | Historical Data Coverage | `BLOCKED` | `data/processed/final_historical_coverage.json` | `421500b1521f...` | LAYER_COVERAGE_INSUFFICIENT (corporate_actions): completeness ratio 0.0 < 0.50 |
 | `raw_integrity` | Raw-File Integrity | `PASS` | `data/reference/raw_manifest.json` | `c5dc31fc9f2d...` | N/A |
-| `security_identity` | Historical Security Identity | `PASS` | `data/processed/final_identity_validation.json` | `e268b86777ac...` | N/A |
+| `security_identity` | Historical Security Identity | `PASS` | `data/processed/final_identity_validation.json` | `19133e6b5123...` | N/A |
 | `pit_universe` | Point-in-Time Universe | `PASS` | `data/reference/nifty200_membership.csv` | `f45b9f93c51d...` | N/A |
 | `pit_temporal_integrity` | PIT Temporal Integrity | `PASS` | `data/processed/final_pit_temporal_validation.json` | `3d04b66017c4...` | N/A |
 | `required_pit_layers` | Required PIT Layers | `BLOCKED` | `data/reference/feature_data_dependency_matrix.json` | `e43306c05037...` | MISSING_REQUIRED_PIT_LAYERS: ['cash_daily', 'security_master'] |
-| `corporate_action_correctness` | Corporate-Action Correctness | `PASS` | `data/processed/nse_pit/corporate_action_validation.json` | `d07c6f9b7809...` | N/A |
+| `corporate_action_correctness` | Corporate-Action Correctness | `PASS` | `data/processed/nse_pit/corporate_action_validation.json` | `c985227d32d5...` | N/A |
 | `model_walk_forward` | Model Walk-Forward Validation | `BLOCKED` | `docs/REAL_WALK_FORWARD_REPORT.md` | `6f630363b8ba...` | WALK_FORWARD_BLOCKED: Insufficient unique trading dates (2) for genuine multi-fold chronological walk-forward evaluation |
 | `calibration` | Probability Calibration | `BLOCKED` | `data/processed/model_validation/calibration.json` | `a01a4d35caa5...` | CALIBRATION_BLOCKED: Insufficient out-of-sample observations from walk-forward folds for probability calibration |
 | `conformal_validation` | Conformal Validation | `BLOCKED` | `data/processed/model_validation/conformal.json` | `fdca45374822...` | CONFORMAL_BLOCKED: Insufficient out-of-sample observations from walk-forward folds for conformal validation |
