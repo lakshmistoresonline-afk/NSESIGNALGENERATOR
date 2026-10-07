@@ -1,5 +1,5 @@
 from __future__ import annotations
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
 import hashlib, json, time
@@ -11,6 +11,12 @@ _MAX_RESPONSE_BYTES = int(__import__("os").getenv("PROVIDER_MAX_RESPONSE_BYTES",
 _FAILURES = {}
 _BREAKER_UNTIL = {}
 
+def epoch(dt):
+    return int(dt.timestamp())
+
+def iso_now():
+    return datetime.now(timezone.utc).isoformat()
+
 @dataclass(frozen=True)
 class ProviderResult:
     provider: str
@@ -18,9 +24,11 @@ class ProviderResult:
     dataframe: object
     retrieved_at: str
     source_url: str
-    source_tier: str = "SECONDARY"
+    source_tier: str = "SECONDARY_UNOFFICIAL"
     license_status: str = "USER_ACCOUNT_TERMS"
     pit_authoritative: bool = False
+    authority_class: str = "SECONDARY_UNOFFICIAL"
+    as_of_timestamp: str = field(default_factory=iso_now)
     candle_timestamp_semantics: str = "candle_start"
     availability_semantics: str = "retrieval_time_only"
 
@@ -67,12 +75,6 @@ def http_json(url: str, *, method="GET", headers=None, body=None, timeout=30, re
         _time.sleep(backoff * (2 ** attempt))
     raise ProviderError(f"HTTP request failed for {url}: {last}")
 
-def epoch(dt):
-    return int(dt.timestamp())
-
-def iso_now():
-    return datetime.now(timezone.utc).isoformat()
-
 def save_with_provenance(df, path, result: ProviderResult, request_params: dict):
     path = Path(path); path.parent.mkdir(parents=True, exist_ok=True)
     df.to_csv(path, index=False)
@@ -84,13 +86,14 @@ def save_with_provenance(df, path, result: ProviderResult, request_params: dict)
         "source_url": result.source_url,
         "source_tier": result.source_tier,
         "license_status": result.license_status,
+        "authority_class": result.authority_class,
+        "as_of_timestamp": result.as_of_timestamp,
         "request": request_params,
         "sha256": digest,
         "pit_authoritative": False,
         "execution_capability_used": False,
         "data_availability_semantics": result.availability_semantics,
         "candle_timestamp_semantics": result.candle_timestamp_semantics,
-        "pit_authoritative": result.pit_authoritative,
     }
     path.with_suffix(path.suffix + ".metadata.json").write_text(json.dumps(meta, indent=2, sort_keys=True), encoding="utf-8")
     return path, meta
