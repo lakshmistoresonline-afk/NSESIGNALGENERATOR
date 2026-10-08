@@ -15,7 +15,8 @@ from ..data.universe_policy import UniversePolicy, BroadNSEEquityUniverse
 from ..data.production_gate import evaluate_production_gate
 from ..risk.publication import publication_gate
 from ..integrations.trademind_core import TradeMindRegime, AdaptiveRiskGeometry
-from ..data.nse.session_calendar import is_trading_day, classify
+from ..data.nse.session_calendar import classify
+from ..utils.config import load_config
 
 class LiveSignalEngine:
     def __init__(self, model_version: str = "3.1.0", model_registry_path: str = "data/processed/model_registry.json"):
@@ -23,6 +24,7 @@ class LiveSignalEngine:
         self.registry = ModelRegistry(model_registry_path)
         self.universe_policy = UniversePolicy(universe_mode="BROAD_NSE")
         self.universe = BroadNSEEquityUniverse(self.universe_policy)
+        self.config = load_config()
 
     def _load_champion_artifact(self) -> Optional[tuple[str, ProductionArtifact]]:
         champ_meta = self.registry.champion()
@@ -41,17 +43,17 @@ class LiveSignalEngine:
     def _verify_live_snapshot_provenance(self, snapshot_path: Path) -> tuple[bool, str | None]:
         if not snapshot_path.exists():
             return False, "Live snapshot file missing"
-        manifest_path = Path("data/reference/raw_manifest.json")
+        manifest_path = Path("data/raw/nse/manifest.jsonl")
         if not manifest_path.exists():
             return False, "Authoritative raw manifest missing"
         try:
-            manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+            manifest_lines = manifest_path.read_text(encoding="utf-8").splitlines()
+            manifest = [json.loads(line) for line in manifest_lines if line.strip()]
             if not manifest:
                 return False, "Raw manifest is empty"
             snapshot = json.loads(snapshot_path.read_text(encoding="utf-8"))
             snap_sha = hashlib.sha256(snapshot_path.read_bytes()).hexdigest()
 
-            # Strict cryptographic verification: must match authoritative manifest record by SHA-256 hash
             match = any(m.get("sha256") == snap_sha for m in manifest)
             if not match:
                 return False, "LIVE SNAPSHOT NOT VERIFIED AGAINST AUTHORITATIVE MANIFEST: Cryptographic SHA-256 hash agreement required."
@@ -177,6 +179,9 @@ class LiveSignalEngine:
                 "signals": []
             }
 
+        econ_cfg = self.config["accuracy_enhancements_v2"]["economic_threshold"]
+        reward_mult = float(econ_cfg["reward_multiple"])
+
         for row in items:
             sym = str(row["symbol"]).strip().upper()
             latest_date = str(row["date"])
@@ -252,7 +257,7 @@ class LiveSignalEngine:
             if atr_val <= zero_val:
                 blocked_count += 1
                 continue
-            risk_geom = AdaptiveRiskGeometry.levels(cls, atr_val, side, regime_obj.label, rr=2.0)
+            risk_geom = AdaptiveRiskGeometry.levels(cls, atr_val, side, regime_obj.label, rr=reward_mult)
 
             pit_ready_val = bool(Path("data/processed/nse_pit/cash_daily.csv").exists())
             provenance_ready_val = bool(prov_ok)

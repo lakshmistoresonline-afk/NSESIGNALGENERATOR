@@ -15,12 +15,14 @@ from ..data.nse.pit_layer_validator import validate_semantic_pit_layer
 from ..risk.publication import publication_gate
 from ..integrations.trademind_core import TradeMindRegime, AdaptiveRiskGeometry
 from ..data.nse.session_calendar import is_trading_day
+from ..utils.config import load_config
 
 class HistoricalSignalEngine:
     def __init__(self, model_registry_path: str = "data/processed/model_registry.json", universe_mode: str = "BROAD_NSE"):
         self.registry = ModelRegistry(model_registry_path)
         self.universe_policy = UniversePolicy(universe_mode=universe_mode)
         self.universe = BroadNSEEquityUniverse(self.universe_policy)
+        self.config = load_config()
 
     def _load_champion_artifact(self) -> Optional[tuple[str, ProductionArtifact]]:
         champ_meta = self.registry.champion()
@@ -37,7 +39,6 @@ class HistoricalSignalEngine:
             return None
 
     def _verify_historical_provenance_and_pit(self, dt_str: str) -> bool:
-        # Read and validate actual contents of validation reports
         id_val_path = Path("data/processed/final_identity_validation.json")
         temp_val_path = Path("data/processed/final_pit_temporal_validation.json")
         row_acc_path = Path("data/processed/final_row_accounting.json")
@@ -50,12 +51,22 @@ class HistoricalSignalEngine:
             temp_data = json.loads(temp_val_path.read_text(encoding="utf-8"))
             row_data = json.loads(row_acc_path.read_text(encoding="utf-8"))
 
-            if id_data.get("status") != "PASS" or temp_data.get("status") != "PASS" or row_data.get("status") != "PASS":
+            if id_data["status"] != "PASS" or temp_data["status"] != "PASS" or row_data["status"] != "PASS":
                 return False
+
+            cov_path = Path("data/processed/final_historical_coverage.json")
+            if cov_path.exists():
+                cov_data = json.loads(cov_path.read_text(encoding="utf-8"))
+                layers = cov_data["layers"]
+                for l_id, l_meta in layers.items():
+                    if l_id == "corporate_actions":
+                        continue
+                    missing_days = l_meta["missing_days"]
+                    if any(m["date"] == dt_str for m in missing_days):
+                        return False
         except Exception:
             return False
 
-        # Use authoritative PIT layer validator
         cash_ok, _ = validate_semantic_pit_layer("cash_bhavcopy")
         sm_ok, _ = validate_semantic_pit_layer("security_master")
         if not cash_ok or not sm_ok:
@@ -87,10 +98,6 @@ class HistoricalSignalEngine:
 
         model_id, artifact = champ_res
 
-        run_id = f"HIST_RUN_{datetime.now(timezone.utc).strftime('%Y%m%d%H%M%S')}"
-        signals = []
-        zero_val = float(0)
-
         pit_root = Path("data/processed/nse_pit")
         cash_csv = pit_root / "cash_daily.csv"
         if not cash_csv.exists():
@@ -104,6 +111,13 @@ class HistoricalSignalEngine:
         if sub.empty:
             return []
 
+        run_id = f"HIST_RUN_{datetime.now(timezone.utc).strftime('%Y%m%d%H%M%S')}"
+        signals = []
+        zero_val = float(0)
+
+        econ_cfg = self.config["accuracy_enhancements_v2"]["economic_threshold"]
+        reward_mult = float(econ_cfg["reward_multiple"])
+
         for dt, group in sub.groupby("date"):
             dt_str = dt.isoformat()
 
@@ -111,11 +125,11 @@ class HistoricalSignalEngine:
                 continue
 
             if not self._verify_historical_provenance_and_pit(dt_str):
-                continue # Fail closed: historical provenance or PIT readiness not proven
+                continue
 
             breadth_val = self._load_historical_breadth(dt_str)
             if breadth_val is None or pd.isna(breadth_val):
-                continue # Fail closed: missing breadth source -> NO_SIGNAL
+                continue
 
             for _, row in group.iterrows():
                 sym = str(row["symbol"]).strip().upper()
@@ -153,7 +167,7 @@ class HistoricalSignalEngine:
                     continue
                 cls = float(close_val)
 
-                asof_time_raw = row.get("asof_time") or row.get("signal_time") or dt_str
+                asof_time_raw = row["asof_time"] if "asof_time" in row else (row["signal_time"] if "signal_time" in row else row["date"])
                 if not asof_time_raw or pd.isna(asof_time_raw):
                     continue
                 asof_timestamp = str(asof_time_raw)
@@ -187,7 +201,7 @@ class HistoricalSignalEngine:
                 atr_val = float(feat_dict["atr"])
                 if atr_val <= zero_val:
                     continue
-                risk_geom = AdaptiveRiskGeometry.levels(cls, atr_val, side, regime_obj.label, rr=2.0)
+                risk_geom = AdaptiveRiskGeometry.levels(cls, atr_val, side, regime_obj.label, rr=reward_mult)
 
                 pit_ready_val = bool(cash_csv.exists() and cash_csv.stat().st_size > 0)
                 provenance_ready_val = bool(True)
