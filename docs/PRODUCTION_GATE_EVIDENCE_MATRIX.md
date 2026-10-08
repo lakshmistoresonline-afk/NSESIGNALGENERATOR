@@ -1,19 +1,19 @@
-# Production Gate Evidence Matrix (Pre-Deployment Historical Drift Verified)
+# Production Gate Evidence Matrix (Complete Raw Manifest Verified)
 
-- **Evaluated At**: 2026-10-08T01:19:44.815595+00:00
+- **Evaluated At**: 2026-10-08T01:31:11.810743+00:00
 - **Overall Status**: `BLOCKED`
 - **Eligible**: `False`
 
 | Category ID | Name | Status | Evidence Path | Evidence Hash (SHA256) | Failure Reason |
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | `historical_coverage` | Historical Data Coverage | `BLOCKED` | `data/processed/final_historical_coverage.json` | `a7bc4c986ffb...` | LAYER_COVERAGE_INSUFFICIENT (corporate_actions): completeness ratio 0.0 < 0.50 |
-| `raw_integrity` | Raw-File Integrity | `PASS` | `data/reference/raw_manifest.json` | `c5dc31fc9f2d...` | N/A |
-| `security_identity` | Historical Security Identity | `PASS` | `data/processed/final_identity_validation.json` | `bd962915b42c...` | N/A |
-| `production_universe` | Production Universe (BroadNSEEquityUniverse) | `PASS` | `data/processed/final_identity_validation.json` | `bd962915b42c...` | N/A |
+| `raw_integrity` | Raw-File Integrity | `BLOCKED` | `data/processed/final_raw_integrity.json` | `2afc0cabd0b4...` | RAW_INTEGRITY_FAIL: invalid_entries=4, missing_files=0, hash_mismatches=0 |
+| `security_identity` | Historical Security Identity | `PASS` | `data/processed/final_identity_validation.json` | `92a0835070c5...` | N/A |
+| `production_universe` | Production Universe (BroadNSEEquityUniverse) | `PASS` | `data/processed/final_identity_validation.json` | `92a0835070c5...` | N/A |
 | `benchmark_nifty200` | Benchmark Nifty 200 Universe (Nifty200BenchmarkUniverse) | `PASS` | `data/processed/universe/nifty200_validation.json` | `e508b4919c8c...` | N/A |
 | `pit_temporal_integrity` | PIT Temporal Integrity | `PASS` | `data/processed/final_pit_temporal_validation.json` | `ffe2c4d56140...` | N/A |
 | `required_pit_layers` | Required PIT Layers | `BLOCKED` | `data/reference/feature_data_dependency_matrix.json` | `e43306c05037...` | MISSING_REQUIRED_PIT_LAYERS: ['cash_daily', 'security_master'] |
-| `corporate_action_correctness` | Corporate-Action Correctness | `PASS` | `data/processed/nse_pit/corporate_action_validation.json` | `6c56e1f8ae0e...` | N/A |
+| `corporate_action_correctness` | Corporate-Action Correctness | `PASS` | `data/processed/nse_pit/corporate_action_validation.json` | `16b68a48d18e...` | N/A |
 | `model_walk_forward` | Model Walk-Forward Validation | `BLOCKED` | `docs/REAL_WALK_FORWARD_REPORT.md` | `6f630363b8ba...` | WALK_FORWARD_BLOCKED: Insufficient unique trading dates (2) for genuine multi-fold chronological walk-forward evaluation |
 | `calibration` | Probability Calibration | `BLOCKED` | `data/processed/model_validation/calibration.json` | `05716a17b4a8...` | CALIBRATION_BLOCKED: Insufficient out-of-sample observations from walk-forward folds for probability calibration |
 | `conformal_validation` | Conformal Validation | `BLOCKED` | `data/processed/model_validation/conformal.json` | `b36d7db6153e...` | CONFORMAL_BLOCKED: Insufficient out-of-sample observations from walk-forward folds for conformal validation |

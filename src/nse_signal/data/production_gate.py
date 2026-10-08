@@ -67,21 +67,17 @@ def _validate_historical_coverage() -> tuple[str, str | None]:
         return "BLOCKED", f"HISTORICAL_INVENTORY_PARSE_ERROR: {e}"
 
 def _validate_raw_integrity() -> tuple[str, str | None]:
-    man_path = Path("data/reference/raw_manifest.json")
+    man_path = Path("data/processed/final_raw_integrity.json")
     valid, err = _validate_evidence_artifact(man_path)
     if not valid:
         return "BLOCKED", f"MISSING_OR_EMPTY_EVIDENCE: {err}"
     try:
-        manifest = json.loads(man_path.read_text(encoding="utf-8"))
-        if not manifest:
-            return "BLOCKED", "EMPTY_RAW_MANIFEST"
-        for m in manifest[:20]:
-            fp = m.get("raw_file_path")
-            if fp and not Path(fp).exists():
-                return "BLOCKED", f"RAW_FILE_MISSING: {fp}"
+        data = json.loads(man_path.read_text(encoding="utf-8"))
+        if data.get("status") != "PASS":
+            return "BLOCKED", f"RAW_INTEGRITY_FAIL: invalid_entries={data.get('invalid_entries')}, missing_files={data.get('missing_files')}, hash_mismatches={data.get('hash_mismatches')}"
         return "PASS", None
     except Exception as e:
-        return "BLOCKED", f"RAW_MANIFEST_ERROR: {e}"
+        return "BLOCKED", f"RAW_INTEGRITY_PARSE_ERROR: {e}"
 
 def _validate_security_identity() -> tuple[str, str | None]:
     id_path = Path("data/processed/final_identity_validation.json")
@@ -286,7 +282,7 @@ def evaluate_production_gate(root_dir: str = ".") -> dict:
 
     validators = [
         ("historical_coverage", "Historical Data Coverage", _validate_historical_coverage, "data/processed/final_historical_coverage.json", "python scripts/build_final_historical_coverage.py"),
-        ("raw_integrity", "Raw-File Integrity", _validate_raw_integrity, "data/reference/raw_manifest.json", "python -m nse_signal.cli --ingest"),
+        ("raw_integrity", "Raw-File Integrity", _validate_raw_integrity, "data/processed/final_raw_integrity.json", "python scripts/build_final_raw_integrity.py"),
         ("security_identity", "Historical Security Identity", _validate_security_identity, "data/processed/final_identity_validation.json", "python -m pytest tests/test_historical_identity.py"),
         ("production_universe", "Production Universe (BroadNSEEquityUniverse)", _validate_production_universe, "data/processed/final_identity_validation.json", "python -m pytest tests/test_universe_architecture.py"),
         ("benchmark_nifty200", "Benchmark Nifty 200 Universe (Nifty200BenchmarkUniverse)", _validate_benchmark_nifty200, "data/processed/universe/nifty200_validation.json", "python scripts/validate_nifty200_membership.py"),
@@ -365,7 +361,7 @@ def evaluate_production_gate(root_dir: str = ".") -> dict:
     processed_gate_path.write_text(json.dumps(gate_result, indent=2, sort_keys=True), encoding="utf-8")
     root.joinpath("FINAL_PRODUCTION_GATE.json").write_text(json.dumps(gate_result, indent=2, sort_keys=True), encoding="utf-8")
 
-    md_lines = ["# Production Gate Evidence Matrix (Pre-Deployment Historical Drift Verified)\n"]
+    md_lines = ["# Production Gate Evidence Matrix (Complete Raw Manifest Verified)\n"]
     md_lines.append(f"- **Evaluated At**: {gate_result['evaluated_at']}")
     md_lines.append(f"- **Overall Status**: `{gate_result['status']}`")
     md_lines.append(f"- **Eligible**: `{gate_result['eligible']}`\n")
