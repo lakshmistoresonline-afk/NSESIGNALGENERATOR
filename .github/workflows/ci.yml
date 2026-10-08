@@ -1,4 +1,4 @@
-name: NSE Signal Provider CI Quality Gate
+name: NSE Signal Provider CI Engineering Gate
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
 
 jobs:
   software_tests:
-    name: Software Tests & Compilation
+    name: 1. Software Tests & pytest
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
@@ -27,9 +27,6 @@ jobs:
           pip install -r server/requirements.txt
           pip install pytest pytest-asyncio anyio httpx
 
-      - name: Run Source Compilation Check
-        run: python -m compileall src server scripts
-
       - name: Run Pytest Test Suite
         run: python -m pytest -q
 
@@ -38,12 +35,25 @@ jobs:
         if: always()
         with:
           name: software-test-results
-          path: |
-            reports/
-            data/processed/model_validation/
+          path: reports/
+
+  compilation:
+    name: 2. Source Compilation Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Run Source Compilation Check
+        run: python -m compileall src server scripts
 
   security_invariants:
-    name: Security & Signal-Only Invariant
+    name: 3. Security & Signal-Only Invariant
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
@@ -70,8 +80,8 @@ jobs:
           name: security-invariant-evidence
           path: reports/final_completion/trading_safety.json
 
-  pit_contracts:
-    name: PIT Contracts & Temporal Validation
+  PIT_contracts:
+    name: 4. PIT Contracts & Integrity
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
@@ -88,21 +98,84 @@ jobs:
           pip install -r requirements.txt
           pip install pytest
 
-      - name: Run PIT Temporal Audit & Security Identity Validation
+      - name: Run Schema, Identity, Temporal, and Row Accounting Validation
         run: |
-          python -m nse_signal.data.nse.temporal_validator
-          python -m pytest tests/test_historical_identity.py tests/test_historical_universe.py tests/test_pit_v13.py
+          python scripts/build_final_pit_temporal_validation.py
+          python scripts/build_final_row_accounting.py
+          python -m pytest tests/test_historical_identity.py tests/test_historical_universe.py tests/test_pit_v13.py tests/test_row_accounting.py
 
       - name: Upload PIT Evidence
         uses: actions/upload-artifact@v4
         with:
           name: pit-contract-evidence
           path: |
-            data/processed/pit/temporal_validation.json
+            data/processed/final_pit_temporal_validation.json
+            data/processed/final_row_accounting.json
             data/reference/identity_validation.json
 
+  historical_data_validation:
+    name: 5. Historical Data Coverage Contract
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run Historical Coverage & Raw Integrity Validation
+        run: |
+          python scripts/build_final_historical_coverage.py
+          python scripts/build_final_raw_integrity.py
+
+      - name: Upload Historical Coverage Evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: historical-coverage-evidence
+          path: |
+            data/processed/final_historical_coverage.json
+            data/processed/final_raw_integrity.json
+
+  model_validation:
+    name: 6. Model Validation, Calibration & Conformal
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install scikit-learn numpy pandas joblib
+
+      - name: Run Walk-Forward, Calibration & Conformal Validation
+        run: |
+          python scripts/run_real_walk_forward.py
+          python scripts/build_calibration_conformal.py
+          python scripts/build_historical_drift.py
+          python scripts/build_economic_validation.py
+
+      - name: Upload Model Validation Evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: model-validation-evidence
+          path: data/processed/model_validation/
+
   android_build:
-    name: Android Unit & Build Validation
+    name: 7. Android Unit & Build (Test / Debug / Release)
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
@@ -117,19 +190,25 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
-      - name: Build Android App (Debug)
+      - name: Run Gradle Test & Assemble (Debug & Release)
         working-directory: ./android
-        run: ./gradlew assembleDebug
+        run: |
+          ./gradlew test
+          ./gradlew assembleDebug
+          ./gradlew assembleRelease
 
-      - name: Upload Android APK
+      - name: Upload Android APK Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: android-debug-apk
-          path: android/app/build/outputs/apk/debug/app-debug.apk
+          name: android-apks
+          path: |
+            android/app/build/outputs/apk/debug/app-debug.apk
+            android/app/build/outputs/apk/release/app-release-unsigned.apk
 
-  production_readiness:
-    name: Production Gate Evaluation
-    needs: [software_tests, security_invariants, pit_contracts]
+  production_gate:
+    name: 8. Production Gate Evaluation (CI_SOFTWARE_GREEN / PRODUCTION_DATA_GATE_BLOCKED)
+    needs: [software_tests, compilation, security_invariants, PIT_contracts, historical_data_validation, model_validation, android_build]
+    if: always()
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
