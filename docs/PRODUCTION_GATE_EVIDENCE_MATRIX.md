@@ -1,19 +1,19 @@
 # Production Gate Evidence Matrix (Complete Raw Manifest Verified)
 
-- **Evaluated At**: 2026-10-08T03:22:09.171413+00:00
+- **Evaluated At**: 2026-10-08T03:38:46.666015+00:00
 - **Overall Status**: `BLOCKED`
 - **Eligible**: `False`
 
 | Category ID | Name | Status | Evidence Path | Evidence Hash (SHA256) | Failure Reason |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| `historical_coverage` | Historical Data Coverage | `BLOCKED` | `data/processed/final_historical_coverage.json` | `2af874c94c19...` | LAYER_COVERAGE_INSUFFICIENT (corporate_actions): completeness ratio 0.0 < 0.50 |
+| `historical_coverage` | Historical Data Coverage | `PASS` | `data/processed/final_historical_coverage.json` | `7b74a5f4dc52...` | N/A |
 | `raw_integrity` | Raw-File Integrity | `PASS` | `data/processed/final_raw_integrity.json` | `12d9143b2511...` | N/A |
-| `security_identity` | Historical Security Identity | `PASS` | `data/processed/final_identity_validation.json` | `9cef045accc0...` | N/A |
-| `production_universe` | Production Universe (BroadNSEEquityUniverse) | `PASS` | `data/processed/final_identity_validation.json` | `9cef045accc0...` | N/A |
+| `security_identity` | Historical Security Identity | `PASS` | `data/processed/final_identity_validation.json` | `764dd342956a...` | N/A |
+| `production_universe` | Production Universe (BroadNSEEquityUniverse) | `PASS` | `data/processed/final_identity_validation.json` | `764dd342956a...` | N/A |
 | `benchmark_nifty200` | Benchmark Nifty 200 Universe (Nifty200BenchmarkUniverse) | `PASS` | `data/processed/universe/nifty200_validation.json` | `78985728f47a...` | N/A |
 | `pit_temporal_integrity` | PIT Temporal Integrity | `PASS` | `data/processed/final_pit_temporal_validation.json` | `a9a31a5304df...` | N/A |
 | `required_pit_layers` | Required PIT Layers | `BLOCKED` | `data/reference/feature_data_dependency_matrix.json` | `e43306c05037...` | MISSING_REQUIRED_PIT_LAYERS: ['cash_daily', 'security_master'] |
-| `corporate_action_correctness` | Corporate-Action Correctness | `PASS` | `data/processed/nse_pit/corporate_action_validation.json` | `9b7935876b83...` | N/A |
+| `corporate_action_correctness` | Corporate-Action Correctness | `PASS` | `data/processed/nse_pit/corporate_action_validation.json` | `224f6e8f1459...` | N/A |
 | `model_walk_forward` | Model Walk-Forward Validation | `PASS` | `docs/REAL_WALK_FORWARD_REPORT.md` | `86275b5306d5...` | N/A |
 | `calibration` | Probability Calibration | `PASS` | `data/processed/model_validation/calibration.json` | `36c07ab1351e...` | N/A |
 | `conformal_validation` | Conformal Validation | `PASS` | `data/processed/model_validation/conformal.json` | `072208539092...` | N/A |

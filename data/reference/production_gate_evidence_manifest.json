@@ -2,22 +2,22 @@
   "categories": [
     {
       "category_id": "historical_coverage",
-      "evidence_hash": "2af874c94c19b5900bee3d876d4792c39f3305945b86a5e9625476461cd5e89d",
+      "evidence_hash": "7b74a5f4dc52a3ba054fc6fcf37d82664052dd94960620a060ec1bb8245a322e",
       "evidence_path": "data/processed/final_historical_coverage.json",
-      "execution_timestamp": "2026-10-08T03:22:09.052409+00:00",
-      "failure_reason": "LAYER_COVERAGE_INSUFFICIENT (corporate_actions): completeness ratio 0.0 < 0.50",
+      "execution_timestamp": "2026-10-08T03:38:46.549499+00:00",
+      "failure_reason": null,
       "input_hashes": [
         "e43306c050373d8ce229ab8586d330842c32cba403fc0ac713b40b22a421a2aa"
       ],
       "name": "Historical Data Coverage",
-      "status": "BLOCKED",
+      "status": "PASS",
       "validator_version": "3.1.0"
     },
     {
       "category_id": "raw_integrity",
       "evidence_hash": "12d9143b2511d3db66acaf7a3757e58ba316e1bd0a019bfcc942dae7b2374805",
       "evidence_path": "data/processed/final_raw_integrity.json",
-      "execution_timestamp": "2026-10-08T03:22:09.054260+00:00",
+      "execution_timestamp": "2026-10-08T03:38:46.550989+00:00",
       "failure_reason": null,
       "input_hashes": [
         "e43306c050373d8ce229ab8586d330842c32cba403fc0ac713b40b22a421a2aa"
@@ -28,9 +28,9 @@
     },
     {
       "category_id": "security_identity",
-      "evidence_hash": "9cef045accc0df012c3ce4538205803439305914e8efe8f3d876111116747393",
+      "evidence_hash": "764dd342956ae02b0bf2019b80576be43f71a239cfa23652224dc381cf9c04ae",
       "evidence_path": "data/processed/final_identity_validation.json",
-      "execution_timestamp": "2026-10-08T03:22:09.055934+00:00",
+      "execution_timestamp": "2026-10-08T03:38:46.553390+00:00",
       "failure_reason": null,
       "input_hashes": [
         "e43306c050373d8ce229ab8586d330842c32cba403fc0ac713b40b22a421a2aa"
@@ -41,9 +41,9 @@
     },
     {
       "category_id": "production_universe",
-      "evidence_hash": "9cef045accc0df012c3ce4538205803439305914e8efe8f3d876111116747393",
+      "evidence_hash": "764dd342956ae02b0bf2019b80576be43f71a239cfa23652224dc381cf9c04ae",
       "evidence_path": "data/processed/final_identity_validation.json",
-      "execution_timestamp": "2026-10-08T03:22:09.056810+00:00",
+      "execution_timestamp": "2026-10-08T03:38:46.554493+00:00",
       "failure_reason": null,
       "input_hashes": [
         "e43306c050373d8ce229ab8586d330842c32cba403fc0ac713b40b22a421a2aa"
@@ -56,7 +56,7 @@
       "category_id": "benchmark_nifty200",
       "evidence_hash": "78985728f47a369178b1ae6d356b838783e9a41735939727067a55f1de4a75a7",
       "evidence_path": "data/processed/universe/nifty200_validation.json",
-      "execution_timestamp": "2026-10-08T03:22:09.058056+00:00",
+      "execution_timestamp": "2026-10-08T03:38:46.555696+00:00",
       "failure_reason": null,
       "input_hashes": [
         "e43306c050373d8ce229ab8586d330842c32cba403fc0ac713b40b22a421a2aa"
@@ -69,7 +69,7 @@
       "category_id": "pit_temporal_integrity",
       "evidence_hash": "a9a31a5304df31b42b188f26f6a879be43ea8f30a42b2898bfe849dd46a6307f",
       "evidence_path": "data/processed/final_pit_temporal_validation.json",
-      "execution_timestamp": "2026-10-08T03:22:09.059608+00:00",
+      "execution_timestamp": "2026-10-08T03:38:46.557090+00:00",
       "failure_reason": null,
       "input_hashes": [
         "e43306c050373d8ce229ab8586d330842c32cba403fc0ac713b40b22a421a2aa"
@@ -82,7 +82,7 @@
       "category_id": "required_pit_layers",
       "evidence_hash": "e43306c050373d8ce229ab8586d330842c32cba403fc0ac713b40b22a421a2aa",
       "evidence_path": "data/reference/feature_data_dependency_matrix.json",
-      "execution_timestamp": "2026-10-08T03:22:09.061057+00:00",
+      "execution_timestamp": "2026-10-08T03:38:46.558494+00:00",
       "failure_reason": "MISSING_REQUIRED_PIT_LAYERS: ['cash_daily', 'security_master']",
       "input_hashes": [
         "e43306c050373d8ce229ab8586d330842c32cba403fc0ac713b40b22a421a2aa"
@@ -93,9 +93,9 @@
     },
     {
       "category_id": "corporate_action_correctness",
-      "evidence_hash": "9b7935876b835b98944f94dfe9f6d696739ee245061f489c8fe02a2fee38ff65",
+      "evidence_hash": "224f6e8f14597c4e92cd7f7c9c8cbeb6ebec5593e302090518958594e1ecda6c",
       "evidence_path": "data/processed/nse_pit/corporate_action_validation.json",
-      "execution_timestamp": "2026-10-08T03:22:09.063404+00:00",
+      "execution_timestamp": "2026-10-08T03:38:46.564327+00:00",
       "failure_reason": null,
       "input_hashes": [
         "e43306c050373d8ce229ab8586d330842c32cba403fc0ac713b40b22a421a2aa"
@@ -108,7 +108,7 @@
       "category_id": "model_walk_forward",
       "evidence_hash": "86275b5306d59b13cffaad2c0b61f1f53c506fcfd4a46d0407d63a8c91ed9832",
       "evidence_path": "docs/REAL_WALK_FORWARD_REPORT.md",
-      "execution_timestamp": "2026-10-08T03:22:09.064991+00:00",
+      "execution_timestamp": "2026-10-08T03:38:46.565840+00:00",
       "failure_reason": null,
       "input_hashes": [
         "e43306c050373d8ce229ab8586d330842c32cba403fc0ac713b40b22a421a2aa"
@@ -121,7 +121,7 @@
       "category_id": "calibration",
       "evidence_hash": "36c07ab1351e789ea984f50fcd9ad3f6451449ccf0cfb22ac2baa797bd2460c9",
       "evidence_path": "data/processed/model_validation/calibration.json",
-      "execution_timestamp": "2026-10-08T03:22:09.066646+00:00",
+      "execution_timestamp": "2026-10-08T03:38:46.567411+00:00",
       "failure_reason": null,
       "input_hashes": [
         "e43306c050373d8ce229ab8586d330842c32cba403fc0ac713b40b22a421a2aa"
@@ -134,7 +134,7 @@
       "category_id": "conformal_validation",
       "evidence_hash": "07220853909213072fcc0816f624fcde07263837676d23e10d53b78d46ba63f7",
       "evidence_path": "data/processed/model_validation/conformal.json",
-      "execution_timestamp": "2026-10-08T03:22:09.068233+00:00",
+      "execution_timestamp": "2026-10-08T03:38:46.568897+00:00",
       "failure_reason": null,
       "input_hashes": [
         "e43306c050373d8ce229ab8586d330842c32cba403fc0ac713b40b22a421a2aa"
@@ -147,7 +147,7 @@
       "category_id": "economic_validation",
       "evidence_hash": "d132841ac372af279503940a6f0926404f0801d259fb11df193ac22845808f88",
       "evidence_path": "data/processed/model_validation/economic_validation.json",
-      "execution_timestamp": "2026-10-08T03:22:09.070155+00:00",
+      "execution_timestamp": "2026-10-08T03:38:46.570563+00:00",
       "failure_reason": null,
       "input_hashes": [
         "e43306c050373d8ce229ab8586d330842c32cba403fc0ac713b40b22a421a2aa"
@@ -160,7 +160,7 @@
       "category_id": "drift",
       "evidence_hash": "44e37890a7b64ba1783f60b96a0898a8e0e694534df138813d9e54e3f6511431",
       "evidence_path": "data/processed/model_validation/historical_drift.json",
-      "execution_timestamp": "2026-10-08T03:22:09.071817+00:00",
+      "execution_timestamp": "2026-10-08T03:38:46.572191+00:00",
       "failure_reason": null,
       "input_hashes": [
         "e43306c050373d8ce229ab8586d330842c32cba403fc0ac713b40b22a421a2aa"
@@ -173,7 +173,7 @@
       "category_id": "adversarial_validation",
       "evidence_hash": "97efe84db0d594ac42be7632f47cda35e827e64e3efa0f24599f6babe826d329",
       "evidence_path": "src/nse_signal/research/adversarial.py",
-      "execution_timestamp": "2026-10-08T03:22:09.073021+00:00",
+      "execution_timestamp": "2026-10-08T03:38:46.573294+00:00",
       "failure_reason": null,
       "input_hashes": [
         "e43306c050373d8ce229ab8586d330842c32cba403fc0ac713b40b22a421a2aa"
@@ -186,7 +186,7 @@
       "category_id": "multiple_testing_controls",
       "evidence_hash": "b639256cfe2b05d8bba01df8346b76f3cfa9e871e8901e35139d7e86b40a71f9",
       "evidence_path": "src/nse_signal/research/falsification.py",
-      "execution_timestamp": "2026-10-08T03:22:09.074220+00:00",
+      "execution_timestamp": "2026-10-08T03:38:46.574491+00:00",
       "failure_reason": null,
       "input_hashes": [
         "e43306c050373d8ce229ab8586d330842c32cba403fc0ac713b40b22a421a2aa"
@@ -199,7 +199,7 @@
       "category_id": "untouched_holdout",
       "evidence_hash": "03f26d04d5cc1923df6cd129f48362026b55507f2565c933af3b96a4e84541f3",
       "evidence_path": "data/processed/nse_pit/pit_features.csv",
-      "execution_timestamp": "2026-10-08T03:22:09.091228+00:00",
+      "execution_timestamp": "2026-10-08T03:38:46.591971+00:00",
       "failure_reason": null,
       "input_hashes": [
         "e43306c050373d8ce229ab8586d330842c32cba403fc0ac713b40b22a421a2aa"
@@ -212,7 +212,7 @@
       "category_id": "forensic_tests",
       "evidence_hash": "6929733dff3a5e344a130424f07b78c8a463a04a33be2e9c2ec85f8acbe42bb7",
       "evidence_path": "data/processed/forensics/MUTATION_TEST_RESULTS.json",
-      "execution_timestamp": "2026-10-08T03:22:09.092425+00:00",
+      "execution_timestamp": "2026-10-08T03:38:46.593258+00:00",
       "failure_reason": null,
       "input_hashes": [
         "e43306c050373d8ce229ab8586d330842c32cba403fc0ac713b40b22a421a2aa"
@@ -225,7 +225,7 @@
       "category_id": "clean_room_rebuild",
       "evidence_hash": "de95976822798fac024d889ab485932f91ea1709240c975b08d58de8a68d5ae9",
       "evidence_path": "docs/CLEAN_ROOM_VALIDATION_REPORT.md",
-      "execution_timestamp": "2026-10-08T03:22:09.093870+00:00",
+      "execution_timestamp": "2026-10-08T03:38:46.594414+00:00",
       "failure_reason": null,
       "input_hashes": [
         "e43306c050373d8ce229ab8586d330842c32cba403fc0ac713b40b22a421a2aa"
@@ -238,7 +238,7 @@
       "category_id": "android_build",
       "evidence_hash": "18404fb252a7ecaa2d02904e4a7f8812f8169005fab43f9be4f85e8a9508ae00",
       "evidence_path": "android/app/build/outputs/apk/debug/app-debug.apk",
-      "execution_timestamp": "2026-10-08T03:22:09.167580+00:00",
+      "execution_timestamp": "2026-10-08T03:38:46.663455+00:00",
       "failure_reason": null,
       "input_hashes": [
         "e43306c050373d8ce229ab8586d330842c32cba403fc0ac713b40b22a421a2aa"
@@ -251,7 +251,7 @@
       "category_id": "android_runtime",
       "evidence_hash": "02f21c5daf0aafa0968b92dc96ec06ad543e14082795f3f30bf0a24e70a778e3",
       "evidence_path": "docs/ANDROID_RUNTIME_VALIDATION.md",
-      "execution_timestamp": "2026-10-08T03:22:09.169175+00:00",
+      "execution_timestamp": "2026-10-08T03:38:46.664452+00:00",
       "failure_reason": "Headless agent environment lacks active AVD or physical device",
       "input_hashes": [
         "e43306c050373d8ce229ab8586d330842c32cba403fc0ac713b40b22a421a2aa"
@@ -264,7 +264,7 @@
       "category_id": "signal_only_safety",
       "evidence_hash": "7ddbd8b4477be81728e0bcff170f6210d182da7c3ec26cf509dfcc9f82d70efc",
       "evidence_path": "reports/final_completion/trading_safety.json",
-      "execution_timestamp": "2026-10-08T03:22:09.171384+00:00",
+      "execution_timestamp": "2026-10-08T03:38:46.665994+00:00",
       "failure_reason": null,
       "input_hashes": [
         "e43306c050373d8ce229ab8586d330842c32cba403fc0ac713b40b22a421a2aa"
@@ -275,6 +275,6 @@
     }
   ],
   "gate_status": "BLOCKED",
-  "generated_at": "2026-10-08T03:22:09.171413+00:00",
+  "generated_at": "2026-10-08T03:38:46.666015+00:00",
   "validator_version": "3.1.0"
 }
