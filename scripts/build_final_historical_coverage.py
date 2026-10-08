@@ -1,4 +1,4 @@
-"""Layer-Specific Historical Coverage Contract Builder: Audits each production-required data layer across 2014-2025 and generates data/processed/final_historical_coverage.json."""
+"""Diagnostic-Only Historical Coverage Auditor: Inspects actual physical raw archives across 2014-2025 without synthesizing or fabricating missing data. Reports exact gaps and sets status to BLOCKED if any required historical session file is absent."""
 from __future__ import annotations
 import json
 import pandas as pd
@@ -10,7 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 from nse_signal.data.nse.session_calendar import load_holidays, is_trading_day
 
-def build_layer_specific_coverage():
+def audit_historical_coverage():
     out_dir = Path("data/processed")
     out_dir.mkdir(parents=True, exist_ok=True)
     raw_root = Path("data/raw/nse")
@@ -24,11 +24,12 @@ def build_layer_specific_coverage():
     while d <= end_d:
         if is_trading_day(d, holidays):
             expected_trading_days += 1
-        d = timedelta(days=1) + d
+        d += timedelta(days=1)
 
     layers = ["cm_bhavcopy", "security_master", "index_close", "fo_bhavcopy", "delivery", "corporate_actions", "restrictions"]
-
     layer_contracts = {}
+
+    total_missing = 0
 
     for layer in layers:
         layer_dir = raw_root / layer
@@ -44,6 +45,8 @@ def build_layer_specific_coverage():
             acquired_days = expected_trading_days if has_corp else 0
             validated_days = acquired_days
             completeness_ratio = 1.0 if has_corp else 0.0
+            if not has_corp:
+                missing_days.append({"date": "ALL", "status": "DATA_MISSING", "reason": "Corporate actions adjustment file missing"})
         else:
             d = start_d
             while d <= end_d:
@@ -64,7 +67,6 @@ def build_layer_specific_coverage():
                         found = True
                         break
                 if not found:
-                    # check glob
                     matches = list(layer_dir.glob(f"{d_str}*"))
                     if matches and any(m.stat().st_size > 0 for m in matches):
                         found = True
@@ -81,6 +83,7 @@ def build_layer_specific_coverage():
                 d += timedelta(days=1)
             completeness_ratio = float(validated_days) / float(expected_trading_days) if expected_trading_days > 0 else 0.0
 
+        total_missing += len(missing_days)
         layer_contracts[layer] = {
             "layer_id": layer,
             "first_required_date": start_d.isoformat(),
@@ -89,28 +92,28 @@ def build_layer_specific_coverage():
             "acquired_days": acquired_days,
             "validated_days": validated_days,
             "invalid_days": invalid_days,
-            "missing_days": missing_days[:20] if layer != "corporate_actions" else [],
-            "missing_days_count": len(missing_days) if layer != "corporate_actions" else 0,
+            "missing_days": missing_days[:20],
+            "missing_days_count": len(missing_days),
             "completeness_ratio": round(completeness_ratio, 4),
-            "acceptable_gap_rules": "Zero gap for production; mandatory for multi-year walk-forward",
+            "acceptable_gap_rules": "Zero gap for production; no synthesis permitted",
             "source_provenance_requirement": "SHA256 provenance manifest required"
         }
 
     overall_completeness = sum(m["completeness_ratio"] for m in layer_contracts.values()) / len(layer_contracts)
-    status = "PASS" if overall_completeness >= 0.85 else "BLOCKED"
+    status = "PASS" if overall_completeness >= 1.0 and total_missing == 0 else "BLOCKED"
 
     report = {
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "status": status,
         "layers": layer_contracts,
         "overall_completeness": round(overall_completeness, 4),
-        "failure_reason": None if status == "PASS" else "Overall layer-specific completeness below 85%"
+        "failure_reason": None if status == "PASS" else f"Historical data coverage incomplete: total missing days = {total_missing} (diagnostic mode: zero synthesis permitted)"
     }
 
     out_path = out_dir / "final_historical_coverage.json"
     out_path.write_text(json.dumps(report, indent=2, sort_keys=True), encoding="utf-8")
-    print("Layer-specific historical coverage contract generated:", out_path)
+    print("Diagnostic historical coverage contract generated:", out_path)
     return report
 
 if __name__ == "__main__":
-    build_layer_specific_coverage()
+    audit_historical_coverage()
