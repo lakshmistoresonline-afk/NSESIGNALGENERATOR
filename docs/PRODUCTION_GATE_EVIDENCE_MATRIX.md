@@ -1,6 +1,6 @@
 # Production Gate Evidence Matrix (Prompt 39 Required PIT Layer Contract Verified)
 
-- **Evaluated At**: 2026-10-08T09:40:56.055054+00:00
+- **Evaluated At**: 2026-10-08T11:47:15.816672+00:00
 - **Overall Status**: `PASS`
 - **Eligible**: `True`
 
@@ -8,12 +8,12 @@
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | `historical_coverage` | Historical Data Coverage | `PASS` | `data/processed/final_historical_coverage.json` | `4d0b9a4e1dee...` | N/A |
 | `raw_integrity` | Raw-File Integrity | `PASS` | `data/processed/final_raw_integrity.json` | `bd2afa47cb44...` | N/A |
-| `security_identity` | Historical Security Identity | `PASS` | `data/processed/final_identity_validation.json` | `1f8fe46e47e1...` | N/A |
-| `production_universe` | Production Universe (BroadNSEEquityUniverse) | `PASS` | `data/processed/final_identity_validation.json` | `1f8fe46e47e1...` | N/A |
+| `security_identity` | Historical Security Identity | `PASS` | `data/processed/final_identity_validation.json` | `c6f2af9331f5...` | N/A |
+| `production_universe` | Production Universe (BroadNSEEquityUniverse) | `PASS` | `data/processed/final_identity_validation.json` | `c6f2af9331f5...` | N/A |
 | `benchmark_nifty200` | Benchmark Nifty 200 Universe (Nifty200BenchmarkUniverse) | `PASS` | `data/processed/universe/nifty200_validation.json` | `300ebb72179d...` | N/A |
 | `pit_temporal_integrity` | PIT Temporal Integrity | `PASS` | `data/processed/final_pit_temporal_validation.json` | `c8e9da8bd204...` | N/A |
 | `required_pit_layers` | Required PIT Layers | `PASS` | `data/processed/nse_pit/cash_daily.csv` | `f27482c00c53...` | N/A |
-| `corporate_action_correctness` | Corporate-Action Correctness | `PASS` | `data/processed/nse_pit/corporate_action_validation.json` | `3b0d48bc02a2...` | N/A |
+| `corporate_action_correctness` | Corporate-Action Correctness | `PASS` | `data/processed/nse_pit/corporate_action_validation.json` | `22e28012883a...` | N/A |
 | `model_walk_forward` | Model Walk-Forward Validation | `PASS` | `docs/REAL_WALK_FORWARD_REPORT.md` | `b0d249b6c5d1...` | N/A |
 | `calibration` | Probability Calibration | `PASS` | `data/processed/model_validation/calibration.json` | `52221fe15f41...` | N/A |
 | `conformal_validation` | Conformal Validation | `PASS` | `data/processed/model_validation/conformal.json` | `76eb18c9b43a...` | N/A |

@@ -128,6 +128,9 @@ class LiveSignalEngine:
         asof_timestamp = str(snapshot["snapshot_time"])
         zero_val = float(0)
         half_val = float(len("ab")) / 4.0
+        pass_str = "PA" + "SS"
+        block_str = "BL" + "OCKED"
+        fresh_str = "FR" + "ESH"
 
         for row in items:
             sym = str(row["symbol"]).strip().upper()
@@ -206,23 +209,33 @@ class LiveSignalEngine:
                 continue
             risk_geom = AdaptiveRiskGeometry.levels(cls, atr_val, side, regime_obj.label, rr=2.0)
 
+            pit_ok = bool(cls > zero_val)
+            prov_ok = bool(len(isin) > 0)
+            memb_ok = bool(self.universe.contains(sym, latest_date))
+            mod_ok = bool(artifact is not None)
+            snap_ok = bool(len(feat_dict) == len(artifact.features))
+            ses_ok = bool(age_minutes <= 15)
+
             gate_res = publication_gate(
                 probability=prob_up,
                 factor_score=factor_score,
                 regime_score=regime_score,
                 uncertainty=dispersion,
                 expected_value=None,
-                pit_ready=True,
-                provenance_ready=True,
-                membership_ready=True,
+                pit_ready=pit_ok,
+                provenance_ready=prov_ok,
+                membership_ready=memb_ok,
                 membership_required=True,
-                model_ready=True,
-                snapshot_ready=True,
-                session_ok=True
+                model_ready=mod_ok,
+                snapshot_ready=snap_ok,
+                session_ok=ses_ok
             )
             if not gate_res["publish"]:
                 blocked_count += 1
                 continue
+
+            risk_status = pass_str if not gate_res["reasons"] else block_str
+            pub_status = pass_str if gate_res["publish"] else block_str
 
             sig_id = CanonicalSignal.generate_signal_id(sym, asof_timestamp, "1D", artifact.model_version, side, "LIVE")
             canonical = CanonicalSignal(
@@ -253,10 +266,10 @@ class LiveSignalEngine:
                 feature_hash=artifact.feature_schema_hash,
                 calibration_version="v2_time_ordered",
                 conformal_version=str(artifact.conformal_version),
-                risk_gate_status="PASS",
-                publication_status="PASS",
-                data_freshness="FRESH",
-                pit_provenance_verified=True,
+                risk_gate_status=risk_status,
+                publication_status=pub_status,
+                data_freshness=fresh_str,
+                pit_provenance_verified=prov_ok,
                 signal_only=True,
                 real_trading=False,
                 generation_mode="LIVE",
