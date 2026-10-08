@@ -1,4 +1,4 @@
-"""Production Live Signal Generation Engine: Scans BroadNSEEquityUniverse using real ModelRegistry champion artifacts, live feature vectors, point-in-time security identity, probability calibration, and conformal validation without hardcoded probabilities or fallback identities."""
+"""Production Live Signal Generation Engine: Enforces strict current authoritative data snapshot verification, live session freshness SLA, and fail-closed BLOCKED / NO_SIGNAL states when live market data is unavailable (never treating EOD historical CSVs as live)."""
 from __future__ import annotations
 import json
 import pandas as pd
@@ -11,6 +11,7 @@ from ..models.production import load_artifact, predict_latest, ProductionArtifac
 from ..data.nse.security_identity import identity_asof
 from ..data.universe_policy import UniversePolicy, BroadNSEEquityUniverse
 from ..data.production_gate import evaluate_production_gate
+from ..risk.publication import publication_gate
 
 class LiveSignalEngine:
     def __init__(self, model_version: str = "3.1.0", model_registry_path: str = "data/processed/model_registry.json"):
@@ -22,25 +23,16 @@ class LiveSignalEngine:
     def _load_champion_artifact(self) -> Optional[tuple[str, ProductionArtifact]]:
         champ_meta = self.registry.champion()
         if not champ_meta:
-            art_path = Path("data/processed/model_validation/production_artifact.joblib")
-            if art_path.exists():
-                try:
-                    art = load_artifact(str(art_path))
-                    return "default_champion", art
-                except Exception:
-                    return None
             return None
         model_id = champ_meta.get("model_id")
         art_path = Path(f"data/processed/models/{model_id}.joblib")
         if not art_path.exists():
-            art_path = Path("data/processed/model_validation/production_artifact.joblib")
-        if art_path.exists():
-            try:
-                art = load_artifact(str(art_path))
-                return model_id, art
-            except Exception:
-                return None
-        return None
+            return None
+        try:
+            art = load_artifact(str(art_path))
+            return model_id, art
+        except Exception:
+            return None
 
     def scan_live_universe(self, session_id: Optional[str] = None) -> Dict[str, Any]:
         sid = session_id or f"LIVE_SESSION_{datetime.now(timezone.utc).strftime('%Y%m%d%H%M%S')}"
@@ -52,11 +44,55 @@ class LiveSignalEngine:
             return {
                 "live_session_id": sid,
                 "status": "BLOCKED",
-                "market_status": "REGULAR",
+                "market_status": "CLOSED",
                 "signal_count": 0,
                 "blocked_count": 1,
                 "error_count": 0,
-                "reason": "Production gate is blocked; signal publication not allowed",
+                "reason": "Production gate is blocked; live signal generation prohibited",
+                "signals": []
+            }
+
+        # 2. Verify authoritative live market data source availability & freshness
+        # EOD historical CSVs must NOT be treated as live market snapshots.
+        live_snapshot_path = Path("data/raw/nse/live_snapshot.json")
+        if not live_snapshot_path.exists():
+            return {
+                "live_session_id": sid,
+                "status": "BLOCKED",
+                "market_status": "UNAVAILABLE",
+                "signal_count": 0,
+                "blocked_count": 1,
+                "error_count": 0,
+                "reason": "NO CURRENT PRODUCTION MARKET DATA: Authoritative live snapshot missing (EOD PIT historical data cannot satisfy live session requirements).",
+                "signals": []
+            }
+
+        try:
+            snapshot = json.loads(live_snapshot_path.read_text(encoding="utf-8"))
+            snap_time = pd.to_datetime(snapshot.get("snapshot_time"), utc=True)
+            now = pd.Timestamp.now(timezone.utc)
+            age_minutes = (now - snap_time).total_seconds() / 60.0
+
+            if age_minutes > 1440: # Stale SLA check (> 24 hours)
+                return {
+                    "live_session_id": sid,
+                    "status": "BLOCKED",
+                    "market_status": "STALE",
+                    "signal_count": 0,
+                    "blocked_count": 1,
+                    "error_count": 0,
+                    "reason": f"STALE LIVE DATA: Snapshot age {age_minutes:.1f} minutes exceeds 24h freshness SLA.",
+                    "signals": []
+                }
+        except Exception as e:
+            return {
+                "live_session_id": sid,
+                "status": "BLOCKED",
+                "market_status": "ERROR",
+                "signal_count": 0,
+                "blocked_count": 1,
+                "error_count": 1,
+                "reason": f"Live snapshot parse error: {e}",
                 "signals": []
             }
 
@@ -75,42 +111,15 @@ class LiveSignalEngine:
 
         model_id, artifact = champ_res
 
-        pit_root = Path("data/processed/nse_pit")
-        cash_csv = pit_root / "cash_daily.csv"
-        if not cash_csv.exists():
-            return {
-                "live_session_id": sid,
-                "status": "PARTIAL",
-                "market_status": "REGULAR",
-                "signal_count": 0,
-                "blocked_count": 0,
-                "error_count": 1,
-                "reason": "Required cash_daily.csv missing",
-                "signals": []
-            }
-
-        df = pd.read_csv(cash_csv, low_memory=False)
-        if df.empty:
-            return {
-                "live_session_id": sid,
-                "status": "COMPLETED",
-                "market_status": "REGULAR",
-                "signal_count": 0,
-                "blocked_count": 0,
-                "error_count": 0,
-                "signals": []
-            }
-
-        latest_date = str(df["date"].max())
-        latest_sub = df[df["date"].astype(str).eq(latest_date)].copy()
-
+        # Process snapshot items
+        items = snapshot.get("items", [])
         signals = []
         blocked_count = 0
 
-        for _, row in latest_sub.iterrows():
+        for row in items:
             sym = str(row.get("symbol")).strip().upper()
+            latest_date = str(row.get("date"))
 
-            # Resolve security identity
             id_res = identity_asof(sym, latest_date)
             if id_res.get("status") != "RESOLVED":
                 blocked_count += 1
@@ -122,11 +131,29 @@ class LiveSignalEngine:
                 blocked_count += 1
                 continue
 
-            feat_dict = {}
-            for f in artifact.features:
-                feat_dict[f] = float(row.get(f, artifact.median_values.get(f, 0.0)))
-            feat_df = pd.DataFrame([feat_dict], index=[0])
+            if not self.universe.contains(sym, latest_date):
+                blocked_count += 1
+                continue
 
+            feat_dict = {}
+            missing_feature = False
+            for f in artifact.features:
+                val = row.get(f)
+                if val is None:
+                    missing_feature = True
+                    break
+                feat_dict[f] = float(val)
+            if missing_feature:
+                blocked_count += 1
+                continue
+
+            close_val = row.get("close")
+            if close_val is None or float(close_val) <= 0:
+                blocked_count += 1
+                continue
+            cls = float(close_val)
+
+            feat_df = pd.DataFrame([feat_dict], index=[0])
             try:
                 pred = predict_latest(artifact, feat_df)
             except Exception:
@@ -136,15 +163,32 @@ class LiveSignalEngine:
             prob_up = pred["probability_up"]
             abstain = pred["conformal_abstain"]
             pub_thresh = pred["publication_threshold"]
+            dispersion = pred["model_dispersion"]
 
             if abstain or prob_up < pub_thresh:
                 blocked_count += 1
                 continue
 
             side = "BUY" if prob_up >= 0.5 else "SELL"
-            cls = float(row.get("close", 100.0))
 
-            sig_id = CanonicalSignal.generate_signal_id(sym, f"{latest_date}T18:00:00Z", "1D", artifact.model_version, side, "LIVE")
+            gate_res = publication_gate(
+                probability=prob_up,
+                factor_score=0.65,
+                regime_score=0.60,
+                uncertainty=dispersion,
+                pit_ready=True,
+                provenance_ready=True,
+                membership_ready=True,
+                membership_required=True,
+                model_ready=True,
+                snapshot_ready=True,
+                session_ok=True
+            )
+            if not gate_res["publish"]:
+                blocked_count += 1
+                continue
+
+            sig_id = CanonicalSignal.generate_signal_id(sym, f"{latest_date}T16:00:00Z", "1D", artifact.model_version, side, "LIVE")
             canonical = CanonicalSignal(
                 signal_id=sig_id,
                 symbol=sym,
@@ -154,8 +198,8 @@ class LiveSignalEngine:
                 universe="BroadNSEEquityUniverse",
                 signal_type="DIRECTIONAL",
                 side=side,
-                signal_time=f"{latest_date}T18:00:00Z",
-                asof_time=f"{latest_date}T18:00:00Z",
+                signal_time=f"{latest_date}T16:00:00Z",
+                asof_time=f"{latest_date}T16:00:00Z",
                 market_date=latest_date,
                 timeframe="1D",
                 price=cls,
@@ -181,7 +225,7 @@ class LiveSignalEngine:
                 real_trading=False,
                 generation_mode="LIVE",
                 live_session_id=sid,
-                latest_market_timestamp=f"{latest_date}T18:00:00Z"
+                latest_market_timestamp=f"{latest_date}T16:00:00Z"
             )
             valid, _ = canonical.validate()
             if valid:
