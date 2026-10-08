@@ -1,0 +1,9 @@
+{
+  "authority_class": "PRIMARY_AUTHORITY",
+  "dataset": "UDiFF CM/FO Bhavcopy & Security Master",
+  "production_allowed": true,
+  "provider": "National Stock Exchange of India",
+  "research_allowed": true,
+  "source_id": "NSE_OFFICIAL_ARCHIVES",
+  "verification_status": "VERIFIED"
+}

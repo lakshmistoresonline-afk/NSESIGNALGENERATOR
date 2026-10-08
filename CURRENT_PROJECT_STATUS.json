@@ -1,0 +1,12 @@
+{
+  "branch": "main",
+  "config_hash": "c8e82825a9d084a03173c4884fea16e6b2bc7aefc1ab1d64a1e8b0832f1b50ff",
+  "dataset_manifest_hash": "c5dc31fc9f2d6408cf4e9c4cb75dbc5ac6d4bad55e617cdb6e0acfc5611f6953",
+  "environment_version": "Python 3.11+",
+  "generated_at": "2026-10-08T01:58:00.029086+00:00",
+  "git_commit": "a9644dc9a14f94f3cf6f8cee7f93b988e10b7049",
+  "production_gate": "BLOCKED",
+  "reason": "Fail-closed production gate due to historical coverage constraints",
+  "status": "BLOCKED",
+  "validator_version": "3.1.0"
+}

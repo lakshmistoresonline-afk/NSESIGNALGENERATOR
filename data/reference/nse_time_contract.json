@@ -1,0 +1,8 @@
+{
+  "equity_regular_session": {
+    "end": "15:30",
+    "start": "09:15"
+  },
+  "timezone": "Asia/Kolkata",
+  "version": "3.1.0"
+}
