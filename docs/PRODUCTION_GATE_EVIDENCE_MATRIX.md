@@ -1,6 +1,6 @@
 # Production Gate Evidence Matrix (Prompt 39 Required PIT Layer Contract Verified)
 
-- **Evaluated At**: 2026-10-08T05:16:03.823938+00:00
+- **Evaluated At**: 2026-10-08T05:21:29.371619+00:00
 - **Overall Status**: `BLOCKED`
 - **Eligible**: `False`
 
@@ -8,12 +8,12 @@
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | `historical_coverage` | Historical Data Coverage | `PASS` | `data/processed/final_historical_coverage.json` | `43ea1d8df973...` | N/A |
 | `raw_integrity` | Raw-File Integrity | `PASS` | `data/processed/final_raw_integrity.json` | `bd2afa47cb44...` | N/A |
-| `security_identity` | Historical Security Identity | `PASS` | `data/processed/final_identity_validation.json` | `031ab1f87c9b...` | N/A |
-| `production_universe` | Production Universe (BroadNSEEquityUniverse) | `PASS` | `data/processed/final_identity_validation.json` | `031ab1f87c9b...` | N/A |
+| `security_identity` | Historical Security Identity | `PASS` | `data/processed/final_identity_validation.json` | `8c21e69ef9fd...` | N/A |
+| `production_universe` | Production Universe (BroadNSEEquityUniverse) | `PASS` | `data/processed/final_identity_validation.json` | `8c21e69ef9fd...` | N/A |
 | `benchmark_nifty200` | Benchmark Nifty 200 Universe (Nifty200BenchmarkUniverse) | `PASS` | `data/processed/universe/nifty200_validation.json` | `78985728f47a...` | N/A |
 | `pit_temporal_integrity` | PIT Temporal Integrity | `PASS` | `data/processed/final_pit_temporal_validation.json` | `a9a31a5304df...` | N/A |
 | `required_pit_layers` | Required PIT Layers | `BLOCKED` | `data/processed/nse_pit/cash_daily.csv` | `MISSING_FILE...` | MISSING_OR_INVALID_EVIDENCE_FILE: data/processed/nse_pit/cash_daily.csv (MISSING_FILE) |
-| `corporate_action_correctness` | Corporate-Action Correctness | `PASS` | `data/processed/nse_pit/corporate_action_validation.json` | `7bfc4b038d50...` | N/A |
+| `corporate_action_correctness` | Corporate-Action Correctness | `PASS` | `data/processed/nse_pit/corporate_action_validation.json` | `8d9f2f817b0e...` | N/A |
 | `model_walk_forward` | Model Walk-Forward Validation | `PASS` | `docs/REAL_WALK_FORWARD_REPORT.md` | `86275b5306d5...` | N/A |
 | `calibration` | Probability Calibration | `PASS` | `data/processed/model_validation/calibration.json` | `36c07ab1351e...` | N/A |
 | `conformal_validation` | Conformal Validation | `PASS` | `data/processed/model_validation/conformal.json` | `072208539092...` | N/A |
