@@ -2,7 +2,7 @@
   "acceptance_result": "PASS",
   "category_id": "calibration",
   "evidence_file": "reports\\final_completion\\calibration_evidence.json",
-  "execution_timestamp": "2026-10-08T03:16:43.772145+00:00",
+  "execution_timestamp": "2026-10-08T05:39:26.015209+00:00",
   "input_hashes": [
     "e43306c050373d8ce229ab8586d330842c32cba403fc0ac713b40b22a421a2aa"
   ],
@@ -10,7 +10,7 @@
     "brier_score": 0.22,
     "calibration_error_ece": 0.035,
     "class_balance": 0.51,
-    "generated_at": "2026-10-08T03:16:43.638914+00:00",
+    "generated_at": "2026-10-08T05:39:25.890410+00:00",
     "per_fold_calibration": [],
     "reason": null,
     "reliability": [],
@@ -18,7 +18,7 @@
     "status": "PASS"
   },
   "name": "Probability Calibration",
-  "output_hash": "b2cfbdf64ce519a863994f1932d63b7910e88839abedb75e2c36b7f3eec80b1b",
+  "output_hash": "37643c3ab35d70539c5b2bd28b9a33cec736ce3d5dc37ff1e8874659b3cf4d7e",
   "return_code": 0,
   "status": "PASS",
   "validator_command": "C:\\Users\\srina\\AppData\\Local\\Programs\\Python\\Python313\\python.exe scripts/build_calibration_conformal.py",

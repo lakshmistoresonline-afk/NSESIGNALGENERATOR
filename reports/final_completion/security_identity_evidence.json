@@ -2,7 +2,7 @@
   "acceptance_result": "PASS",
   "category_id": "security_identity",
   "evidence_file": "reports\\final_completion\\security_identity_evidence.json",
-  "execution_timestamp": "2026-10-08T03:12:39.046476+00:00",
+  "execution_timestamp": "2026-10-08T05:35:11.172049+00:00",
   "input_hashes": [
     "e43306c050373d8ce229ab8586d330842c32cba403fc0ac713b40b22a421a2aa"
   ],
@@ -11,7 +11,7 @@
     "valid": true
   },
   "name": "Historical Security Identity",
-  "output_hash": "6d65bd4b99bc6d0149fb9f8d1cf183f0147340432853893791bbe471d1336325",
+  "output_hash": "ed19077a67bf5fd3279c3df10cd9e5054221ad44b6faf6d212a1c0f7eabb2b15",
   "return_code": 0,
   "status": "PASS",
   "validator_command": "C:\\Users\\srina\\AppData\\Local\\Programs\\Python\\Python313\\python.exe -c import sys; from nse_signal.data.nse.security_identity import build_identity_intervals; build_identity_intervals()",
