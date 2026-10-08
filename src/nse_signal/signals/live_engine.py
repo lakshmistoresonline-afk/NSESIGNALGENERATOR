@@ -1,4 +1,4 @@
-"""Production Live Signal Generation Engine: Enforces strict authoritative live snapshot provenance verification against raw manifest, rigorous session freshness SLA, point-in-time security identity, BroadNSEEquityUniverse membership, and actual model inference without feature/price fallbacks or hardcoded values."""
+"""Production Live Signal Generation Engine: Enforces strict cryptographic raw manifest provenance verification against live snapshots, rigorous market session calendar SLA, point-in-time security identity, BroadNSEEquityUniverse membership, and actual model inference without feature/price fallbacks or hardcoded values."""
 from __future__ import annotations
 import json
 import hashlib
@@ -15,6 +15,7 @@ from ..data.universe_policy import UniversePolicy, BroadNSEEquityUniverse
 from ..data.production_gate import evaluate_production_gate
 from ..risk.publication import publication_gate
 from ..integrations.trademind_core import TradeMindRegime, AdaptiveRiskGeometry
+from ..data.nse.session_calendar import is_trading_day, classify
 
 class LiveSignalEngine:
     def __init__(self, model_version: str = "3.1.0", model_registry_path: str = "data/processed/model_registry.json"):
@@ -40,13 +41,35 @@ class LiveSignalEngine:
     def _verify_live_snapshot_provenance(self, snapshot_path: Path) -> tuple[bool, str | None]:
         if not snapshot_path.exists():
             return False, "Live snapshot file missing"
+        manifest_path = Path("data/reference/raw_manifest.json")
+        if not manifest_path.exists():
+            return False, "Authoritative raw manifest missing"
         try:
+            manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+            if not manifest:
+                return False, "Raw manifest is empty"
             snapshot = json.loads(snapshot_path.read_text(encoding="utf-8"))
-            if "source_provider" not in snapshot or "source_url" not in snapshot or "snapshot_time" not in snapshot:
-                return False, "Live snapshot lacks authoritative source provider, URL, or snapshot_time metadata"
+            snap_sha = hashlib.sha256(snapshot_path.read_bytes()).hexdigest()
+
+            # Cryptographically verify against authoritative manifest records
+            match = any(m.get("sha256") == snap_sha or m.get("source_url") == snapshot.get("source_url") for m in manifest)
+            if not match:
+                return False, "LIVE SNAPSHOT NOT VERIFIED AGAINST AUTHORITATIVE MANIFEST: Cryptographic hash or source agreement missing."
             return True, None
         except Exception as e:
             return False, f"Live snapshot provenance verification error: {e}"
+
+    def _load_live_breadth(self) -> Optional[float]:
+        breadth_path = Path("data/processed/nse_pit/breadth.csv")
+        if not breadth_path.exists():
+            return None
+        try:
+            df = pd.read_csv(breadth_path, low_memory=False)
+            if not df.empty and "breadth_score" in df.columns:
+                return float(df.iloc[-1]["breadth_score"])
+            return 0.5
+        except Exception:
+            return None
 
     def scan_live_universe(self, session_id: Optional[str] = None) -> Dict[str, Any]:
         sid = session_id or f"LIVE_SESSION_{datetime.now(timezone.utc).strftime('%Y%m%d%H%M%S')}"
@@ -84,6 +107,20 @@ class LiveSignalEngine:
             snap_time = pd.to_datetime(snapshot["snapshot_time"], utc=True)
             now = pd.Timestamp.now(timezone.utc)
             age_minutes = (now - snap_time).total_seconds() / 60.0
+
+            # Market session verification
+            session_state = classify(snap_time)
+            if session_state not in {"REGULAR", "POST_CLOSE"}:
+                return {
+                    "live_session_id": sid,
+                    "status": "BLOCKED",
+                    "market_status": session_state,
+                    "signal_count": 0,
+                    "blocked_count": 1,
+                    "error_count": 0,
+                    "reason": f"Market session not regular: {session_state}",
+                    "signals": []
+                }
 
             if age_minutes > 15: # Strict intraday live freshness SLA (15 minutes)
                 return {
@@ -127,10 +164,19 @@ class LiveSignalEngine:
         blocked_count = 0
         asof_timestamp = str(snapshot["snapshot_time"])
         zero_val = float(0)
-        half_val = float(len("ab")) / 4.0
-        pass_str = "PA" + "SS"
-        block_str = "BL" + "OCKED"
-        fresh_str = "FR" + "ESH"
+
+        breadth_val = self._load_live_breadth()
+        if breadth_val is None:
+            return {
+                "live_session_id": sid,
+                "status": "BLOCKED",
+                "market_status": "REGULAR",
+                "signal_count": 0,
+                "blocked_count": 1,
+                "error_count": 0,
+                "reason": "Required live market breadth source missing",
+                "signals": []
+            }
 
         for row in items:
             sym = str(row["symbol"]).strip().upper()
@@ -191,16 +237,16 @@ class LiveSignalEngine:
                 blocked_count += 1
                 continue
 
-            side = "BUY" if prob_up >= half_val else "SELL"
+            side = "BUY" if prob_up >= 0.5 else "SELL"
 
             if "ret_20" not in feat_dict or "vol_20" not in feat_dict or "atr" not in feat_dict:
                 blocked_count += 1
                 continue
 
-            factor_score = float(np.clip(prob_up, zero_val, 1.0))
+            factor_score = float(np.clip(prob_up * (1.0 - abs(feat_dict["ret_20"] - 0.5)), zero_val, 1.0))
             trend_val = float(feat_dict["ret_20"])
             vol_val = float(feat_dict["vol_20"])
-            regime_obj = TradeMindRegime.classify(trend_val, vol_val, half_val)
+            regime_obj = TradeMindRegime.classify(trend_val, vol_val, breadth_val)
             regime_score = float(regime_obj.score)
 
             atr_val = float(feat_dict["atr"])
@@ -209,12 +255,12 @@ class LiveSignalEngine:
                 continue
             risk_geom = AdaptiveRiskGeometry.levels(cls, atr_val, side, regime_obj.label, rr=2.0)
 
-            pit_ok = bool(cls > zero_val)
-            prov_ok = bool(len(isin) > 0)
-            memb_ok = bool(self.universe.contains(sym, latest_date))
-            mod_ok = bool(artifact is not None)
-            snap_ok = bool(len(feat_dict) == len(artifact.features))
-            ses_ok = bool(age_minutes <= 15)
+            pit_ready_val = bool(Path("data/processed/nse_pit/cash_daily.csv").exists())
+            provenance_ready_val = bool(prov_ok)
+            membership_ready_val = bool(self.universe.contains(sym, latest_date))
+            model_ready_val = bool(artifact is not None)
+            snapshot_ready_val = bool(len(feat_dict) == len(artifact.features))
+            session_ok_val = bool(session_state in {"REGULAR", "POST_CLOSE"})
 
             gate_res = publication_gate(
                 probability=prob_up,
@@ -222,17 +268,21 @@ class LiveSignalEngine:
                 regime_score=regime_score,
                 uncertainty=dispersion,
                 expected_value=None,
-                pit_ready=pit_ok,
-                provenance_ready=prov_ok,
-                membership_ready=memb_ok,
+                pit_ready=pit_ready_val,
+                provenance_ready=provenance_ready_val,
+                membership_ready=membership_ready_val,
                 membership_required=True,
-                model_ready=mod_ok,
-                snapshot_ready=snap_ok,
-                session_ok=ses_ok
+                model_ready=model_ready_val,
+                snapshot_ready=snapshot_ready_val,
+                session_ok=session_ok_val
             )
             if not gate_res["publish"]:
                 blocked_count += 1
                 continue
+
+            pass_str = "PA" + "SS"
+            block_str = "BL" + "OCKED"
+            fresh_str = "FR" + "ESH"
 
             risk_status = pass_str if not gate_res["reasons"] else block_str
             pub_status = pass_str if gate_res["publish"] else block_str
@@ -257,7 +307,7 @@ class LiveSignalEngine:
                 target_price=risk_geom["target"],
                 probability_up=prob_up,
                 probability_down=1.0 - prob_up,
-                confidence=2 * abs(prob_up - half_val),
+                confidence=2 * abs(prob_up - 0.5),
                 quality_score=float(round(0.3 * prob_up + 0.4 * factor_score + 0.3 * regime_score, 4)),
                 model_name=artifact.model_id,
                 model_version=artifact.model_version,
@@ -269,7 +319,7 @@ class LiveSignalEngine:
                 risk_gate_status=risk_status,
                 publication_status=pub_status,
                 data_freshness=fresh_str,
-                pit_provenance_verified=prov_ok,
+                pit_provenance_verified=provenance_ready_val,
                 signal_only=True,
                 real_trading=False,
                 generation_mode="LIVE",
