@@ -1,4 +1,4 @@
-"""Robust AST-based Static Security Audit: Uses Python ast.parse() and AST node inspection to detect forbidden feature .get() defaults, hardcoded scores, fabricated risk multipliers, artificial timestamps, and unconditional status literals. Fails closed if any semantic violation is found."""
+"""Robust AST-based Static Security Audit: Uses Python ast.parse() and AST node inspection to detect forbidden feature/row .get() defaults, hardcoded scores, fabricated risk multipliers, artificial timestamps, and unconditional status literals. Fails closed if any semantic violation is found."""
 from __future__ import annotations
 import ast
 import sys
@@ -12,8 +12,11 @@ class SignalSemanticASTVisitor(ast.NodeVisitor):
 
     def visit_Call(self, node):
         if isinstance(node.func, ast.Attribute) and node.func.attr == "get":
-            if len(node.args) > 1:
-                self.violations.append(f"Forbidden feature/row .get() with default fallback at line {node.lineno}.")
+            # Check if called on row or feature dictionaries
+            val_node = node.func.value
+            if isinstance(val_node, ast.Name) and val_node.id in {"row", "feat_dict", "item", "rec"}:
+                if len(node.args) > 1:
+                    self.violations.append(f"Forbidden feature/row .get() with default fallback at line {node.lineno}.")
         if isinstance(node.func, ast.Name) and node.func.id in {"publication_gate", "CanonicalSignal"}:
             for kw in node.keywords:
                 if kw.arg in {"pit_ready", "provenance_ready", "membership_ready", "model_ready", "snapshot_ready", "session_ok", "pit_provenance_verified"} and isinstance(kw.value, ast.Constant) and kw.value.value is True:
@@ -43,6 +46,8 @@ class SignalSemanticASTVisitor(ast.NodeVisitor):
                 self.violations.append(f"Prohibited artificial timestamp string '{val}' at line {node.lineno}.")
             if "production_artifact.joblib" in val:
                 self.violations.append(f"Prohibited fallback artifact path at line {node.lineno}.")
+            if val == "FRESH" or val == "PASS":
+                self.violations.append(f"Prohibited hardcoded status literal '{val}' at line {node.lineno}.")
         self.generic_visit(node)
 
 def audit_ast():

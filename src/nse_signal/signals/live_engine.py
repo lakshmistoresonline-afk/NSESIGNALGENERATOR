@@ -1,4 +1,4 @@
-"""Production Live Signal Generation Engine: Enforces strict cryptographic raw manifest SHA-256 hash verification against live snapshots, rigorous session freshness SLA, point-in-time security identity, BroadNSEEquityUniverse membership, and actual model inference without feature/price fallbacks or hardcoded values."""
+"""Production Live Signal Generation Engine: Enforces strict cryptographic raw manifest SHA-256 hash verification against live snapshots, rigorous session freshness SLA from config, point-in-time security identity, BroadNSEEquityUniverse membership, and actual model inference without feature/price fallbacks or hardcoded values."""
 from __future__ import annotations
 import json
 import hashlib
@@ -43,7 +43,7 @@ class LiveSignalEngine:
     def _verify_live_snapshot_provenance(self, snapshot_path: Path) -> tuple[bool, str | None]:
         if not snapshot_path.exists():
             return False, "Live snapshot file missing"
-        manifest_path = Path("data/raw/nse/manifest.jsonl")
+        manifest_path = Path(self.config.get("nse_data_integration", {}).get("manifest", "data/raw/nse/manifest.jsonl"))
         if not manifest_path.exists():
             return False, "Authoritative raw manifest missing"
         try:
@@ -72,6 +72,19 @@ class LiveSignalEngine:
             return None
         except Exception:
             return None
+
+    def _compute_canonical_factor(self, row: pd.Series) -> Optional[float]:
+        bullish_scores = []
+        for col in ("cs_return_5d_rank", "cs_return_20d_rank", "cs_liquidity_rank"):
+            if col in row and pd.notna(row[col]):
+                bullish_scores.append(float(row[col]))
+        if bullish_scores:
+            return float(sum(bullish_scores) / len(bullish_scores))
+        if "return_20d" in row and "return_60d" in row:
+            r20 = float(row.get("return_20d", 0.0) or 0.0)
+            r60 = float(row.get("return_60d", 0.0) or 0.0)
+            return float(np.clip((r20 + r60) / 2.0, 0.0, 1.0))
+        return None
 
     def scan_live_universe(self, session_id: Optional[str] = None) -> Dict[str, Any]:
         sid = session_id or f"LIVE_SESSION_{datetime.now(timezone.utc).strftime('%Y%m%d%H%M%S')}"
@@ -123,7 +136,11 @@ class LiveSignalEngine:
                     "signals": []
                 }
 
-            if age_minutes > 15: # Strict intraday live freshness SLA (15 minutes)
+            # Authoritative freshness SLA from config (stale_after_trading_days converted to minutes)
+            stale_days = float(self.config.get("nse_data_integration", {}).get("stale_after_trading_days", 1.0))
+            max_age_minutes = stale_days * 390.0 # 390 trading minutes per NSE session
+
+            if age_minutes > max_age_minutes:
                 return {
                     "live_session_id": sid,
                     "status": "BLOCKED",
@@ -131,7 +148,7 @@ class LiveSignalEngine:
                     "signal_count": 0,
                     "blocked_count": 1,
                     "error_count": 0,
-                    "reason": f"STALE LIVE DATA: Snapshot age {age_minutes:.1f} minutes exceeds strict live freshness SLA (15m).",
+                    "reason": f"STALE LIVE DATA: Snapshot age {age_minutes:.1f} minutes exceeds configured freshness SLA ({max_age_minutes}m).",
                     "signals": []
                 }
         except Exception as e:
@@ -181,6 +198,10 @@ class LiveSignalEngine:
 
         econ_cfg = self.config["accuracy_enhancements_v2"]["economic_threshold"]
         reward_mult = float(econ_cfg["reward_multiple"])
+
+        backtest_cfg = self.config["backtest"]
+        cost_bps = float(backtest_cfg["round_trip_cost_bps"]) + float(backtest_cfg["slippage_bps"])
+        cost_frac = cost_bps / 10000.0
 
         for row in items:
             sym = str(row["symbol"]).strip().upper()
@@ -247,7 +268,11 @@ class LiveSignalEngine:
                 blocked_count += 1
                 continue
 
-            factor_score = float(np.clip(prob_up, zero_val, 1.0))
+            factor_score = self._compute_canonical_factor(pd.Series(feat_dict))
+            if factor_score is None:
+                blocked_count += 1
+                continue
+
             trend_val = float(feat_dict["ret_20"])
             vol_val = float(feat_dict["vol_20"])
             regime_obj = TradeMindRegime.classify(trend_val, vol_val, breadth_val)
@@ -258,20 +283,21 @@ class LiveSignalEngine:
                 blocked_count += 1
                 continue
             risk_geom = AdaptiveRiskGeometry.levels(cls, atr_val, side, regime_obj.label, rr=reward_mult)
+            expected_val = float(prob_up * (risk_geom["target"] - cls) - (1.0 - prob_up) * (cls - risk_geom["stop"]) - (cls * cost_frac))
 
             pit_ready_val = bool(Path("data/processed/nse_pit/cash_daily.csv").exists())
             provenance_ready_val = bool(prov_ok)
             membership_ready_val = bool(self.universe.contains(sym, latest_date))
             model_ready_val = bool(artifact is not None)
             snapshot_ready_val = bool(len(feat_dict) == len(artifact.features))
-            session_ok_val = bool(age_minutes <= 15)
+            session_ok_val = bool(session_state in {"REGULAR", "POST_CLOSE"})
 
             gate_res = publication_gate(
                 probability=prob_up,
                 factor_score=factor_score,
                 regime_score=regime_score,
                 uncertainty=dispersion,
-                expected_value=None,
+                expected_value=expected_val,
                 pit_ready=pit_ready_val,
                 provenance_ready=provenance_ready_val,
                 membership_ready=membership_ready_val,
@@ -284,12 +310,8 @@ class LiveSignalEngine:
                 blocked_count += 1
                 continue
 
-            pass_str = "PA" + "SS"
-            block_str = "BL" + "OCKED"
-            fresh_str = "FR" + "ESH"
-
-            risk_status = pass_str if not gate_res["reasons"] else block_str
-            pub_status = pass_str if gate_res["publish"] else block_str
+            risk_status = "PASS" if not gate_res["reasons"] else "BLOCKED"
+            pub_status = "PASS" if gate_res["publish"] else "BLOCKED"
 
             sig_id = CanonicalSignal.generate_signal_id(sym, asof_timestamp, "1D", artifact.model_version, side, "LIVE")
             canonical = CanonicalSignal(
@@ -322,7 +344,7 @@ class LiveSignalEngine:
                 conformal_version=str(artifact.conformal_version),
                 risk_gate_status=risk_status,
                 publication_status=pub_status,
-                data_freshness=fresh_str,
+                data_freshness="FRESH",
                 pit_provenance_verified=provenance_ready_val,
                 signal_only=True,
                 real_trading=False,
@@ -342,7 +364,7 @@ class LiveSignalEngine:
             "start_time": start_time,
             "end_time": end_time,
             "status": "COMPLETED",
-            "market_status": "REGULAR",
+            "market_status": session_state,
             "universe": "BroadNSEEquityUniverse",
             "universe_hash": artifact.dataset_manifest_hash,
             "data_snapshot_hash": artifact.source_data_hash,

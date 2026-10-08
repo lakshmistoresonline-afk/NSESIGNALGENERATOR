@@ -1,4 +1,4 @@
-"""True Historical Signal Generation Engine: Strictly point-in-time, using ModelRegistry champion artifacts, real feature vectors without feature/ATR fallbacks, authoritative security identity, BroadNSEEquityUniverse membership, TradeMindRegime classification, AdaptiveRiskGeometry calculation, and actual derived publication gating without hardcoded scores, multipliers, or artificial timestamps."""
+"""True Historical Signal Generation Engine: Strictly point-in-time, using ModelRegistry champion artifacts, real feature vectors without feature/ATR fallbacks, authoritative security identity, BroadNSEEquityUniverse membership, TradeMindRegime classification, AdaptiveRiskGeometry calculation from config, cost-adjusted expected value, and actual derived publication gating without hardcoded scores, multipliers, or artificial timestamps."""
 from __future__ import annotations
 import json
 import pandas as pd
@@ -67,8 +67,8 @@ class HistoricalSignalEngine:
         except Exception:
             return False
 
-        cash_ok, _ = validate_semantic_pit_layer("cash_bhavcopy")
-        sm_ok, _ = validate_semantic_pit_layer("security_master")
+        cash_ok, _ = validate_semantic_pit_layer("cash_bhavcopy", requested_date=dt_str)
+        sm_ok, _ = validate_semantic_pit_layer("security_master", requested_date=dt_str)
         if not cash_ok or not sm_ok:
             return False
 
@@ -87,6 +87,23 @@ class HistoricalSignalEngine:
             return None
         except Exception:
             return None
+
+    def _compute_canonical_factor(self, row: pd.Series, sub_history: pd.DataFrame) -> Optional[float]:
+        # Causal trailing momentum percentile calculation matching scripts/generate_signal.py
+        if len(sub_history) < 20 or "return_20d" not in row or "return_60d" not in row:
+            return None
+        cur20 = float(row.get("return_20d", 0.0) or 0.0)
+        cur60 = float(row.get("return_60d", 0.0) or 0.0)
+        r20 = pd.to_numeric(sub_history["return_20d"], errors="coerce").dropna()
+        r60 = pd.to_numeric(sub_history["return_60d"], errors="coerce").dropna()
+        def _pct(v, h):
+            if len(h) < 20 or not pd.notna(v): return np.nan
+            return float((h <= v).mean())
+        vals = [_pct(cur20, r20), _pct(cur60, r60)]
+        vals = [v for v in vals if np.isfinite(v)]
+        if not vals:
+            return None
+        return float(sum(vals) / len(vals))
 
     def generate_historical_signals(self, start_date: str, end_date: str, universe: str = "BroadNSEEquityUniverse", timeframe: str = "1D") -> List[CanonicalSignal]:
         start_d = date.fromisoformat(start_date)
@@ -118,6 +135,10 @@ class HistoricalSignalEngine:
         econ_cfg = self.config["accuracy_enhancements_v2"]["economic_threshold"]
         reward_mult = float(econ_cfg["reward_multiple"])
 
+        backtest_cfg = self.config["backtest"]
+        cost_bps = float(backtest_cfg["round_trip_cost_bps"]) + float(backtest_cfg["slippage_bps"])
+        cost_frac = cost_bps / 10000.0
+
         for dt, group in sub.groupby("date"):
             dt_str = dt.isoformat()
 
@@ -130,6 +151,8 @@ class HistoricalSignalEngine:
             breadth_val = self._load_historical_breadth(dt_str)
             if breadth_val is None or pd.isna(breadth_val):
                 continue
+
+            sub_history = sub[sub["date"] < dt]
 
             for _, row in group.iterrows():
                 sym = str(row["symbol"]).strip().upper()
@@ -167,10 +190,13 @@ class HistoricalSignalEngine:
                     continue
                 cls = float(close_val)
 
-                asof_time_raw = row["asof_time"] if "asof_time" in row else (row["signal_time"] if "signal_time" in row else row["date"])
+                # Require authoritative source timestamp matching dt_str strictly without fallback
+                asof_time_raw = row["asof_time"] if "asof_time" in row else row.get("signal_time")
                 if not asof_time_raw or pd.isna(asof_time_raw):
                     continue
                 asof_timestamp = str(asof_time_raw)
+                if not asof_timestamp.startswith(dt_str):
+                    continue
 
                 feat_df = pd.DataFrame([feat_dict], index=[0])
 
@@ -192,7 +218,11 @@ class HistoricalSignalEngine:
                 if "ret_20" not in feat_dict or "vol_20" not in feat_dict or "atr" not in feat_dict:
                     continue
 
-                factor_score = float(np.clip(prob_up, zero_val, 1.0))
+                # Canonical factor score
+                factor_score = self._compute_canonical_factor(row, sub_history)
+                if factor_score is None:
+                    continue
+
                 trend_val = float(feat_dict["ret_20"])
                 vol_val = float(feat_dict["vol_20"])
                 regime_obj = TradeMindRegime.classify(trend_val, vol_val, breadth_val)
@@ -203,8 +233,11 @@ class HistoricalSignalEngine:
                     continue
                 risk_geom = AdaptiveRiskGeometry.levels(cls, atr_val, side, regime_obj.label, rr=reward_mult)
 
-                pit_ready_val = bool(cash_csv.exists() and cash_csv.stat().st_size > 0)
-                provenance_ready_val = bool(True)
+                # Compute cost-adjusted expected value
+                expected_val = float(prob_up * (risk_geom["target"] - cls) - (1.0 - prob_up) * (cls - risk_geom["stop"]) - (cls * cost_frac))
+
+                pit_ready_val = bool(self._verify_historical_provenance_and_pit(dt_str))
+                provenance_ready_val = bool(pit_ready_val)
                 membership_ready_val = bool(self.universe.contains(sym, dt_str))
                 model_ready_val = bool(artifact is not None)
                 snapshot_ready_val = bool(len(feat_dict) == len(artifact.features))
@@ -215,7 +248,7 @@ class HistoricalSignalEngine:
                     factor_score=factor_score,
                     regime_score=regime_score,
                     uncertainty=dispersion,
-                    expected_value=None,
+                    expected_value=expected_val,
                     pit_ready=pit_ready_val,
                     provenance_ready=provenance_ready_val,
                     membership_ready=membership_ready_val,
@@ -227,11 +260,8 @@ class HistoricalSignalEngine:
                 if not gate_res["publish"]:
                     continue
 
-                pass_str = "PA" + "SS"
-                block_str = "BL" + "OCKED"
-
-                risk_status = pass_str if not gate_res["reasons"] else block_str
-                pub_status = pass_str if gate_res["publish"] else block_str
+                risk_status = "PASS" if not gate_res["reasons"] else "BLOCKED"
+                pub_status = "PASS" if gate_res["publish"] else "BLOCKED"
 
                 sig_id = CanonicalSignal.generate_signal_id(sym, asof_timestamp, timeframe, artifact.model_version, side, "HISTORICAL")
                 canonical = CanonicalSignal(
