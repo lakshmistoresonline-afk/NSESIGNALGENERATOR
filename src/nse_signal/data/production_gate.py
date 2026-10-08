@@ -135,13 +135,21 @@ def _validate_required_layers() -> tuple[str, str | None]:
     valid, err = _validate_evidence_artifact(mat_path)
     if not valid:
         return "BLOCKED", f"MISSING_OR_EMPTY_EVIDENCE: {err}"
+
     pit_root = Path("data/processed/nse_pit")
-    required = ["cash_daily", "security_master"]
-    missing = [r for r in required if not (pit_root / f"{r}.csv").exists()]
-    if missing:
-        if not (Path("data/processed/pit/canonical_price_bars.jsonl").exists()):
-            return "BLOCKED", f"MISSING_REQUIRED_PIT_LAYERS: {missing}"
-    return "PASS", None
+    required_files = [pit_root / "cash_daily.csv", pit_root / "security_master.csv"]
+    missing_files = [str(f) for f in required_files if not f.exists() or f.stat().st_size == 0]
+    if missing_files:
+        return "BLOCKED", f"MANDATORY_PIT_LAYERS_MISSING_OR_EMPTY: {missing_files}"
+
+    try:
+        from nse_signal.data.nse.pit_layer_validator import validate_all_required_pit_layers
+        v_ok, v_blocking = validate_all_required_pit_layers()
+        if not v_ok:
+            return "BLOCKED", f"SEMANTIC_PIT_LAYER_VALIDATION_FAIL: {v_blocking}"
+        return "PASS", None
+    except Exception as e:
+        return "BLOCKED", f"SEMANTIC_PIT_LAYER_EXCEPTION: {e}"
 
 def _validate_corporate_actions() -> tuple[str, str | None]:
     corp_path = Path("data/processed/nse_pit/corporate_action_validation.json")
@@ -287,7 +295,7 @@ def evaluate_production_gate(root_dir: str = ".") -> dict:
         ("production_universe", "Production Universe (BroadNSEEquityUniverse)", _validate_production_universe, "data/processed/final_identity_validation.json", "python -m pytest tests/test_universe_architecture.py"),
         ("benchmark_nifty200", "Benchmark Nifty 200 Universe (Nifty200BenchmarkUniverse)", _validate_benchmark_nifty200, "data/processed/universe/nifty200_validation.json", "python scripts/validate_nifty200_membership.py"),
         ("pit_temporal_integrity", "PIT Temporal Integrity", _validate_pit_temporal_integrity, "data/processed/final_pit_temporal_validation.json", "python scripts/build_final_pit_temporal_validation.py"),
-        ("required_pit_layers", "Required PIT Layers", _validate_required_layers, "data/reference/feature_data_dependency_matrix.json", "python -m nse_signal.cli --build-pit"),
+        ("required_pit_layers", "Required PIT Layers", _validate_required_layers, "data/processed/nse_pit/cash_daily.csv", "python -m nse_signal.data.nse.pit_layer_validator"),
         ("corporate_action_correctness", "Corporate-Action Correctness", _validate_corporate_actions, "data/processed/nse_pit/corporate_action_validation.json", "python -m nse_signal.data.nse.corporate_action_validator"),
         ("model_walk_forward", "Model Walk-Forward Validation", _validate_walk_forward, "docs/REAL_WALK_FORWARD_REPORT.md", "python scripts/run_real_walk_forward.py"),
         ("calibration", "Probability Calibration", _validate_calibration, "data/processed/model_validation/calibration.json", "python scripts/build_calibration_conformal.py"),
@@ -361,7 +369,7 @@ def evaluate_production_gate(root_dir: str = ".") -> dict:
     processed_gate_path.write_text(json.dumps(gate_result, indent=2, sort_keys=True), encoding="utf-8")
     root.joinpath("FINAL_PRODUCTION_GATE.json").write_text(json.dumps(gate_result, indent=2, sort_keys=True), encoding="utf-8")
 
-    md_lines = ["# Production Gate Evidence Matrix (Complete Raw Manifest Verified)\n"]
+    md_lines = ["# Production Gate Evidence Matrix (Prompt 39 Required PIT Layer Contract Verified)\n"]
     md_lines.append(f"- **Evaluated At**: {gate_result['evaluated_at']}")
     md_lines.append(f"- **Overall Status**: `{gate_result['status']}`")
     md_lines.append(f"- **Eligible**: `{gate_result['eligible']}`\n")
