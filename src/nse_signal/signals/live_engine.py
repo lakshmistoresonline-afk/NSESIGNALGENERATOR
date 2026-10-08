@@ -1,4 +1,4 @@
-"""Production Live Signal Generation Engine: Enforces strict cryptographic raw manifest provenance verification against live snapshots, rigorous market session calendar SLA, point-in-time security identity, BroadNSEEquityUniverse membership, and actual model inference without feature/price fallbacks or hardcoded values."""
+"""Production Live Signal Generation Engine: Enforces strict cryptographic raw manifest SHA-256 hash verification against live snapshots, rigorous session freshness SLA, point-in-time security identity, BroadNSEEquityUniverse membership, and actual model inference without feature/price fallbacks or hardcoded values."""
 from __future__ import annotations
 import json
 import hashlib
@@ -51,10 +51,10 @@ class LiveSignalEngine:
             snapshot = json.loads(snapshot_path.read_text(encoding="utf-8"))
             snap_sha = hashlib.sha256(snapshot_path.read_bytes()).hexdigest()
 
-            # Cryptographically verify against authoritative manifest records
-            match = any(m.get("sha256") == snap_sha or m.get("source_url") == snapshot.get("source_url") for m in manifest)
+            # Strict cryptographic verification: must match authoritative manifest record by SHA-256 hash
+            match = any(m.get("sha256") == snap_sha for m in manifest)
             if not match:
-                return False, "LIVE SNAPSHOT NOT VERIFIED AGAINST AUTHORITATIVE MANIFEST: Cryptographic hash or source agreement missing."
+                return False, "LIVE SNAPSHOT NOT VERIFIED AGAINST AUTHORITATIVE MANIFEST: Cryptographic SHA-256 hash agreement required."
             return True, None
         except Exception as e:
             return False, f"Live snapshot provenance verification error: {e}"
@@ -67,7 +67,7 @@ class LiveSignalEngine:
             df = pd.read_csv(breadth_path, low_memory=False)
             if not df.empty and "breadth_score" in df.columns:
                 return float(df.iloc[-1]["breadth_score"])
-            return 0.5
+            return None
         except Exception:
             return None
 
@@ -108,7 +108,6 @@ class LiveSignalEngine:
             now = pd.Timestamp.now(timezone.utc)
             age_minutes = (now - snap_time).total_seconds() / 60.0
 
-            # Market session verification
             session_state = classify(snap_time)
             if session_state not in {"REGULAR", "POST_CLOSE"}:
                 return {
@@ -243,7 +242,7 @@ class LiveSignalEngine:
                 blocked_count += 1
                 continue
 
-            factor_score = float(np.clip(prob_up * (1.0 - abs(feat_dict["ret_20"] - 0.5)), zero_val, 1.0))
+            factor_score = float(np.clip(prob_up, zero_val, 1.0))
             trend_val = float(feat_dict["ret_20"])
             vol_val = float(feat_dict["vol_20"])
             regime_obj = TradeMindRegime.classify(trend_val, vol_val, breadth_val)
@@ -260,7 +259,7 @@ class LiveSignalEngine:
             membership_ready_val = bool(self.universe.contains(sym, latest_date))
             model_ready_val = bool(artifact is not None)
             snapshot_ready_val = bool(len(feat_dict) == len(artifact.features))
-            session_ok_val = bool(session_state in {"REGULAR", "POST_CLOSE"})
+            session_ok_val = bool(age_minutes <= 15)
 
             gate_res = publication_gate(
                 probability=prob_up,
