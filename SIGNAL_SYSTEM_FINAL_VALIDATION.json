@@ -1,0 +1,17 @@
+{
+  "android_status": "INTEGRATED_SIGNAL_ONLY",
+  "api_status": "OPERATIONAL",
+  "blockers": [],
+  "commit_hash": "317b13e3a07670727bf179c219d052c144909892",
+  "generated_at": "2026-10-08T06:57:39.480837+00:00",
+  "historical_generation_status": "VALIDATED",
+  "live_generation_status": "VALIDATED",
+  "safety_status": "REAL_TRADING_FALSE_VERIFIED",
+  "signal_store_status": "OPERATIONAL",
+  "test_counts": {
+    "failed": 0,
+    "passed": 173,
+    "skipped": 0
+  },
+  "web_dashboard_status": "OPERATIONAL"
+}
