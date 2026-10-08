@@ -1,24 +1,24 @@
 # Production Gate Evidence Matrix (Complete Raw Manifest Verified)
 
-- **Evaluated At**: 2026-10-08T03:08:38.742890+00:00
+- **Evaluated At**: 2026-10-08T03:22:09.171413+00:00
 - **Overall Status**: `BLOCKED`
 - **Eligible**: `False`
 
 | Category ID | Name | Status | Evidence Path | Evidence Hash (SHA256) | Failure Reason |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| `historical_coverage` | Historical Data Coverage | `BLOCKED` | `data/processed/final_historical_coverage.json` | `a7bc4c986ffb...` | LAYER_COVERAGE_INSUFFICIENT (corporate_actions): completeness ratio 0.0 < 0.50 |
-| `raw_integrity` | Raw-File Integrity | `PASS` | `data/processed/final_raw_integrity.json` | `1c74caf5d341...` | N/A |
-| `security_identity` | Historical Security Identity | `PASS` | `data/processed/final_identity_validation.json` | `f676b60fcc29...` | N/A |
-| `production_universe` | Production Universe (BroadNSEEquityUniverse) | `PASS` | `data/processed/final_identity_validation.json` | `f676b60fcc29...` | N/A |
-| `benchmark_nifty200` | Benchmark Nifty 200 Universe (Nifty200BenchmarkUniverse) | `PASS` | `data/processed/universe/nifty200_validation.json` | `e508b4919c8c...` | N/A |
-| `pit_temporal_integrity` | PIT Temporal Integrity | `PASS` | `data/processed/final_pit_temporal_validation.json` | `ffe2c4d56140...` | N/A |
+| `historical_coverage` | Historical Data Coverage | `BLOCKED` | `data/processed/final_historical_coverage.json` | `2af874c94c19...` | LAYER_COVERAGE_INSUFFICIENT (corporate_actions): completeness ratio 0.0 < 0.50 |
+| `raw_integrity` | Raw-File Integrity | `PASS` | `data/processed/final_raw_integrity.json` | `12d9143b2511...` | N/A |
+| `security_identity` | Historical Security Identity | `PASS` | `data/processed/final_identity_validation.json` | `9cef045accc0...` | N/A |
+| `production_universe` | Production Universe (BroadNSEEquityUniverse) | `PASS` | `data/processed/final_identity_validation.json` | `9cef045accc0...` | N/A |
+| `benchmark_nifty200` | Benchmark Nifty 200 Universe (Nifty200BenchmarkUniverse) | `PASS` | `data/processed/universe/nifty200_validation.json` | `78985728f47a...` | N/A |
+| `pit_temporal_integrity` | PIT Temporal Integrity | `PASS` | `data/processed/final_pit_temporal_validation.json` | `a9a31a5304df...` | N/A |
 | `required_pit_layers` | Required PIT Layers | `BLOCKED` | `data/reference/feature_data_dependency_matrix.json` | `e43306c05037...` | MISSING_REQUIRED_PIT_LAYERS: ['cash_daily', 'security_master'] |
-| `corporate_action_correctness` | Corporate-Action Correctness | `PASS` | `data/processed/nse_pit/corporate_action_validation.json` | `763d876a191e...` | N/A |
-| `model_walk_forward` | Model Walk-Forward Validation | `PASS` | `docs/REAL_WALK_FORWARD_REPORT.md` | `212bb7efa976...` | N/A |
-| `calibration` | Probability Calibration | `BLOCKED` | `data/processed/model_validation/calibration.json` | `05716a17b4a8...` | CALIBRATION_BLOCKED: Insufficient out-of-sample observations from walk-forward folds for probability calibration |
-| `conformal_validation` | Conformal Validation | `BLOCKED` | `data/processed/model_validation/conformal.json` | `b36d7db6153e...` | CONFORMAL_BLOCKED: Insufficient out-of-sample observations from walk-forward folds for conformal validation |
-| `economic_validation` | Economic Validation | `BLOCKED` | `data/processed/model_validation/economic_validation.json` | `afc5815af47e...` | ECONOMIC_VALIDATION_BLOCKED: Insufficient out-of-sample predictions from walk-forward folds for economic paper-execution validation |
-| `drift` | Model Drift (Pre-Deployment Historical) | `PASS` | `data/processed/model_validation/historical_drift.json` | `3aedbb3b845c...` | N/A |
+| `corporate_action_correctness` | Corporate-Action Correctness | `PASS` | `data/processed/nse_pit/corporate_action_validation.json` | `9b7935876b83...` | N/A |
+| `model_walk_forward` | Model Walk-Forward Validation | `PASS` | `docs/REAL_WALK_FORWARD_REPORT.md` | `86275b5306d5...` | N/A |
+| `calibration` | Probability Calibration | `PASS` | `data/processed/model_validation/calibration.json` | `36c07ab1351e...` | N/A |
+| `conformal_validation` | Conformal Validation | `PASS` | `data/processed/model_validation/conformal.json` | `072208539092...` | N/A |
+| `economic_validation` | Economic Validation | `PASS` | `data/processed/model_validation/economic_validation.json` | `d132841ac372...` | N/A |
+| `drift` | Model Drift (Pre-Deployment Historical) | `PASS` | `data/processed/model_validation/historical_drift.json` | `44e37890a7b6...` | N/A |
 | `adversarial_validation` | Adversarial Validation | `PASS` | `src/nse_signal/research/adversarial.py` | `97efe84db0d5...` | N/A |
 | `multiple_testing_controls` | Multiple-Testing Controls | `PASS` | `src/nse_signal/research/falsification.py` | `b639256cfe2b...` | N/A |
 | `untouched_holdout` | Untouched Holdout | `PASS` | `data/processed/nse_pit/pit_features.csv` | `03f26d04d5cc...` | N/A |

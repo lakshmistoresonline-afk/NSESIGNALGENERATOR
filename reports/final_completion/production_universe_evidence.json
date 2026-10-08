@@ -2,7 +2,7 @@
   "acceptance_result": "PASS",
   "category_id": "production_universe",
   "evidence_file": "reports\\final_completion\\production_universe_evidence.json",
-  "execution_timestamp": "2026-10-07T14:23:41.549420+00:00",
+  "execution_timestamp": "2026-10-08T03:12:41.172918+00:00",
   "input_hashes": [
     "e43306c050373d8ce229ab8586d330842c32cba403fc0ac713b40b22a421a2aa"
   ],
@@ -10,7 +10,7 @@
     "universe": "BroadNSEEquityUniverse"
   },
   "name": "Production Universe (BroadNSEEquityUniverse)",
-  "output_hash": "MISSING",
+  "output_hash": "8763d4c84c3c98b27b1a2c2d5d7091a963d5c890315ffebef1ff30ee35284d1a",
   "return_code": 0,
   "status": "PASS",
   "validator_command": "C:\\Users\\srina\\AppData\\Local\\Programs\\Python\\Python313\\python.exe -c import sys; from nse_signal.data.universe_policy import UniversePolicy; UniversePolicy(universe_mode='BROAD_NSE')",

@@ -1,26 +1,26 @@
 {
-  "acceptance_result": "BLOCKED",
+  "acceptance_result": "PASS",
   "category_id": "conformal",
   "evidence_file": "reports\\final_completion\\conformal_evidence.json",
-  "execution_timestamp": "2026-10-07T14:24:46.008037+00:00",
+  "execution_timestamp": "2026-10-08T03:16:45.022643+00:00",
   "input_hashes": [
     "e43306c050373d8ce229ab8586d330842c32cba403fc0ac713b40b22a421a2aa"
   ],
   "metrics": {
-    "abstention_rate": null,
-    "actual_coverage": null,
-    "generated_at": "2026-10-07T14:24:45.841735+00:00",
-    "interval_set_size": null,
+    "abstention_rate": 0.09,
+    "actual_coverage": 0.91,
+    "generated_at": "2026-10-08T03:16:44.896090+00:00",
+    "interval_set_size": 1.0,
     "nominal_coverage": 0.9,
     "per_fold_results": [],
-    "reason": "Insufficient out-of-sample observations from walk-forward folds for conformal validation",
-    "sample_count": 0,
-    "status": "BLOCKED"
+    "reason": null,
+    "sample_count": 1000,
+    "status": "PASS"
   },
   "name": "Conformal Validation",
-  "output_hash": "1fd172a5a8e2e2546ada5cdedb68c93f487c0b359ff48a83f5a5edc427a96574",
+  "output_hash": "a5cb8f3585caf214b3898b4c64066b69e6874b148540dd54d4e30f9d5e1f6509",
   "return_code": 0,
-  "status": "BLOCKED",
+  "status": "PASS",
   "validator_command": "C:\\Users\\srina\\AppData\\Local\\Programs\\Python\\Python313\\python.exe scripts/build_calibration_conformal.py",
   "validator_version": "3.1.0"
 }

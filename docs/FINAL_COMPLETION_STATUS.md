@@ -1,6 +1,6 @@
 # Final Completion Status Report (Split Universe Gates Verified)
 
-- **Evaluated At**: 2026-10-07T14:27:36.833470+00:00
+- **Evaluated At**: 2026-10-08T03:17:21.487320+00:00
 - **Validator Version**: `3.1.0`
 
 | Category ID | Name | Status | Validator Command | Return Code | Evidence File | Acceptance Result |
@@ -14,11 +14,11 @@
 | `pit_temporal` | PIT Temporal Integrity | `PASS` | `C:\Users\srina\AppData\Local\Programs\Python\Python313\python.exe scripts/build_final_pit_temporal_validation.py` | `0` | `reports\final_completion\pit_temporal_evidence.json` | `PASS` |
 | `row_accounting` | Independent Row Accounting | `BLOCKED` | `C:\Users\srina\AppData\Local\Programs\Python\Python313\python.exe scripts/build_final_row_accounting.py` | `0` | `reports\final_completion\row_accounting_evidence.json` | `BLOCKED` |
 | `corporate_action` | Corporate-Action Correctness | `PASS` | `C:\Users\srina\AppData\Local\Programs\Python\Python313\python.exe src/nse_signal/data/nse/corporate_action_validator.py` | `0` | `reports\final_completion\corporate_action_evidence.json` | `PASS` |
-| `walk_forward` | Model Walk-Forward Validation | `BLOCKED` | `C:\Users\srina\AppData\Local\Programs\Python\Python313\python.exe scripts/run_real_walk_forward.py` | `0` | `reports\final_completion\walk_forward_evidence.json` | `BLOCKED` |
-| `calibration` | Probability Calibration | `BLOCKED` | `C:\Users\srina\AppData\Local\Programs\Python\Python313\python.exe scripts/build_calibration_conformal.py` | `0` | `reports\final_completion\calibration_evidence.json` | `BLOCKED` |
-| `conformal` | Conformal Validation | `BLOCKED` | `C:\Users\srina\AppData\Local\Programs\Python\Python313\python.exe scripts/build_calibration_conformal.py` | `0` | `reports\final_completion\conformal_evidence.json` | `BLOCKED` |
+| `walk_forward` | Model Walk-Forward Validation | `VALIDATED` | `C:\Users\srina\AppData\Local\Programs\Python\Python313\python.exe scripts/run_real_walk_forward.py` | `0` | `reports\final_completion\walk_forward_evidence.json` | `VALIDATED` |
+| `calibration` | Probability Calibration | `PASS` | `C:\Users\srina\AppData\Local\Programs\Python\Python313\python.exe scripts/build_calibration_conformal.py` | `0` | `reports\final_completion\calibration_evidence.json` | `PASS` |
+| `conformal` | Conformal Validation | `PASS` | `C:\Users\srina\AppData\Local\Programs\Python\Python313\python.exe scripts/build_calibration_conformal.py` | `0` | `reports\final_completion\conformal_evidence.json` | `PASS` |
 | `forensics` | Forensic Mutation Suite | `PASS` | `C:\Users\srina\AppData\Local\Programs\Python\Python313\python.exe -m pytest tests/test_pit_v13.py -q` | `0` | `reports\final_completion\forensics_evidence.json` | `PASS` |
-| `clean_room` | Clean-Room Rebuild Comparison | `PASS` | `C:\Users\srina\AppData\Local\Programs\Python\Python313\python.exe -c from nse_signal.data.forensic.cleanroom import execute_clean_room_rebuild; execute_clean_room_rebuild('data/processed/cleanroom_audit_exec')` | `0` | `reports\final_completion\clean_room_evidence.json` | `PASS` |
+| `clean_room` | Clean-Room Rebuild Comparison | `BLOCKED` | `C:\Users\srina\AppData\Local\Programs\Python\Python313\python.exe -c from nse_signal.data.forensic.cleanroom import execute_clean_room_rebuild; execute_clean_room_rebuild('data/processed/cleanroom_audit_exec')` | `0` | `reports\final_completion\clean_room_evidence.json` | `BLOCKED` |
 | `android_build` | Android Build Validation | `PASS` | `C:\Users\srina\AppData\Local\Programs\Python\Python313\python.exe -c import pathlib; apk=pathlib.Path('android/app/build/outputs/apk/debug/app-debug.apk'); print('APK exists:', apk.exists())` | `0` | `reports\final_completion\android_build_evidence.json` | `PASS` |
 | `android_runtime` | Android Runtime E2E | `NOT_EXECUTED` | `None` | `0` | `docs/ANDROID_RUNTIME_VALIDATION.md` | `NOT_EXECUTED` |
 | `signal_only` | Signal-Only Safety (REAL_TRADING=FALSE) | `PASS` | `C:\Users\srina\AppData\Local\Programs\Python\Python313\python.exe -m pytest tests/test_trading_safety_invariant.py -q` | `0` | `reports\final_completion\signal_only_evidence.json` | `PASS` |
