@@ -4,6 +4,7 @@ import json
 import pandas as pd
 from pathlib import Path
 from datetime import datetime, timezone
+from typing import Optional
 
 def validate_semantic_pit_layer(layer_id: str, pit_dir: str = "data/processed/pit", raw_root: str = "data/raw/nse", requested_date: Optional[str] = None) -> tuple[bool, str | None]:
     pit_p = Path(pit_dir)
@@ -18,7 +19,8 @@ def validate_semantic_pit_layer(layer_id: str, pit_dir: str = "data/processed/pi
     for line in manifest_p.read_text(encoding="utf-8").splitlines():
         if line.strip():
             try: manifest.append(json.loads(line))
-            except Exception: pass
+            except Exception as e:
+                return False, f"MANIFEST_PARSE_ERROR: malformed jsonl record: {e}"
 
     if layer_id in ("cash_bhavcopy", "cash"):
         dataset_name = "cm_bhavcopy"
@@ -77,4 +79,4 @@ def validate_all_required_pit_layers(requested_date: Optional[str] = None) -> tu
         valid, reason = validate_semantic_pit_layer(layer, requested_date=requested_date)
         if not valid:
             blocking_reasons.append(f"{layer}: {reason}")
-    return len(blocking_enclosed := blocking_reasons) == 0, blocking_reasons
+    return len(blocking_reasons) == 0, blocking_reasons
