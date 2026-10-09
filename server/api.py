@@ -187,6 +187,10 @@ def published_signals():
     from nse_signal.data.production_gate import evaluate_production_gate
     from nse_signal.signals.contract import CanonicalSignal
 
+    gate = evaluate_production_gate()
+    is_eligible = gate.get('eligible', False)
+    blockers = gate.get('blocking_reasons', [])
+
     # Signals are read-only dashboard artifacts; the dashboard never creates a live order.
     candidates = [ROOT / 'data' / 'processed' / 'published_signals.json', ROOT / 'reports' / 'published_signals.json']
     for p in candidates:
@@ -197,39 +201,17 @@ def published_signals():
                     if data.get('real_trading', False) is True or data.get('signal_only', True) is not True:
                         raise ValueError('published signal artifact violates signal-only safety boundary')
                     items = data.get('items', [])
+                    live_items = data.get('live_items', [])
+                    historical_items = data.get('historical_items', [])
                 elif isinstance(data, list):
                     items = data
+                    live_items = []
+                    historical_items = []
                 else:
                     items = []
+                    live_items = []
+                    historical_items = []
 
-                for item in items:
-                    if isinstance(item, dict):
-                        if item.get('real_trading', False) is True or item.get('signal_only', True) is not True:
-                            raise ValueError('published signal artifact violates signal-only safety boundary')
-            except HTTPException:
-                raise
-            except Exception as exc:
-                raise HTTPException(500, f'Invalid published signal artifact: {p.name}: {exc}') from exc
-
-    gate = evaluate_production_gate()
-    if not gate.get('eligible', False):
-        return {
-            'signal_only': True,
-            'real_trading': False,
-            'live_items': [],
-            'historical_items': [],
-            'items': [],
-            'publication_gate': 'BLOCKED',
-            'blockers': gate.get('blocking_reasons', [])
-        }
-
-    for p in candidates:
-        if p.exists():
-            try:
-                data = json.loads(p.read_text(encoding='utf-8'))
-                items = data if isinstance(data, list) else data.get('items', [])
-                live_items = data.get('live_items', []) if isinstance(data, dict) else []
-                historical_items = data.get('historical_items', []) if isinstance(data, dict) else []
                 if not isinstance(items, list):
                     raise ValueError('published signal artifact must contain a list of items')
                 safe = []
@@ -255,11 +237,14 @@ def published_signals():
                     'live_items': live_items,
                     'historical_items': historical_items,
                     'items': safe,
-                    'publication_gate': 'PASS'
+                    'publication_gate': 'PASS' if is_eligible else 'BLOCKED',
+                    'blockers': blockers
                 }
+            except HTTPException:
+                raise
             except Exception as exc:
                 raise HTTPException(500, f'Invalid published signal artifact: {p.name}: {exc}') from exc
-    return {'signal_only': True, 'real_trading': False, 'live_items': [], 'historical_items': [], 'items': [], 'publication_gate': 'BLOCKED'}
+    return {'signal_only': True, 'real_trading': False, 'live_items': [], 'historical_items': [], 'items': [], 'publication_gate': 'PASS' if is_eligible else 'BLOCKED', 'blockers': blockers}
 
 @app.post('/signal')
 @app.post('/api/signal')
