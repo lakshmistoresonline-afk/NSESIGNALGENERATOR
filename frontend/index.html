@@ -12,7 +12,7 @@
 <section class="hero"><div><p class="eyebrow">PRODUCTION CONTROL PLANE</p><h2>Research integrity before signal publication.</h2><p class="sub">Only data that passes the configured point-in-time and publication controls can support a published paper signal.</p></div><div id="pitStatus" class="status blocked"><span class="dot"></span><div><b>PIT BLOCKED</b><small>Loading…</small></div></div></section>
 <section class="cards">
 <div class="metric"><div class="metric-icon">▦</div><div><span>PIT readiness</span><strong id="pitValue">—</strong></div></div>
-<div class="metric"><div class="metric-icon">◎</div><div><span>Published signals</span><strong id="signalValue">—</strong></div></div>
+<div class="metric"><div class="metric-icon">◎</div><div><span>Total signals</span><strong id="signalValue">—</strong></div></div>
 <div class="metric"><div class="metric-icon">◈</div><div><span>Impact-cost cap</span><strong id="impactValue">—</strong></div></div>
 <div class="metric"><div class="metric-icon">◇</div><div><span>PIT universe</span><strong id="universeValue">BLOCKED</strong></div></div>
 <div class="metric"><div class="metric-icon">✓</div><div><span>Provenance</span><strong id="provenanceValue">BLOCKED</strong></div></div>
@@ -22,7 +22,28 @@
 <div class="panel"><div class="panel-head"><h3>Required PIT layers</h3></div><div id="layers" class="layers"></div><div id="issues" class="issues hidden"></div></div>
 <div class="panel"><div class="panel-head"><h3>Dataset coverage</h3><span id="manifest">Manifest: —</span></div><div id="coverage" class="coverage"></div></div>
 </section>
-<section class="panel"><div class="panel-head"><div><h3>Published paper signals</h3><span>Only signals that passed the publication layer appear here.</span></div></div><div id="signals"></div></section>
+
+<!-- Separate Live & Historical Signal Sections -->
+<section class="panel">
+  <div class="panel-head">
+    <div>
+      <h3>🟢 Live Signals</h3>
+      <span>Real-time signals generated from live authoritative market sessions.</span>
+    </div>
+  </div>
+  <div id="liveSignals"></div>
+</section>
+
+<section class="panel">
+  <div class="panel-head">
+    <div>
+      <h3>📜 Historical Signals</h3>
+      <span>Point-in-time backtested signals generated across historical dates.</span>
+    </div>
+  </div>
+  <div id="historicalSignals"></div>
+</section>
+
 <section class="footer-note">✓ <span><b>Safety boundary:</b> REAL_TRADING = FALSE. This application is signal-only and contains no broker execution path.</span></section>
 </main>
 <script src="/dashboard/app.js"></script>

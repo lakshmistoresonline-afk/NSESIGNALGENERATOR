@@ -187,6 +187,8 @@ def published_signals():
             try:
                 data = json.loads(p.read_text(encoding='utf-8'))
                 items = data if isinstance(data, list) else data.get('items', [])
+                live_items = data.get('live_items', []) if isinstance(data, dict) else []
+                historical_items = data.get('historical_items', []) if isinstance(data, dict) else []
                 if not isinstance(items, list):
                     raise ValueError('published signal artifact must contain a list of items')
                 safe = []
@@ -196,10 +198,19 @@ def published_signals():
                     if item.get('real_trading', False) is True or item.get('signal_only', True) is not True:
                         raise ValueError('published signal artifact violates signal-only safety boundary')
                     safe.append(item)
-                return {'signal_only': True, 'real_trading': False, 'items': safe}
+                if not live_items and not historical_items:
+                    live_items = [it for it in safe if it.get('generation_mode') == 'LIVE']
+                    historical_items = [it for it in safe if it.get('generation_mode') == 'HISTORICAL']
+                return {
+                    'signal_only': True,
+                    'real_trading': False,
+                    'live_items': live_items,
+                    'historical_items': historical_items,
+                    'items': safe
+                }
             except Exception as exc:
                 raise HTTPException(500, f'Invalid published signal artifact: {p.name}: {exc}') from exc
-    return {'signal_only': True, 'real_trading': False, 'items': []}
+    return {'signal_only': True, 'real_trading': False, 'live_items': [], 'historical_items': [], 'items': []}
 
 @app.post('/signal')
 @app.post('/api/signal')
