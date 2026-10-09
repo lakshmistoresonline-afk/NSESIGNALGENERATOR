@@ -1,10 +1,12 @@
-"""True Machine-Verified Production Gate: Enforces strict evidence existence, non-empty schema, input hashes, and generation timestamps across all 20 required categories without hard-coded statuses."""
+"""True Machine-Verified Production Gate: Enforces strict evidence existence, non-empty schema, input hashes, and generation timestamps across all required categories with fail-closed non-pass blocking semantics."""
 from __future__ import annotations
 import json
 import hashlib
 from pathlib import Path
 from datetime import datetime, timezone
 import pandas as pd
+from .nse.pit_layer_validator import validate_semantic_pit_layer
+from ..utils.config import load_config
 
 def _sha256(path: Path) -> str:
     if not path.exists(): return "MISSING_FILE"
@@ -58,10 +60,12 @@ def _validate_historical_coverage() -> tuple[str, str | None]:
         return "BLOCKED", f"MISSING_OR_EMPTY_EVIDENCE: {err}"
     try:
         data = json.loads(inv_path.read_text(encoding="utf-8"))
+        if data.get("status") != "PASS":
+            return "BLOCKED", "HISTORICAL_COVERAGE_NOT_PASS"
         layers = data.get("layers", {})
         for l_id, l_meta in layers.items():
-            if l_meta.get("completeness_ratio", 0.0) < 0.50:
-                return "BLOCKED", f"LAYER_COVERAGE_INSUFFICIENT ({l_id}): completeness ratio {l_meta.get('completeness_ratio')} < 0.50"
+            if l_meta.get("completeness_ratio", 0.0) < 1.0:
+                return "BLOCKED", f"LAYER_COVERAGE_INSUFFICIENT ({l_id}): completeness ratio {l_meta.get('completeness_ratio')} < 1.0"
         return "PASS", None
     except Exception as e:
         return "BLOCKED", f"HISTORICAL_INVENTORY_PARSE_ERROR: {e}"
@@ -131,25 +135,27 @@ def _validate_pit_temporal_integrity() -> tuple[str, str | None]:
         return "BLOCKED", f"FINAL_TEMPORAL_VALIDATION_EXCEPTION: {e}"
 
 def _validate_required_layers() -> tuple[str, str | None]:
-    mat_path = Path("data/reference/feature_data_dependency_matrix.json")
-    valid, err = _validate_evidence_artifact(mat_path)
-    if not valid:
-        return "BLOCKED", f"MISSING_OR_EMPTY_EVIDENCE: {err}"
+    cfg = load_config()
+    required_layers = cfg.get("nse_data_integration", {}).get("production_required_layers", ["cash", "security_master"])
 
-    pit_root = Path("data/processed/nse_pit")
-    required_files = [pit_root / "cash_daily.csv", pit_root / "security_master.csv"]
-    missing_files = [str(f) for f in required_files if not f.exists() or f.stat().st_size == 0]
-    if missing_files:
-        return "BLOCKED", f"MANDATORY_PIT_LAYERS_MISSING_OR_EMPTY: {missing_files}"
+    # Map friendly layer names to semantic layer IDs
+    layer_map = {
+        "cash": "cm_bhavcopy",
+        "security_master": "security_master",
+        "derivatives": "fo_bhavcopy",
+        "index": "index_close",
+        "delivery": "delivery",
+        "corporate_adjustments": "corporate_actions",
+        "surveillance": "restrictions"
+    }
 
-    try:
-        from nse_signal.data.nse.pit_layer_validator import validate_all_required_pit_layers
-        v_ok, v_blocking = validate_all_required_pit_layers()
-        if not v_ok:
-            return "BLOCKED", f"SEMANTIC_PIT_LAYER_VALIDATION_FAIL: {v_blocking}"
-        return "PASS", None
-    except Exception as e:
-        return "BLOCKED", f"SEMANTIC_PIT_LAYER_EXCEPTION: {e}"
+    for l_key in required_layers:
+        s_id = layer_map.get(l_key, l_key)
+        ok, reason = validate_semantic_pit_layer(s_id)
+        if not ok:
+            return "BLOCKED", f"REQUIRED_PIT_LAYER_MISSING_OR_INVALID ({l_key} -> {s_id}): {reason}"
+
+    return "PASS", None
 
 def _validate_corporate_actions() -> tuple[str, str | None]:
     corp_path = Path("data/processed/nse_pit/corporate_action_validation.json")
@@ -340,8 +346,9 @@ def evaluate_production_gate(root_dir: str = ".") -> dict:
             "failure_reason": reason
         }
         evaluated_categories.append(item)
-        if status in ("BLOCKED", "FAIL"):
-            blocking_reasons.append(f"{name}: {reason}")
+        # Requirement 1: Any status that is not "PASS" (such as "NOT_EXECUTED", "BLOCKED", "FAIL", "PARTIAL", "UNKNOWN", "ERROR") must block production eligibility!
+        if status != "PASS":
+            blocking_reasons.append(f"{name}: Status is {status} ({reason or 'N/A'})")
 
     overall_status = "BLOCKED" if blocking_reasons else "PASS"
     eligible = (overall_status == "PASS")
@@ -369,7 +376,7 @@ def evaluate_production_gate(root_dir: str = ".") -> dict:
     processed_gate_path.write_text(json.dumps(gate_result, indent=2, sort_keys=True), encoding="utf-8")
     root.joinpath("FINAL_PRODUCTION_GATE.json").write_text(json.dumps(gate_result, indent=2, sort_keys=True), encoding="utf-8")
 
-    md_lines = ["# Production Gate Evidence Matrix (Prompt 39 Required PIT Layer Contract Verified)\n"]
+    md_lines = ["# Production Gate Evidence Matrix (Fail-Closed Non-Pass Blocking Verified)\n"]
     md_lines.append(f"- **Evaluated At**: {gate_result['evaluated_at']}")
     md_lines.append(f"- **Overall Status**: `{gate_result['status']}`")
     md_lines.append(f"- **Eligible**: `{gate_result['eligible']}`\n")
