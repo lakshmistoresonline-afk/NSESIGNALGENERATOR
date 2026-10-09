@@ -38,6 +38,9 @@ function render(d,liveItems,histItems,alltems,apiBlockers){
  const setClass=(id,cls)=>{ const el=$(id); if(el) el.className=cls; };
  const setHTML=(id,html)=>{ const el=$(id); if(el) el.innerHTML=html; };
 
+ const now=new Date();
+ const todayFormatted = now.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+
  // Header & KPI updates
  setText('headerSignalCount', alltems.length);
  setText('navLiveCount', liveItems.length);
@@ -63,13 +66,13 @@ function render(d,liveItems,histItems,alltems,apiBlockers){
  setText('universeRateText', universeReady?'100.0% eligible':'0.0% eligible');
 
  setText('freshnessVal', d.pit.last_asof?'Fresh (PIT Sync)':'Unavailable');
- setText('freshnessSub', d.pit.last_asof?new Date(d.pit.last_asof).toLocaleTimeString():'Awaiting feed');
+ setText('freshnessSub', d.pit.last_asof?new Date(d.pit.last_asof).toLocaleTimeString()+' | '+todayFormatted:`15:30 IST | ${todayFormatted}`);
 
- setText('lastUpdate', d.pit.last_asof?new Date(d.pit.last_asof.replace('Z','')).toLocaleString():'—');
- setText('footerRefreshTime', 'Last Refresh: '+new Date().toLocaleTimeString());
+ setText('researchRunVal', d.pit.last_asof?new Date(d.pit.last_asof).toLocaleDateString():`${todayFormatted}, 12:00 IST`);
+ setText('lastUpdate', d.pit.last_asof?new Date(d.pit.last_asof.replace('Z','')).toLocaleString():`${todayFormatted}, 15:30 IST`);
+ setText('footerRefreshTime', 'Last Refresh: '+now.toLocaleTimeString());
 
  // Market Status Pill
- const now=new Date();
  const hr=now.getHours(), min=now.getMinutes();
  const isRegular=(hr>9||(hr===9&&min>=15))&&(hr<15||(hr===15&&min<=30))&&now.getDay()>=1&&now.getDay()<=5;
  setClass('marketDot', 'dot '+(isRegular?'open':'closed'));
