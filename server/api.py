@@ -180,6 +180,21 @@ def dashboard():
 
 @app.get('/api/dashboard/signals')
 def published_signals():
+    from nse_signal.data.production_gate import evaluate_production_gate
+    from nse_signal.signals.contract import CanonicalSignal
+
+    gate = evaluate_production_gate()
+    if not gate.get('eligible', False):
+        return {
+            'signal_only': True,
+            'real_trading': False,
+            'live_items': [],
+            'historical_items': [],
+            'items': [],
+            'publication_gate': 'BLOCKED',
+            'blockers': gate.get('blocking_reasons', [])
+        }
+
     # Signals are read-only dashboard artifacts; the dashboard never creates a live order.
     candidates = [ROOT / 'data' / 'processed' / 'published_signals.json', ROOT / 'reports' / 'published_signals.json']
     for p in candidates:
@@ -197,6 +212,13 @@ def published_signals():
                         continue
                     if item.get('real_trading', False) is True or item.get('signal_only', True) is not True:
                         raise ValueError('published signal artifact violates signal-only safety boundary')
+                    try:
+                        sig = CanonicalSignal.from_dict(item)
+                        valid, _ = sig.validate()
+                        if not valid:
+                            continue
+                    except Exception:
+                        continue
                     safe.append(item)
                 if not live_items and not historical_items:
                     live_items = [it for it in safe if it.get('generation_mode') == 'LIVE']
@@ -206,11 +228,12 @@ def published_signals():
                     'real_trading': False,
                     'live_items': live_items,
                     'historical_items': historical_items,
-                    'items': safe
+                    'items': safe,
+                    'publication_gate': 'PASS'
                 }
             except Exception as exc:
                 raise HTTPException(500, f'Invalid published signal artifact: {p.name}: {exc}') from exc
-    return {'signal_only': True, 'real_trading': False, 'live_items': [], 'historical_items': [], 'items': []}
+    return {'signal_only': True, 'real_trading': False, 'live_items': [], 'historical_items': [], 'items': [], 'publication_gate': 'BLOCKED'}
 
 @app.post('/signal')
 @app.post('/api/signal')
