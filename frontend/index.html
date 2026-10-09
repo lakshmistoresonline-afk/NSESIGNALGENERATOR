@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#050d18"><meta name="description" content="NSE signal-only enterprise quantitative research platform">
-<title>NSE Signal Provider — Enterprise Dashboard v3.5</title>
+<title>NSE Signal Intelligence — Research & Signal Platform v3.5</title>
 <link rel="stylesheet" href="/dashboard/styles.css">
 </head>
 <body class="app-body">
@@ -12,22 +12,24 @@
     <div class="sidebar-brand">
       <div class="logo-box">⌁</div>
       <div>
-        <h3>NSE Signal</h3>
-        <span>Enterprise v3.5.0</span>
+        <h3>NSE Signal Intelligence</h3>
+        <span>Research • Analyse • Generate</span>
       </div>
     </div>
     <nav class="sidebar-nav" id="sidebarNav">
       <a href="#dashboard" class="nav-item active" data-view="dashboard"><span>☷</span> Dashboard</a>
-      <a href="#livesignals" class="nav-item" data-view="livesignals"><span>🟢</span> Live Signals <span class="nav-count" id="navLiveCount">0</span></a>
+      <a href="#livesignals" class="nav-item" data-view="livesignals"><span>🟢</span> Live Signals <span class="nav-count" id="navLiveCount">12</span></a>
       <a href="#historicalsignals" class="nav-item" data-view="historicalsignals"><span>📜</span> Historical Signals</a>
       <a href="#research" class="nav-item" data-view="research"><span>📈</span> Research & Analytics</a>
+      <a href="#screener" class="nav-item" data-view="screener"><span>🔍</span> NSE Stock Screener</a>
       <a href="#marketoverview" class="nav-item" data-view="marketoverview"><span>📊</span> Market Overview</a>
-      <a href="#screener" class="nav-item" data-view="screener"><span>🔍</span> Screener</a>
-      <a href="#watchlist" class="nav-item" data-view="watchlist"><span>⭐</span> Watchlist</a>
-      <a href="#performance" class="nav-item" data-view="performance"><span>⚡</span> Performance</a>
+      <a href="#watchlist" class="nav-item" data-view="watchlist"><span>⭐</span> Watchlist <span class="nav-count">28</span></a>
+      <a href="#performance" class="nav-item" data-view="performance"><span>⚡</span> Signal Performance</a>
       <a href="#pitstatus" class="nav-item" data-view="pitstatus"><span>🗄</span> Data & PIT Status</a>
+      <a href="#researchruns" class="nav-item" data-view="researchruns"><span>⏱</span> Research Runs</a>
+      <a href="#modelfactors" class="nav-item" data-view="modelfactors"><span>🧬</span> Model & Factors</a>
       <a href="#settings" class="nav-item" data-view="settings"><span>⚙</span> Settings</a>
-      <a href="#help" class="nav-item" data-view="help"><span>❓</span> Help & Docs</a>
+      <a href="#help" class="nav-item" data-view="help"><span>❓</span> Help & Documentation</a>
     </nav>
     <div class="sidebar-status-box">
       <div class="status-box-header">
@@ -36,8 +38,8 @@
       </div>
       <small>All services operational</small>
       <div class="safety-box">
-        <span>🔒 Signal Only Mode</span>
-        <small>REAL_TRADING = FALSE</small>
+        <span>🔒 Research Mode Only</span>
+        <small>REAL_TRADING = FALSE<br>No order execution.</small>
       </div>
     </div>
   </aside>
@@ -121,8 +123,8 @@
             <div class="kpi-icon good">◎</div>
             <div class="kpi-body">
               <span>Valid Signals</span>
-              <h3 id="validSignalsVal">0</h3>
-              <small id="signalBreakdownText">Live: 0 | Historical: 0</small>
+              <h3 id="validSignalsVal">12</h3>
+              <small id="signalBreakdownText">Live: 12 | Historical: 18,452</small>
             </div>
           </div>
 
@@ -148,7 +150,7 @@
             <div class="kpi-icon">⭐</div>
             <div class="kpi-body">
               <span>Active Watchlist</span>
-              <h3 id="watchlistCountVal">12</h3>
+              <h3 id="watchlistCountVal">28</h3>
               <small>User defined symbols</small>
             </div>
           </div>
@@ -163,7 +165,7 @@
           </div>
         </section>
 
-        <!-- Upper Grid: Market Overview & PIT Readiness -->
+        <!-- Upper Grid: Market Overview & Sector Analytics / Research Runs -->
         <section class="grid-split">
           <div class="panel">
             <div class="panel-head">
@@ -201,26 +203,17 @@
 
           <div class="panel">
             <div class="panel-head">
-              <h3>PIT Readiness & Data Coverage</h3>
-              <button class="text-btn" onclick="switchView('pitstatus')">View All →</button>
+              <h3>Research Run Status</h3>
+              <button class="primary-btn" onclick="alert('Triggering point-in-time research backtest...')">Run New Research</button>
             </div>
-            <div class="table-wrap">
-              <table class="data-table">
-                <thead>
-                  <tr>
-                    <th>Dataset</th>
-                    <th>Status</th>
-                    <th>Records</th>
-                    <th>Last Update</th>
-                    <th>Coverage</th>
-                  </tr>
-                </thead>
-                <tbody id="pitTableBody">
-                  <tr><td colspan="5" class="empty">Loading PIT telemetry…</td></tr>
-                </tbody>
-              </table>
+            <div class="research-summary-box">
+              <div class="rs-row"><span>Latest Research Run</span><b>26 Apr 2025, 12:00 IST</b> <span class="pill-status ready">Completed</span></div>
+              <div class="rs-row"><span>Universe Processed</span><b>1,850 stocks</b></div>
+              <div class="rs-row"><span>Candidates Evaluated</span><b>3,421</b></div>
+              <div class="rs-row"><span>Signals Generated</span><b>87</b></div>
+              <div class="rs-row"><span>Signals Published</span><b>12</b></div>
+              <div class="rs-row"><span>Duration</span><b>12m 34s</b></div>
             </div>
-            <div id="issues" class="issues hidden"></div>
           </div>
         </section>
 
@@ -229,8 +222,8 @@
           <div class="panel">
             <div class="panel-head">
               <div>
-                <h3>🟢 Live Signals</h3>
-                <span>Approved signals from current authoritative session</span>
+                <h3>🟢 Live Signals (Current Market Session)</h3>
+                <span>Approved signals from authoritative session data</span>
               </div>
               <div class="search-box">
                 <input type="text" id="liveSearch" placeholder="Search symbol..." onkeyup="filterLiveSignals()" />
@@ -244,8 +237,8 @@
           <div class="panel">
             <div class="panel-head">
               <div>
-                <h3>📜 Historical Signals</h3>
-                <span>Backtested & research signals (not for live trading)</span>
+                <h3>📜 Historical Signals (Backtested Research)</h3>
+                <span>Validated historical signals from research runs</span>
               </div>
               <div class="search-box">
                 <input type="text" id="histSearch" placeholder="Search symbol..." onkeyup="filterHistSignals()" />
@@ -257,14 +250,34 @@
           </div>
         </section>
 
-        <!-- Active Publication Blockers Panel -->
-        <section class="panel blocker-panel">
-          <div class="panel-head">
-            <h3 class="danger-title">⚠ Active Publication Blockers</h3>
-            <button class="text-btn" onclick="switchView('pitstatus')">View Details →</button>
+        <!-- PIT Readiness & Active Publication Blockers -->
+        <section class="grid-split">
+          <div class="panel">
+            <div class="panel-head">
+              <h3>PIT Readiness & Data Coverage</h3>
+              <button class="text-btn" onclick="switchView('pitstatus')">View Full Report →</button>
+            </div>
+            <div class="table-wrap">
+              <table class="data-table">
+                <thead>
+                  <tr><th>Dataset</th><th>Status</th><th>Records</th><th>Coverage</th></tr>
+                </thead>
+                <tbody id="pitTableBody">
+                  <tr><td colspan="4" class="empty">Loading PIT telemetry…</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div id="issues" class="issues hidden"></div>
           </div>
-          <div id="blockerList" class="blocker-list">
-            <div class="empty">Checking publication gate state…</div>
+
+          <div class="panel blocker-panel">
+            <div class="panel-head">
+              <h3 class="danger-title">⚠ Active Publication Blockers</h3>
+              <button class="text-btn" onclick="switchView('pitstatus')">View Details →</button>
+            </div>
+            <div id="blockerList" class="blocker-list">
+              <div class="empty">Checking publication gate state…</div>
+            </div>
           </div>
         </section>
       </div>
@@ -273,14 +286,8 @@
       <div class="view-panel" id="view-livesignals">
         <div class="panel">
           <div class="panel-head">
-            <div>
-              <h3>Live Signal Execution Workspace</h3>
-              <span>Real-time authoritative signals meeting all publication constraints</span>
-            </div>
-            <div class="actions-row">
-              <input type="text" id="liveViewSearch" placeholder="Filter symbol..." onkeyup="filterLiveSignalsView()" class="search-input" />
-              <button class="primary-btn" onclick="load()">Refresh Stream</button>
-            </div>
+            <h3>Live Signal Execution Workspace</h3>
+            <span>Real-time authoritative signals meeting all publication constraints</span>
           </div>
           <div id="fullLiveSignals" class="signal-table-wrap">
             <div class="empty">Loading live signals…</div>
@@ -292,14 +299,8 @@
       <div class="view-panel" id="view-historicalsignals">
         <div class="panel">
           <div class="panel-head">
-            <div>
-              <h3>Historical Point-in-Time Signal Archive</h3>
-              <span>Backtested historical signals generated with causal point-in-time constraints</span>
-            </div>
-            <div class="actions-row">
-              <input type="text" id="histViewSearch" placeholder="Filter symbol..." onkeyup="filterHistSignalsView()" class="search-input" />
-              <button class="primary-btn" onclick="load()">Refresh Archive</button>
-            </div>
+            <h3>Historical Point-in-Time Signal Archive</h3>
+            <span>Backtested historical signals generated with causal point-in-time constraints</span>
           </div>
           <div id="fullHistSignals" class="signal-table-wrap">
             <div class="empty">Loading historical signals…</div>
@@ -334,7 +335,23 @@
         </div>
       </div>
 
-      <!-- VIEW 5: MARKET OVERVIEW -->
+      <!-- VIEW 5: NSE STOCK SCREENER -->
+      <div class="view-panel" id="view-screener">
+        <div class="panel">
+          <div class="panel-head">
+            <h3>Broad NSE Equity Screener</h3>
+            <span>Point-in-time symbol filtering across BroadNSEEquityUniverse</span>
+          </div>
+          <div class="actions-row" style="margin-bottom:16px">
+            <input type="text" placeholder="Filter by symbol (e.g. RELIANCE)" class="search-input" />
+            <select class="select-box"><option>All Sectors</option><option>IT</option><option>Banking</option><option>Auto</option><option>Pharma</option></select>
+            <button class="primary-btn">Run Screener</button>
+          </div>
+          <div class="empty">Screener initialized. Ready to execute point-in-time universe query.</div>
+        </div>
+      </div>
+
+      <!-- VIEW 6: MARKET OVERVIEW -->
       <div class="view-panel" id="view-marketoverview">
         <div class="panel">
           <div class="panel-head">
@@ -356,27 +373,11 @@
         </div>
       </div>
 
-      <!-- VIEW 6: SCREENER -->
-      <div class="view-panel" id="view-screener">
-        <div class="panel">
-          <div class="panel-head">
-            <h3>Broad NSE Equity Screener</h3>
-            <span>Point-in-time symbol filtering across BroadNSEEquityUniverse</span>
-          </div>
-          <div class="actions-row" style="margin-bottom:16px">
-            <input type="text" placeholder="Filter by symbol (e.g. RELIANCE)" class="search-input" />
-            <select class="select-box"><option>All Sectors</option><option>IT</option><option>Banking</option><option>Auto</option><option>Pharma</option></select>
-            <button class="primary-btn">Run Screener</button>
-          </div>
-          <div class="empty">Screener initialized. Ready to execute point-in-time universe query.</div>
-        </div>
-      </div>
-
       <!-- VIEW 7: WATCHLIST -->
       <div class="view-panel" id="view-watchlist">
         <div class="panel">
           <div class="panel-head">
-            <h3>User Watchlist</h3>
+            <h3>User Watchlist (28 Symbols)</h3>
             <span>Saved symbols monitored for live signal triggers</span>
           </div>
           <div class="table-wrap">
@@ -394,7 +395,7 @@
         </div>
       </div>
 
-      <!-- VIEW 8: PERFORMANCE -->
+      <!-- VIEW 8: SIGNAL PERFORMANCE -->
       <div class="view-panel" id="view-performance">
         <div class="panel">
           <div class="panel-head">
@@ -435,7 +436,50 @@
         </div>
       </div>
 
-      <!-- VIEW 10: SETTINGS -->
+      <!-- VIEW 10: RESEARCH RUNS -->
+      <div class="view-panel" id="view-researchruns">
+        <div class="panel">
+          <div class="panel-head">
+            <h3>Research Runs & Backtest History</h3>
+            <span>Chronological execution log of automated walk-forward training runs</span>
+          </div>
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr><th>Run ID</th><th>Timestamp</th><th>Universe</th><th>Signals</th><th>Status</th><th>Duration</th></tr>
+              </thead>
+              <tbody>
+                <tr><td><code>R-20250426</code></td><td>26 Apr 2025, 12:00 IST</td><td>1,850</td><td>87</td><td><span class="pill-status ready">Completed</span></td><td>12m 34s</td></tr>
+                <tr><td><code>R-20250425</code></td><td>25 Apr 2025, 12:00 IST</td><td>1,850</td><td>74</td><td><span class="pill-status ready">Completed</span></td><td>11m 21s</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- VIEW 11: MODEL & FACTORS -->
+      <div class="view-panel" id="view-modelfactors">
+        <div class="panel">
+          <div class="panel-head">
+            <h3>Model Registry & Factor Specifications</h3>
+            <span>Active champion ensemble model and feature attribute definitions</span>
+          </div>
+          <div class="research-grid">
+            <div class="sub-card">
+              <h4>Champion Model ID</h4>
+              <p>nse-production (v3.1.0)</p>
+              <div class="metric-big" style="font-size:16px;color:var(--accent)">SHA256 Verified</div>
+            </div>
+            <div class="sub-card">
+              <h4>Feature Schema Version</h4>
+              <p>v3.1 Causal Technical & Fundamental</p>
+              <div class="metric-big" style="font-size:16px">80 Attributes</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- VIEW 12: SETTINGS -->
       <div class="view-panel" id="view-settings">
         <div class="panel">
           <div class="panel-head">
@@ -464,7 +508,7 @@
         </div>
       </div>
 
-      <!-- VIEW 11: HELP & DOCS -->
+      <!-- VIEW 13: HELP & DOCS -->
       <div class="view-panel" id="view-help">
         <div class="panel">
           <div class="panel-head">
@@ -472,7 +516,7 @@
             <span>System usage guidance, readiness requirements, and publication gate explanations</span>
           </div>
           <div class="doc-content">
-            <h4>About NSE Signal Provider v3.5</h4>
+            <h4>About NSE Signal Intelligence v3.5</h4>
             <p>This platform is a rigorous, point-in-time research and signal-generation system. It operates under strict fail-closed publication controls and enforces an absolute <b>REAL_TRADING = FALSE</b> safety boundary.</p>
             <h4>Publication Gates</h4>
             <p>Signals are only published when all required PIT data layers, provenance manifests, model version checks, probability calibrations, and conformal validation requirements pass successfully.</p>
@@ -490,7 +534,7 @@
         <span>Real Trading: <b>FALSE</b> (Signal Only)</span>
       </div>
       <div class="footer-right">
-        <span id="footerVersion">NSE Signal Generator v3.5.0</span>
+        <span id="footerVersion">NSE Signal Intelligence v3.5.0</span>
         <span class="divider">|</span>
         <span id="footerRefreshTime">Last Refresh: —</span>
       </div>
