@@ -23,7 +23,7 @@ FEATURES = [
     'avg_price','median_price','typical_price','weighted_close','ha_open','ha_high','ha_low','ha_close','gap_pct','intraday_range_pct','body_pct','upper_wick_pct','lower_wick_pct',
     'high_20_breakout','low_20_breakdown','accbands_upper','accbands_lower','accbands_mid','linearreg_slope_20','linearreg_intercept_20','linearreg_angle_20','tsf_20','percentile_20','percent_rank_20',
     # Volume / flow
-    'obv','obv_z','ad_line','ad_osc','pvt','vwap','vwap_gap','force_index_13','market_facilitation','pvi','nvi','pvo','pvo_signal','pvo_hist','rvol_20','volume_z','volume_ratio_20','volume_ratio_50','dollar_volume','turnover_z','cmf_20',
+    'obv','obv_z','ad_line','ad_osc','pvt','vwap','vwap_gap','force_index_13','market_facilitation','pvi','nvi','pvo','pvo_signal','pvo_hist','rvol_20','volume_z','volume_ratio_20','volume_ratio_50','dollar_volume','turnover_z','cmf_20','squeeze_on','squeeze_momentum','anchored_vwap_20','avwap_gap_20',
     # Returns
     'return_1d','return_3d','return_5d','return_20d','return_60d','return_120d',
     # Other

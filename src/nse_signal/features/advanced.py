@@ -1,4 +1,4 @@
-"""Causal market-structure and microstructure proxies derived only from OHLCV.
+"""Causal market-structure, microstructure, and advanced alpha proxies (TTM Squeeze, Anchored VWAP, and volume profile features) derived only from OHLCV.
 
 These are deliberately lightweight substitutes for richer point-in-time feeds.
 They never use future observations and should still be validated OOS.
@@ -47,6 +47,30 @@ def add_advanced_features(df: pd.DataFrame) -> pd.DataFrame:
     x["range_compression_20"] = (h-l).rolling(5).mean() / (h-l).rolling(20).mean()
     x["close_to_high_20"] = (c - h.rolling(20).min()) / (h.rolling(20).max() - h.rolling(20).min()).replace(0, np.nan)
     x["distance_from_20d_vwap"] = c / ((c*v).rolling(20).sum()/v.rolling(20).sum().replace(0,np.nan)) - 1
+
+    # TTM Squeeze Volatility Compression & Momentum
+    sma = c.rolling(20).mean()
+    std = c.rolling(20).std()
+    upper_bb = sma + (2.0 * std)
+    lower_bb = sma - (2.0 * std)
+    tr = pd.concat([h - l, (h - c.shift(1)).abs(), (l - c.shift(1)).abs()], axis=1).max(axis=1)
+    atr = tr.rolling(20).mean()
+    ema = c.ewm(span=20, adjust=False).mean()
+    upper_kc = ema + (1.5 * atr)
+    lower_kc = ema - (1.5 * atr)
+    x["squeeze_on"] = ((lower_bb > lower_kc) & (upper_bb < upper_kc)).astype(float)
+    highest_high = h.rolling(20).max()
+    lowest_low = l.rolling(20).min()
+    avg_hl = (highest_high + lowest_low) / 2
+    val = c - ((avg_hl + sma) / 2)
+    x["squeeze_momentum"] = val.ewm(span=5, adjust=False).mean()
+
+    # Anchored VWAP / Volume Profile proxy (rolling 20-period anchor)
+    typical_price = (h + l + c) / 3
+    pv = typical_price * v
+    x["anchored_vwap_20"] = pv.rolling(20).sum() / v.rolling(20).sum().replace(0, np.nan)
+    x["avwap_gap_20"] = c / x["anchored_vwap_20"] - 1.0
+
     return x.replace([np.inf, -np.inf], np.nan)
 
 # Optional stationarity-preserving transforms. Imported lazily to keep the core
