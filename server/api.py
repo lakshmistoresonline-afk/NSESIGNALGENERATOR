@@ -161,6 +161,10 @@ def root_redirect():
 def health():
     return {'status': 'ok', 'version': app.version, 'product': 'NSE signal provider', 'signal_only': True, 'real_trading': False}
 
+@app.get('/favicon.ico', include_in_schema=False)
+def favicon():
+    return Response(status_code=204)
+
 @app.get('/dashboard', include_in_schema=False)
 @app.get('/dashboard/', include_in_schema=False)
 def dashboard_page():
