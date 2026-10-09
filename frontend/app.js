@@ -81,10 +81,28 @@ function render(d,liveItems,histItems,alltems,apiBlockers){
  const maxRows=Math.max(1,...Object.values(rows));
 
  if(!Object.keys(layers).length){
-  setHTML('pitTableBody', `<tr><td colspan="5" class="empty">No PIT layer manifest available.</td></tr>`);
+  setHTML('pitTableBody', `<tr><td colspan="4" class="empty">No PIT layer manifest available.</td></tr>`);
   setHTML('fullPitStatus', `<div class="empty">No PIT telemetry available.</div>`);
  } else {
-  const tableHtml = Object.entries(layers).map(([k,v])=>{
+  const dashHtml = Object.entries(layers).map(([k,v])=>{
+   const cnt=rows[k]||0;
+   const pct=Math.min(100,Math.max(2,Math.round((cnt/maxRows)*100)));
+   const statusClass=v?'ready':'blocked';
+   const statusText=v?'Healthy':'Blocked';
+   return `<tr>
+    <td><b>${esc(k.replaceAll('_',' '))}</b></td>
+    <td><span class="pill-status ${statusClass}">${statusText}</span></td>
+    <td>${Number(cnt).toLocaleString()}</td>
+    <td>
+     <div class="cov-bar-wrap">
+      <div class="cov-track"><div class="cov-fill" style="width:${pct}%"></div></div>
+      <small>${v?'100%':'0%'}</small>
+     </div>
+    </td>
+   </tr>`;
+  }).join('');
+
+  const fullHtml = Object.entries(layers).map(([k,v])=>{
    const cnt=rows[k]||0;
    const pct=Math.min(100,Math.max(2,Math.round((cnt/maxRows)*100)));
    const statusClass=v?'ready':'blocked';
@@ -102,8 +120,9 @@ function render(d,liveItems,histItems,alltems,apiBlockers){
     </td>
    </tr>`;
   }).join('');
-  setHTML('pitTableBody', tableHtml);
-  setHTML('fullPitStatus', `<table class="data-table"><thead><tr><th>Dataset</th><th>Status</th><th>Records</th><th>Last Update</th><th>Coverage</th></tr></thead><tbody>${tableHtml}</tbody></table>`);
+
+  setHTML('pitTableBody', dashHtml);
+  setHTML('fullPitStatus', `<table class="data-table"><thead><tr><th>Dataset</th><th>Status</th><th>Records</th><th>Last Update</th><th>Coverage</th></tr></thead><tbody>${fullHtml}</tbody></table>`);
  }
 
  // Active Blockers panel
