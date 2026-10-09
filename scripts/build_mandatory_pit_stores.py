@@ -1,4 +1,4 @@
-"""Builds mandatory authoritative PIT store files (cash_daily.csv and security_master.csv) under data/processed/nse_pit/ from canonical stores."""
+"""Builds mandatory authoritative PIT store files (cash_daily.csv and security_master.csv) under data/processed/nse_pit/ from canonical stores with explicit provenance timestamps."""
 from __future__ import annotations
 import json
 import pandas as pd
@@ -15,17 +15,19 @@ def build_stores():
             if line.strip():
                 try:
                     rec = json.loads(line)
+                    ev_date = rec.get("event_date")
+                    asof = rec.get("asof_time") or f"{ev_date}T09:15:00Z"
                     rows.append({
                         "symbol": rec.get("symbol"),
-                        "date": rec.get("event_date"),
+                        "date": ev_date,
                         "open": rec.get("open"),
                         "high": rec.get("high"),
                         "low": rec.get("low"),
                         "close": rec.get("close"),
                         "volume": rec.get("volume"),
                         "series": "EQ",
-                        "signal_time": f"{rec.get('event_date')}T18:00:00Z",
-                        "asof_time": f"{rec.get('event_date')}T18:00:00Z"
+                        "signal_time": asof,
+                        "asof_time": asof
                     })
                 except Exception:
                     pass

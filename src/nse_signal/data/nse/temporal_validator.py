@@ -1,4 +1,4 @@
-"""Authoritative Point-in-Time Temporal Validator: Validates real repository data against strict [effective_from, effective_to) and source_available_at <= decision_timestamp rules."""
+"""Authoritative Point-in-Time Temporal Validator: Validates real repository data against strict [effective_from, effective_to) and source_available_at <= decision_timestamp rules without event_date timestamp fabrication."""
 from __future__ import annotations
 import json
 import pandas as pd
@@ -32,7 +32,7 @@ def execute_pit_temporal_validation(pit_dir: str = "data/processed/pit") -> dict
         else:
             valid_records += 100
 
-    # 2. Audit canonical price bars
+    # 2. Audit canonical price bars without event_date timestamp fallback
     bars_path = pit_p / "canonical_price_bars.jsonl"
     if bars_path.exists():
         now_ts = pd.Timestamp.now(timezone.utc).tz_convert(None)
@@ -41,14 +41,13 @@ def execute_pit_temporal_validation(pit_dir: str = "data/processed/pit") -> dict
             total_records += 1
             try:
                 rec = json.loads(line)
-                ev_date = rec.get("event_date")
-                sig_time = rec.get("signal_time") or ev_date
-                asof = rec.get("asof_time") or ev_date
+                sig_time = rec.get("signal_time")
+                asof = rec.get("asof_time")
 
-                if not asof:
+                if not asof or not sig_time:
                     missing_provenance_count += 1
                     invalid_records += 1
-                    sample_violations.append(f"Missing provenance asof_time for bar {rec.get('symbol')}")
+                    sample_violations.append(f"Missing authoritative provenance asof_time or signal_time for bar {rec.get('symbol')}")
                 else:
                     asof_ts = pd.to_datetime(asof, utc=True, errors="coerce")
                     if pd.isna(asof_ts):
@@ -104,6 +103,7 @@ def execute_pit_temporal_validation(pit_dir: str = "data/processed/pit") -> dict
     }
 
     out_path = pit_p / "temporal_validation.json"
+    out_path.parent.mkdir(parents=True, exist_ok=True)
     out_path.write_text(json.dumps(result, indent=2, sort_keys=True), encoding="utf-8")
     return result
 
