@@ -2,49 +2,244 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#07111f"><meta name="description" content="NSE signal-only PIT dashboard">
-<title>NSE Signal Provider</title><link rel="stylesheet" href="/dashboard/styles.css">
+<meta name="theme-color" content="#050d18"><meta name="description" content="NSE signal-only enterprise quantitative research platform">
+<title>NSE Signal Provider — Enterprise Dashboard</title>
+<link rel="stylesheet" href="/dashboard/styles.css">
 </head>
-<body>
-<header class="topbar"><div class="brand"><div class="logo">⌁</div><div><h1>NSE Signal Provider</h1><span>Point-in-time research & signal dashboard</span></div></div><div class="top-actions"><span class="badge safe">✓ SIGNAL ONLY</span><button id="refresh" class="icon-btn" title="Refresh">↻</button></div></header>
-<div id="error" class="banner hidden"></div>
-<main>
-<section class="hero"><div><p class="eyebrow">PRODUCTION CONTROL PLANE</p><h2>Research integrity before signal publication.</h2><p class="sub">Only data that passes the configured point-in-time and publication controls can support a published paper signal.</p></div><div id="pitStatus" class="status blocked"><span class="dot"></span><div><b>PIT BLOCKED</b><small>Loading…</small></div></div></section>
-<section class="cards">
-<div class="metric"><div class="metric-icon">▦</div><div><span>PIT readiness</span><strong id="pitValue">—</strong></div></div>
-<div class="metric"><div class="metric-icon">◎</div><div><span>Total signals</span><strong id="signalValue">—</strong></div></div>
-<div class="metric"><div class="metric-icon">◈</div><div><span>Impact-cost cap</span><strong id="impactValue">—</strong></div></div>
-<div class="metric"><div class="metric-icon">◇</div><div><span>PIT universe</span><strong id="universeValue">BLOCKED</strong></div></div>
-<div class="metric"><div class="metric-icon">✓</div><div><span>Provenance</span><strong id="provenanceValue">BLOCKED</strong></div></div>
-<div class="metric"><div class="metric-icon good">✓</div><div><span>Real trading</span><strong id="tradingValue">DISABLED</strong></div></div>
-</section>
-<section class="grid2">
-<div class="panel"><div class="panel-head"><h3>Required PIT layers</h3></div><div id="layers" class="layers"></div><div id="issues" class="issues hidden"></div></div>
-<div class="panel"><div class="panel-head"><h3>Dataset coverage</h3><span id="manifest">Manifest: —</span></div><div id="coverage" class="coverage"></div></div>
-</section>
-
-<!-- Separate Live & Historical Signal Sections -->
-<section class="panel">
-  <div class="panel-head">
-    <div>
-      <h3>🟢 Live Signals</h3>
-      <span>Real-time signals generated from live authoritative market sessions.</span>
+<body class="app-body">
+  <!-- Sidebar Navigation -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="logo-box">⌁</div>
+      <div>
+        <h3>NSE Signal</h3>
+        <span>Enterprise v3.5</span>
+      </div>
     </div>
-  </div>
-  <div id="liveSignals"></div>
-</section>
-
-<section class="panel">
-  <div class="panel-head">
-    <div>
-      <h3>📜 Historical Signals</h3>
-      <span>Point-in-time backtested signals generated across historical dates.</span>
+    <nav class="sidebar-nav">
+      <a href="#dashboard" class="nav-item active"><span>☷</span> Dashboard</a>
+      <a href="#signals" class="nav-item"><span>◎</span> Signals</a>
+      <a href="#research" class="nav-item"><span>📈</span> Research & Analytics</a>
+      <a href="#performance" class="nav-item"><span>📊</span> Performance</a>
+      <a href="#watchlist" class="nav-item"><span>⭐</span> Watchlist</a>
+      <a href="#settings" class="nav-item"><span>⚙</span> Settings</a>
+    </nav>
+    <div class="sidebar-card">
+      <div class="card-glow"></div>
+      <h4>Institutional Grade NSE Signal Research</h4>
+      <p>Data • Research • Discipline</p>
     </div>
-  </div>
-  <div id="historicalSignals"></div>
-</section>
+  </aside>
 
-<section class="footer-note">✓ <span><b>Safety boundary:</b> REAL_TRADING = FALSE. This application is signal-only and contains no broker execution path.</span></section>
-</main>
+  <!-- Main Content Area -->
+  <div class="main-shell">
+    <!-- Top Header -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <h2>Dashboard</h2>
+        <span class="subtitle">Real-time signal research and publication status</span>
+      </div>
+      <div class="topbar-right">
+        <div class="market-pill" id="marketStatusPill">
+          <span class="dot closed" id="marketDot"></span>
+          <span id="marketStatusText">NSE Market Closed</span>
+        </div>
+        <div class="meta-item">
+          <small>Last Update</small>
+          <span id="lastUpdate">—</span>
+        </div>
+        <div class="meta-item">
+          <small>Signals Generated</small>
+          <span id="headerSignalCount">0</span>
+        </div>
+        <div class="pub-badge blocked" id="headerPubBadge">
+          PUBLICATION BLOCKED
+        </div>
+        <button id="refresh" class="icon-btn" title="Refresh Dashboard">↻</button>
+        <div class="user-avatar" title="Demo Analyst">DA</div>
+      </div>
+    </header>
+
+    <div id="error" class="banner hidden"></div>
+
+    <main class="dashboard-content">
+      <!-- KPI Cards Row -->
+      <section class="kpi-grid">
+        <div class="kpi-card danger" id="kpiPubStatus">
+          <div class="kpi-icon">🛡</div>
+          <div class="kpi-body">
+            <span>Publication Status</span>
+            <h3 id="pubStatusVal">BLOCKED</h3>
+            <small id="blockerCountText">0 Active Blockers</small>
+          </div>
+        </div>
+
+        <div class="kpi-card" id="kpiValidSignals">
+          <div class="kpi-icon good">◎</div>
+          <div class="kpi-body">
+            <span>Valid Signals</span>
+            <h3 id="validSignalsVal">0</h3>
+            <small id="signalBreakdownText">Live: 0 | Historical: 0</small>
+          </div>
+        </div>
+
+        <div class="kpi-card" id="kpiEligibleUniverse">
+          <div class="kpi-icon">👥</div>
+          <div class="kpi-body">
+            <span>Eligible Universe</span>
+            <h3 id="universeCountVal">0 / 1,850</h3>
+            <small id="universeRateText">0.0% eligible</small>
+          </div>
+        </div>
+
+        <div class="kpi-card" id="kpiDataFreshness">
+          <div class="kpi-icon">⏰</div>
+          <div class="kpi-body">
+            <span>Data Freshness</span>
+            <h3 id="freshnessVal">Unavailable</h3>
+            <small id="freshnessSub">Awaiting sync</small>
+          </div>
+        </div>
+
+        <div class="kpi-card" id="kpiResearchRun">
+          <div class="kpi-icon">📊</div>
+          <div class="kpi-body">
+            <span>Latest Research Run</span>
+            <h3 id="researchRunVal">—</h3>
+            <small>Walk-forward OOS</small>
+          </div>
+        </div>
+
+        <div class="kpi-card warning" id="kpiActiveBlockers">
+          <div class="kpi-icon">⚠</div>
+          <div class="kpi-body">
+            <span>Active Blockers</span>
+            <h3 id="activeBlockerVal">0</h3>
+            <small>View details</small>
+          </div>
+        </div>
+      </section>
+
+      <!-- Upper Grid: PIT Readiness & Market Overview -->
+      <section class="grid-split">
+        <div class="panel">
+          <div class="panel-head">
+            <h3>PIT Readiness & Data Coverage</h3>
+            <span class="pipeline-status blocked" id="pipelineStatusBadge">Data Pipeline Blocked</span>
+          </div>
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Dataset</th>
+                  <th>Status</th>
+                  <th>Records</th>
+                  <th>Coverage</th>
+                </tr>
+              </thead>
+              <tbody id="pitTableBody">
+                <tr><td colspan="4" class="empty">Loading PIT layer telemetry…</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div id="issues" class="issues hidden"></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head">
+            <h3>Market & Signal Overview</h3>
+            <div class="timeframe-pills">
+              <button class="tf-btn active">1D</button>
+              <button class="tf-btn">1W</button>
+              <button class="tf-btn">1M</button>
+              <button class="tf-btn">3M</button>
+            </div>
+          </div>
+          <div class="chart-container">
+            <div class="chart-header">
+              <span>NIFTY 50 Benchmark & Signal Overlay</span>
+              <strong class="chart-price" id="chartPrice">23,402.15 <span class="pos">+112.60 (+0.48%)</span></strong>
+            </div>
+            <div class="chart-svg-wrap">
+              <svg viewBox="0 0 600 200" class="mock-chart" preserveAspectRatio="none">
+                <defs>
+                  <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#63e6be" stop-opacity="0.3"/>
+                    <stop offset="100%" stop-color="#63e6be" stop-opacity="0.0"/>
+                  </linearGradient>
+                </defs>
+                <path d="M 0 150 Q 100 120 200 130 T 400 80 T 600 50 L 600 200 L 0 200 Z" fill="url(#chartGrad)"/>
+                <path d="M 0 150 Q 100 120 200 130 T 400 80 T 600 50" fill="none" stroke="#63e6be" stroke-width="2.5"/>
+              </svg>
+            </div>
+            <div class="chart-footer-axis">
+              <span>09:15</span><span>10:00</span><span>11:00</span><span>12:00</span><span>13:00</span><span>14:00</span><span>15:00</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Separate Live and Historical Signal Workspaces -->
+      <section class="grid-split-signals">
+        <div class="panel">
+          <div class="panel-head">
+            <div>
+              <h3>🟢 Live Signals</h3>
+              <span>Approved signals from current authoritative session</span>
+            </div>
+            <div class="search-box">
+              <input type="text" id="liveSearch" placeholder="Search symbol..." />
+            </div>
+          </div>
+          <div id="liveSignals" class="signal-table-wrap">
+            <div class="empty">NO LIVE SIGNALS — publication gate is blocked.</div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head">
+            <div>
+              <h3>📜 Historical Signals</h3>
+              <span>Backtested point-in-time research signals</span>
+            </div>
+            <div class="search-box">
+              <input type="text" id="histSearch" placeholder="Search symbol..." />
+            </div>
+          </div>
+          <div id="historicalSignals" class="signal-table-wrap">
+            <div class="empty">NO HISTORICAL SIGNALS available.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Active Publication Blockers Panel -->
+      <section class="panel blocker-panel" id="blockerPanel">
+        <div class="panel-head">
+          <h3 class="danger-title">⚠ Active Publication Blockers</h3>
+          <span class="badge blocked">Fail-Closed Enforcement</span>
+        </div>
+        <div id="blockerList" class="blocker-list">
+          <div class="empty">Checking publication gate state…</div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Professional Footer / Safety Boundary -->
+    <footer class="app-footer">
+      <div class="footer-left">
+        <span class="status-dot-green"></span>
+        <span>System Healthy</span>
+        <span class="divider">|</span>
+        <span>Real Trading: <b>FALSE</b> (Signal Only)</span>
+      </div>
+      <div class="footer-right">
+        <span id="footerVersion">NSE Signal Generator v3.5.0</span>
+        <span class="divider">|</span>
+        <span id="footerRefreshTime">Last Refresh: —</span>
+      </div>
+    </footer>
+  </div>
+
 <script src="/dashboard/app.js"></script>
-</body></html>
+</body>
+</html>
