@@ -103,26 +103,26 @@ def _manifest_count() -> int:
 def dashboard_overview():
     layers = {}
     rows = {}
+    from nse_signal.data.db import table_row_count
     for layer in REQUIRED_LAYERS:
-        # Canonical store names are mapped to the layer identifiers used in config.
-        aliases = {
-            'cash': ['cash_daily', 'cm_bhavcopy'],
-            'index': ['index_close', 'indices'],
-            'derivatives': ['fo_daily', 'fo_bhavcopy', 'derivatives_context'],
-            'security_master': ['security_master'],
-            'delivery': ['delivery'],
-            'impact_cost': ['impact_cost'],
-            'breadth': ['breadth'],
-            'india_vix': ['india_vix'],
-            'surveillance': ['surveillance'],
-            'price_bands': ['price_bands'],
-            'short_selling': ['short_selling'],
-            'corporate_adjustments': ['corporate_adjustments'],
-            'corporate_events': ['corporate_events', 'corporate_filings_actions'],
-        }[layer]
-        found = next((a for a in aliases if (PIT_ROOT / f'{a}.csv').exists()), None)
-        layers[layer] = found is not None
-        rows[layer] = _csv_rows(found) if found else 0
+        db_tbl = {
+            'cash': 'cash_daily',
+            'index': 'index_close',
+            'derivatives': 'fo_bhavcopy',
+            'security_master': 'security_master',
+            'delivery': 'delivery',
+            'impact_cost': 'impact_cost',
+            'breadth': 'breadth',
+            'india_vix': 'india_vix',
+            'surveillance': 'surveillance',
+            'price_bands': 'price_bands',
+            'short_selling': 'short_selling',
+            'corporate_adjustments': 'corporate_adjustments',
+            'corporate_events': 'corporate_events'
+        }.get(layer, layer)
+        cnt = table_row_count(db_tbl)
+        layers[layer] = cnt > 0
+        rows[layer] = cnt
     issues = [f'{k} dataset missing' for k, ok in layers.items() if not ok]
     membership = ROOT / 'data' / 'reference' / 'nifty200_membership.csv'
     membership_ready = False

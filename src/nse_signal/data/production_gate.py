@@ -140,13 +140,20 @@ def _validate_required_layers() -> tuple[str, str | None]:
 
     # Map friendly layer names to semantic layer IDs
     layer_map = {
-        "cash": "cm_bhavcopy",
+        "cash": "cash_daily",
         "security_master": "security_master",
         "derivatives": "fo_bhavcopy",
         "index": "index_close",
         "delivery": "delivery",
-        "corporate_adjustments": "corporate_actions",
-        "surveillance": "restrictions"
+        "impact_cost": "impact_cost",
+        "breadth": "breadth",
+        "india_vix": "india_vix",
+        "surveillance": "surveillance",
+        "price_bands": "price_bands",
+        "short_selling": "short_selling",
+        "corporate_adjustments": "corporate_adjustments",
+        "corporate_events": "corporate_events",
+        "cm_bhavcopy": "cash_daily"
     }
 
     for l_key in required_layers:
