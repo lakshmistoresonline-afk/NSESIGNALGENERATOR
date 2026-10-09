@@ -151,6 +151,11 @@ def dashboard_overview():
         'warnings': [] if not issues else ['Production publication remains blocked until every required PIT layer, universe, and provenance requirement is satisfied.'],
     }
 
+@app.get('/', include_in_schema=False)
+def root_redirect():
+    from fastapi.responses import RedirectResponse
+    return RedirectResponse(url='/dashboard')
+
 @app.get('/health')
 @app.get('/api/health')
 def health():
