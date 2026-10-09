@@ -187,6 +187,30 @@ def published_signals():
     from nse_signal.data.production_gate import evaluate_production_gate
     from nse_signal.signals.contract import CanonicalSignal
 
+    # Signals are read-only dashboard artifacts; the dashboard never creates a live order.
+    candidates = [ROOT / 'data' / 'processed' / 'published_signals.json', ROOT / 'reports' / 'published_signals.json']
+    for p in candidates:
+        if p.exists():
+            try:
+                data = json.loads(p.read_text(encoding='utf-8'))
+                if isinstance(data, dict):
+                    if data.get('real_trading', False) is True or data.get('signal_only', True) is not True:
+                        raise ValueError('published signal artifact violates signal-only safety boundary')
+                    items = data.get('items', [])
+                elif isinstance(data, list):
+                    items = data
+                else:
+                    items = []
+
+                for item in items:
+                    if isinstance(item, dict):
+                        if item.get('real_trading', False) is True or item.get('signal_only', True) is not True:
+                            raise ValueError('published signal artifact violates signal-only safety boundary')
+            except HTTPException:
+                raise
+            except Exception as exc:
+                raise HTTPException(500, f'Invalid published signal artifact: {p.name}: {exc}') from exc
+
     gate = evaluate_production_gate()
     if not gate.get('eligible', False):
         return {
@@ -199,8 +223,6 @@ def published_signals():
             'blockers': gate.get('blocking_reasons', [])
         }
 
-    # Signals are read-only dashboard artifacts; the dashboard never creates a live order.
-    candidates = [ROOT / 'data' / 'processed' / 'published_signals.json', ROOT / 'reports' / 'published_signals.json']
     for p in candidates:
         if p.exists():
             try:

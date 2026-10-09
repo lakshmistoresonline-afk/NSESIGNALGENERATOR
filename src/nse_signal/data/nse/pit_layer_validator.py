@@ -1,4 +1,4 @@
-"""Semantic PIT Layer Validator: Validates required semantic layers across SQLite database tables, raw provenance, date coverage, and identity linkage."""
+"""Semantic PIT Layer Validator: Validates required semantic layers across SQLite database tables, raw provenance, date coverage, and identity linkage with strict empty-file rejection."""
 from __future__ import annotations
 import json
 import pandas as pd
@@ -8,6 +8,7 @@ from typing import Optional
 from ..db import table_row_count
 
 def validate_semantic_pit_layer(layer_id: str, pit_dir: str = "data/processed/pit", raw_root: str = "data/raw/nse", requested_date: Optional[str] = None) -> tuple[bool, str | None]:
+    pit_p = Path(pit_dir)
     raw_p = Path(raw_root)
     manifest_p = raw_p / "manifest.jsonl"
 
@@ -21,26 +22,19 @@ def validate_semantic_pit_layer(layer_id: str, pit_dir: str = "data/processed/pi
             except Exception as e:
                 return False, f"MANIFEST_PARSE_ERROR: malformed jsonl record: {e}"
 
-    db_table_map = {
-        "cash_bhavcopy": "cash_daily",
-        "cash": "cash_daily",
-        "security_master": "security_master",
-        "fo_bhavcopy": "fo_bhavcopy",
-        "index_close": "index_close",
-        "index": "index_close",
-        "delivery": "delivery",
-        "impact_cost": "impact_cost",
-        "breadth": "breadth",
-        "india_vix": "india_vix",
-        "surveillance": "surveillance",
-        "price_bands": "price_bands",
-        "short_selling": "short_selling",
-        "corporate_actions": "corporate_adjustments",
-        "corporate_adjustments": "corporate_adjustments",
-        "corporate_events": "corporate_events"
-    }
+    if layer_id in ("cash_bhavcopy", "cash"):
+        canonical_file = pit_p / "canonical_price_bars.jsonl"
+        db_table = "cash_daily"
+    elif layer_id in ("security_master",):
+        canonical_file = pit_p / "canonical_instruments.jsonl"
+        db_table = "security_master"
+    else:
+        canonical_file = pit_p / f"{layer_id}.jsonl"
+        db_table = layer_id
 
-    db_table = db_table_map.get(layer_id, layer_id)
+    # If canonical file explicitly exists and is 0 bytes (empty), fail closed immediately
+    if canonical_file.exists() and canonical_file.stat().st_size == 0:
+        return False, f"CANONICAL_REPRESENTATION_EMPTY: {canonical_file}"
 
     cnt = table_row_count(db_table)
     if cnt <= 0:
