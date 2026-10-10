@@ -15,9 +15,7 @@ def backtest_oos(pred: pd.DataFrame, cost_bps=30, slippage_bps=10, threshold=.55
     required={'open','close','p_up'}
     x=pred.copy()
     if not required.issubset(x.columns):
-        if 'close' not in x.columns:
-            raise ValueError("backtest requires close and p_up")
-        x['open']=x['close']
+        raise ValueError(f"backtest requires valid open, close, and p_up columns, missing: {required - set(x.columns)}")
     cost=(cost_bps+slippage_bps)/10000.0
 
     def _one(g, symbol=None):
