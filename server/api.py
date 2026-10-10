@@ -182,6 +182,25 @@ def dashboard_js():
 def dashboard():
     return dashboard_overview()
 
+@app.get('/api/dashboard/tickers')
+def market_tickers():
+    from nse_signal.data.db import get_connection
+    import pandas as pd
+    conn = get_connection()
+    try:
+        df = pd.read_sql_query("SELECT symbol, close, date FROM index_close ORDER BY date DESC LIMIT 10", conn)
+        if df.empty:
+            return {"tickers": []}
+        tickers = []
+        for sym, grp in df.groupby('symbol'):
+            row = grp.iloc[0]
+            tickers.append({"symbol": str(sym), "price": float(row['close']), "date": str(row['date'])})
+        return {"tickers": tickers}
+    except Exception:
+        return {"tickers": []}
+    finally:
+        conn.close()
+
 @app.get('/api/dashboard/signals')
 def published_signals():
     from nse_signal.data.production_gate import evaluate_production_gate

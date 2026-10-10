@@ -12,26 +12,27 @@ async function load(){
  const errEl = $('error');
  if(errEl) errEl.classList.add('hidden');
  try{
-  const [o,s]=await Promise.all([fetch('/api/dashboard/overview'),fetch('/api/dashboard/signals')]);
+  const [o,s,t]=await Promise.all([fetch('/api/dashboard/overview'),fetch('/api/dashboard/signals'),fetch('/api/dashboard/tickers')]);
   if(!o.ok) throw new Error('Dashboard API '+o.status);
   const d=await o.json(), sig=s.ok?await s.json():{live_items:[],historical_items:[],items:[],blockers:[]};
+  const tics=t.ok?await t.json():{tickers:[]};
   cachedData = d;
   cachedLive = sig.live_items||[];
   cachedHist = sig.historical_items||[];
   cachedAll = sig.items||[];
   cachedBlockers = sig.blockers||[];
 
-  render(d, cachedLive, cachedHist, cachedAll, cachedBlockers);
+  render(d, cachedLive, cachedHist, cachedAll, cachedBlockers, tics.tickers);
  }catch(e){
   if(errEl){
    errEl.textContent=(e.message||'Unable to reach API')+'. Dashboard is fail-closed; no live signal is inferred.';
    errEl.classList.remove('hidden');
   }
-  render({pit:{ready:false,required_layers:{},rows:{},issues:['API unavailable'],last_asof:null},signals:{count:0},publication:{max_impact_cost_bps:100},real_trading:false,provenance:{manifest_records:0}},[],[],[],['API unavailable']);
+  render({pit:{ready:false,required_layers:{},rows:{},issues:['API unavailable'],last_asof:null},signals:{count:0},publication:{max_impact_cost_bps:100},real_trading:false,provenance:{manifest_records:0}},[],[],[],['API unavailable'],[]);
  }
 }
 
-function render(d,liveItems,histItems,alltems,apiBlockers){
+function render(d,liveItems,histItems,alltems,apiBlockers,tickers){
  const ready=!!d.pit.ready;
 
  const setText=(id,val)=>{ const el=$(id); if(el) el.textContent=val; };
@@ -41,7 +42,20 @@ function render(d,liveItems,histItems,alltems,apiBlockers){
  const now=new Date();
  const todayFormatted = now.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
 
- // Header & KPI updates
+ // Header & Tickers from database
+ if(tickers && tickers.length>0){
+  const nifty=tickers.find(t=>t.symbol.toUpperCase().includes('NIFTY') && !t.symbol.toUpperCase().includes('BANK'));
+  const bank=tickers.find(t=>t.symbol.toUpperCase().includes('BANK'));
+  const vix=tickers.find(t=>t.symbol.toUpperCase().includes('VIX') || t.symbol.toUpperCase().includes('INDIA'));
+  if(nifty) setText('tickNifty', fmt(nifty.price));
+  if(bank) setText('tickBank', fmt(bank.price));
+  if(vix) setText('tickVix', fmt(vix.price));
+ } else {
+  setText('tickNifty', '—');
+  setText('tickBank', '—');
+  setText('tickVix', '—');
+ }
+
  setText('headerSignalCount', alltems.length);
  setText('navLiveCount', liveItems.length);
 
