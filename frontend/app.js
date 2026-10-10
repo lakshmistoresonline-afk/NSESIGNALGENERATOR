@@ -233,16 +233,49 @@ function renderSectorStrength(mode){
 
 function updateChartTimeframe(tf){
  const priceEl=document.querySelector('.chart-price');
- if(!priceEl) return;
- const changes={
-  '1D': '23,402.15 <span class="pos">+112.60 (+0.74%)</span>',
-  '1W': '23,850.10 <span class="pos">+412.50 (+1.76%)</span>',
-  '1M': '24,210.80 <span class="pos">+921.40 (+3.95%)</span>',
-  '3M': '21,900.50 <span class="pos">+1,501.65 (+7.36%)</span>',
-  '1Y': '19,850.20 <span class="pos">+3,551.95 (+21.09%)</span>'
+ const pathEl=document.querySelector('.mock-chart path:nth-of-type(2)');
+ const areaEl=document.querySelector('.mock-chart path:nth-of-type(1)');
+ const axisEl=document.querySelector('.chart-footer-axis');
+
+ const dataConfig={
+  '1D': {
+   price: '23,402.15 <span class="pos">+112.60 (+0.74%)</span>',
+   path: 'M 0 150 Q 100 120 200 130 T 400 80 T 600 50',
+   area: 'M 0 150 Q 100 120 200 130 T 400 80 T 600 50 L 600 200 L 0 200 Z',
+   axis: '<span>09:15</span><span>10:00</span><span>11:00</span><span>12:00</span><span>13:00</span><span>14:00</span><span>15:30</span>'
+  },
+  '1W': {
+   price: '23,850.10 <span class="pos">+412.50 (+1.76%)</span>',
+   path: 'M 0 160 Q 120 100 240 110 T 480 60 T 600 40',
+   area: 'M 0 160 Q 120 100 240 110 T 480 60 T 600 40 L 600 200 L 0 200 Z',
+   axis: '<span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span>'
+  },
+  '1M': {
+   price: '24,210.80 <span class="pos">+921.40 (+3.95%)</span>',
+   path: 'M 0 170 Q 150 140 300 90 T 500 70 T 600 30',
+   area: 'M 0 170 Q 150 140 300 90 T 500 70 T 600 30 L 600 200 L 0 200 Z',
+   axis: '<span>Week 1</span><span>Week 2</span><span>Week 3</span><span>Week 4</span>'
+  },
+  '3M': {
+   price: '21,900.50 <span class="pos">+1,501.65 (+7.36%)</span>',
+   path: 'M 0 180 Q 150 160 300 110 T 450 70 T 600 35',
+   area: 'M 0 180 Q 150 160 300 110 T 450 70 T 600 35 L 600 200 L 0 200 Z',
+   axis: '<span>Month 1</span><span>Month 2</span><span>Month 3</span>'
+  },
+  '1Y': {
+   price: '19,850.20 <span class="pos">+3,551.95 (+21.09%)</span>',
+   path: 'M 0 190 Q 150 140 300 100 T 450 60 T 600 20',
+   area: 'M 0 190 Q 150 140 300 100 T 450 60 T 600 20 L 600 200 L 0 200 Z',
+   axis: '<span>Q1</span><span>Q2</span><span>Q3</span><span>Q4</span>'
+  }
  };
- if(changes[tf]){
-  priceEl.innerHTML=changes[tf];
+
+ const cfg=dataConfig[tf];
+ if(cfg){
+  if(priceEl) priceEl.innerHTML=cfg.price;
+  if(pathEl) pathEl.setAttribute('d', cfg.path);
+  if(areaEl) areaEl.setAttribute('d', cfg.area);
+  if(axisEl) axisEl.innerHTML=cfg.axis;
  }
 }
 
