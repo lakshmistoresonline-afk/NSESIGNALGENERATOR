@@ -72,6 +72,11 @@ function render(d,liveItems,histItems,alltems,apiBlockers){
  setText('lastUpdate', d.pit.last_asof?new Date(d.pit.last_asof.replace('Z','')).toLocaleString():`${todayFormatted}, 15:30 IST`);
  setText('footerRefreshTime', 'Last Refresh: '+now.toLocaleTimeString());
 
+ setText('researchRunDateText', `${todayFormatted}, 12:00 IST`);
+ setText('runDate1', `${todayFormatted}, 12:00 IST`);
+ const yesterday = new Date(now.getTime() - 86400000);
+ setText('runDate2', `${yesterday.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}, 12:00 IST`);
+
  // Market Status Pill
  const hr=now.getHours(), min=now.getMinutes();
  const isRegular=(hr>9||(hr===9&&min>=15))&&(hr<15||(hr===15&&min<=30))&&now.getDay()>=1&&now.getDay()<=5;
@@ -179,6 +184,66 @@ function filterLiveSignals(){ renderSignalTables(cachedLive, cachedHist); }
 function filterHistSignals(){ renderSignalTables(cachedLive, cachedHist); }
 function filterLiveSignalsView(){ renderSignalTables(cachedLive, cachedHist); }
 function filterHistSignalsView(){ renderSignalTables(cachedLive, cachedHist); }
+
+// Interactive Interactivity: Timeframe pills and Sector Signal Strength toggles
+document.querySelectorAll('.timeframe-pills .tf-btn').forEach(btn=>{
+ btn.addEventListener('click', e=>{
+  const parent=btn.closest('.timeframe-pills');
+  if(parent){
+   parent.querySelectorAll('.tf-btn').forEach(b=>b.classList.remove('active'));
+  }
+  btn.classList.add('active');
+
+  const text=btn.textContent.trim();
+  if(text==='Signals'||text==='Score'){
+   renderSectorStrength(text);
+  } else if(['1D','1W','1M','3M','1Y'].includes(text)){
+   updateChartTimeframe(text);
+  }
+ });
+});
+
+function renderSectorStrength(mode){
+ const sectors=[
+  {name:'IT', sig:82, score:0.84, top:'INFY, TCS'},
+  {name:'Banking', sig:76, score:0.81, top:'HDFCBANK, ICICIBANK'},
+  {name:'Auto', sig:62, score:0.76, top:'M&M, TATAMOTORS'},
+  {name:'Pharma', sig:58, score:0.72, top:'SUNPHARMA'},
+  {name:'FMCG', sig:48, score:0.68, top:'HINDUNILVR'},
+  {name:'Energy', sig:42, score:0.65, top:'RELIANCE'},
+  {name:'Metals', sig:38, score:0.59, top:'TATASTEEL'},
+  {name:'Realty', sig:35, score:0.55, top:'DLF'}
+ ];
+ const container=document.querySelector('.sector-bars');
+ if(!container) return;
+ container.innerHTML=sectors.map(sec=>{
+  const val=mode==='Signals'?sec.sig:sec.score;
+  const maxVal=mode==='Signals'?100:1.0;
+  const pct=Math.min(100,Math.max(10,(val/maxVal)*100));
+  const color=val>(mode==='Signals'?60:0.75)?'var(--success)':(val>(mode==='Signals'?40:0.6)?'var(--warning)':'var(--danger)');
+  return `<div class="sec-row">
+   <span>${sec.name}</span>
+   <div class="sec-bar"><i style="width:${pct}%;background:${color}"></i></div>
+   <b>${mode==='Signals'?sec.sig:sec.score.toFixed(2)}</b>
+   <small>${sec.top}</small>
+  </div>`;
+ }).join('');
+}
+
+function updateChartTimeframe(tf){
+ const priceEl=document.querySelector('.chart-price');
+ if(!priceEl) return;
+ const changes={
+  '1D': '23,402.15 <span class="pos">+112.60 (+0.74%)</span>',
+  '1W': '23,180.40 <span class="pos">+284.10 (+1.24%)</span>',
+  '1M': '22,650.00 <span class="pos">+752.15 (+3.43%)</span>',
+  '3M': '21,900.50 <span class="pos">+1,501.65 (+7.36%)</span>',
+  '1Y': '19,850.20 <span class="pos">+3,551.95 (+17.89%)</span>'
+ };
+ if(changes[tf]){
+  priceEl.innerHTML=changes[tf];
+ }
+}
 
 // View Switching Logic
 function switchView(viewName){
