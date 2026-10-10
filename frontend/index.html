@@ -165,11 +165,11 @@
           </div>
         </section>
 
-        <!-- Upper Grid: Market Overview & Sector Analytics / Research Runs -->
+        <!-- Upper Grid: Market Overview & Sector Signal Strength -->
         <section class="grid-split">
           <div class="panel">
             <div class="panel-head">
-              <h3>Market & Signal Overview</h3>
+              <h3>NIFTY 50 — Market Overview</h3>
               <div class="timeframe-pills">
                 <button class="tf-btn active">1D</button>
                 <button class="tf-btn">1W</button>
@@ -180,7 +180,7 @@
             </div>
             <div class="chart-container">
               <div class="chart-header">
-                <span>NIFTY 50</span>
+                <span>Live market data (when available) — Uses verified data source</span>
                 <strong class="chart-price">23,402.15 <span class="pos">+112.60 (+0.74%)</span></strong>
               </div>
               <div class="chart-svg-wrap">
@@ -203,16 +203,24 @@
 
           <div class="panel">
             <div class="panel-head">
-              <h3>Research Run Status</h3>
-              <button class="primary-btn" onclick="alert('Triggering point-in-time research backtest...')">Run New Research</button>
+              <div>
+                <h3>Sector Signal Strength</h3>
+                <span class="sub">Today's signal density and strength</span>
+              </div>
+              <div class="timeframe-pills">
+                <button class="tf-btn active">Signals</button>
+                <button class="tf-btn">Score</button>
+              </div>
             </div>
-            <div class="research-summary-box">
-              <div class="rs-row"><span>Latest Research Run</span><b id="researchRunDateText">26 Apr 2025, 12:00 IST</b> <span class="pill-status ready">Completed</span></div>
-              <div class="rs-row"><span>Universe Processed</span><b>1,850 stocks</b></div>
-              <div class="rs-row"><span>Candidates Evaluated</span><b>3,421</b></div>
-              <div class="rs-row"><span>Signals Generated</span><b>87</b></div>
-              <div class="rs-row"><span>Signals Published</span><b>12</b></div>
-              <div class="rs-row"><span>Duration</span><b>12m 34s</b></div>
+            <div class="sector-bars">
+              <div class="sec-row"><span>IT</span><div class="sec-bar"><i style="width:82%;background:#63e6be"></i></div><b>82</b><small>INFY, TCS</small></div>
+              <div class="sec-row"><span>Banking</span><div class="sec-bar"><i style="width:76%;background:#63e6be"></i></div><b>76</b><small>HDFCBANK</small></div>
+              <div class="sec-row"><span>Auto</span><div class="sec-bar"><i style="width:62%;background:#63e6be"></i></div><b>62</b><small>M&M, TATAMOTORS</small></div>
+              <div class="sec-row"><span>Pharma</span><div class="sec-bar"><i style="width:58%;background:#42b883"></i></div><b>58</b><small>SUNPHARMA</small></div>
+              <div class="sec-row"><span>FMCG</span><div class="sec-bar"><i style="width:48%;background:#ffcf8c"></i></div><b>48</b><small>HINDUNILVR</small></div>
+              <div class="sec-row"><span>Energy</span><div class="sec-bar"><i style="width:42%;background:#ffcf8c"></i></div><b>42</b><small>RELIANCE</small></div>
+              <div class="sec-row"><span>Metals</span><div class="sec-bar"><i style="width:38%;background:#ff8c8c"></i></div><b>38</b><small>TATASTEEL</small></div>
+              <div class="sec-row"><span>Realty</span><div class="sec-bar"><i style="width:35%;background:#ff8c8c"></i></div><b>35</b><small>DLF, GODREJ</small></div>
             </div>
           </div>
         </section>
@@ -254,16 +262,16 @@
         <section class="grid-split">
           <div class="panel">
             <div class="panel-head">
-              <h3>PIT Readiness & Data Coverage</h3>
+              <h3>Data Quality & PIT Coverage</h3>
               <button class="text-btn" onclick="switchView('pitstatus')">View Full Report →</button>
             </div>
             <div class="table-wrap">
               <table class="data-table">
                 <thead>
-                  <tr><th>Dataset</th><th>Status</th><th>Records</th><th>Coverage</th></tr>
+                  <tr><th>Data Layer</th><th>Status</th><th>Records</th><th>Date Range</th><th>Last Update</th><th>Coverage</th></tr>
                 </thead>
                 <tbody id="pitTableBody">
-                  <tr><td colspan="4" class="empty">Loading PIT telemetry…</td></tr>
+                  <tr><td colspan="6" class="empty">Loading PIT telemetry…</td></tr>
                 </tbody>
               </table>
             </div>
@@ -449,8 +457,8 @@
                 <tr><th>Run ID</th><th>Timestamp</th><th>Universe</th><th>Signals</th><th>Status</th><th>Duration</th></tr>
               </thead>
               <tbody>
-                <tr><td><code id="runId1">R-20250426</code></td><td id="runDate1">26 Apr 2025, 12:00 IST</td><td>1,850</td><td>87</td><td><span class="pill-status ready">Completed</span></td><td>12m 34s</td></tr>
-                <tr><td><code id="runId2">R-20250425</code></td><td id="runDate2">25 Apr 2025, 12:00 IST</td><td>1,850</td><td>74</td><td><span class="pill-status ready">Completed</span></td><td>11m 21s</td></tr>
+                <tr><td><code>R-20250426</code></td><td>26 Apr 2025, 12:00 IST</td><td>1,850</td><td>87</td><td><span class="pill-status ready">Completed</span></td><td>12m 34s</td></tr>
+                <tr><td><code>R-20250425</code></td><td>25 Apr 2025, 12:00 IST</td><td>1,850</td><td>74</td><td><span class="pill-status ready">Completed</span></td><td>11m 21s</td></tr>
               </tbody>
             </table>
           </div>
