@@ -185,22 +185,23 @@ function filterHistSignals(){ renderSignalTables(cachedLive, cachedHist); }
 function filterLiveSignalsView(){ renderSignalTables(cachedLive, cachedHist); }
 function filterHistSignalsView(){ renderSignalTables(cachedLive, cachedHist); }
 
-// Interactive Interactivity: Timeframe pills and Sector Signal Strength toggles
-document.querySelectorAll('.timeframe-pills .tf-btn').forEach(btn=>{
- btn.addEventListener('click', e=>{
-  const parent=btn.closest('.timeframe-pills');
+// Robust Event Delegation for Timeframe pills and Sector Signal Strength toggles
+document.addEventListener('click', e=>{
+ const btn=e.target.closest('.tf-btn');
+ if(btn){
+  const parent=btn.closest('.panel-head');
   if(parent){
    parent.querySelectorAll('.tf-btn').forEach(b=>b.classList.remove('active'));
-  }
-  btn.classList.add('active');
+   btn.classList.add('active');
 
-  const text=btn.textContent.trim();
-  if(text==='Signals'||text==='Score'){
-   renderSectorStrength(text);
-  } else if(['1D','1W','1M','3M','1Y'].includes(text)){
-   updateChartTimeframe(text);
+   const text=btn.textContent.trim();
+   if(text==='Signals'||text==='Score'){
+    renderSectorStrength(text);
+   } else if(['1D','1W','1M','3M','1Y'].includes(text)){
+    updateChartTimeframe(text);
+   }
   }
- });
+ }
 });
 
 function renderSectorStrength(mode){
@@ -235,10 +236,10 @@ function updateChartTimeframe(tf){
  if(!priceEl) return;
  const changes={
   '1D': '23,402.15 <span class="pos">+112.60 (+0.74%)</span>',
-  '1W': '23,180.40 <span class="pos">+284.10 (+1.24%)</span>',
-  '1M': '22,650.00 <span class="pos">+752.15 (+3.43%)</span>',
+  '1W': '23,850.10 <span class="pos">+412.50 (+1.76%)</span>',
+  '1M': '24,210.80 <span class="pos">+921.40 (+3.95%)</span>',
   '3M': '21,900.50 <span class="pos">+1,501.65 (+7.36%)</span>',
-  '1Y': '19,850.20 <span class="pos">+3,551.95 (+17.89%)</span>'
+  '1Y': '19,850.20 <span class="pos">+3,551.95 (+21.09%)</span>'
  };
  if(changes[tf]){
   priceEl.innerHTML=changes[tf];
